@@ -1,3 +1,7 @@
 archive/
 build/
 resources/sass/.sass-cache/
+_android.built
+_ios.built
+cordova-android.js
+cordova-ios.js
