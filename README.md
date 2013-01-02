@@ -47,6 +47,12 @@ Android SDK directory:
 
     $ tools/android update sdk --no-ui
 
+### JDK
+
+Ant, used by Sencha Cmd, requires a JDK. Make sure you have JDK 7 installed.
+See
+http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html.
+
 ## Build
 
 To build the app run this command:
