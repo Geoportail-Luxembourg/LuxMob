@@ -43,19 +43,22 @@ For example:
     $ tar xvzf android-sdk_r21.0.1-linux.tgz
 
 To be able to build the LuxMob app, and run it in the Android emulator, you
-need to install the Android SDK Platform-tools, and at least one platform (the
-latest, 4.2 at time of this writing). You can use the Android SDK Manager to
-install these, which you can launch by navigating to the `tools` directory and
-running `android`.
-
-Also, you need to add the paths to the Android SDK `platform-tools` and `tools`
-directories to the `PATH` environment variable.
+need to install the Android SDK Platform-tools, and at least one platform and
+system image. You can use the Android SDK Manager for that, which you launch by
+executing `tools/android sdk`. In the Manager select and install `Android SDK
+Platform-tools`, and `SDK Platform` and `System Image` for a version of Android
+(4.2). Now create an Android Virtual Device (AVD) using the AVD Manager, which
+you launch by executing `tools/android avd`. You should now be able to start
+the emulator: `tools/emulator`.
+    
+For Sencha Cmd to find the Android SDK Tools you need to have the paths to the
+`platform-tools` and `tools` directories in your `PATH`.
 
 For example:
 
     $ export PATH=${PATH}:${HOME}/local/opt/android-sdk-linux/platform-tools:${HOME}/local/opt/android-sdk-linux/tools
 
-And to persist that adjust the setting of the `PATH` in your `.bashrc`.
+To persist that adjust the setting of the `PATH` in your `.bashrc`.
 
 ## Build
 
@@ -78,3 +81,10 @@ following:
 Open `build/LuxMob/ios/LuxMob.xcodeproj` in `Xcode` and press `Run`.
 
 ## Run app in Android emulator
+
+Make the apk file availble to the emulator. This is done by running this
+command:
+
+    $ adb install build/LuxMob/android/bin/LuxMob-debug.apk
+
+The LuxMob app should now available in the emulated Android device.
