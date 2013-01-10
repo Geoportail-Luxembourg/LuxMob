@@ -44,15 +44,31 @@ For example:
 
 To be able to build the LuxMob app, and run it in the Android emulator, you
 need to install the Android SDK Platform-tools, and at least one platform and
-system image. You can use the Android SDK Manager for that, which you launch by
+system image.
+
+You can use the Android SDK Manager for that, which you launch by
 executing `tools/android sdk`. In the Manager select and install `Android SDK
 Platform-tools`, and `SDK Platform` and `System Image` for a version of Android
-(4.2). Now create an Android Virtual Device (AVD) using the AVD Manager, which
-you launch by executing `tools/android avd`. You should now be able to start
-the emulator: `tools/emulator`.
+(4.2).
+
+Now create an Android Virtual Device (AVD) using the AVD Manager, which
+you launch by executing `tools/android avd`.
+
+You should now be able to start the emulator: `tools/emulator -avd
+<virtual_device_name>`, where `<virtual_device_name>` is the name of the
+virtual device you just created. For example:
+
+    $ emulator -avd nexus7
+
+Use `adb devices` to see the list of Android devices. The emulated
+Android device should be listed as a `device`:
+
+    $ adb devices
+    List of devices attached 
+    emulator-5554   device
     
-For Sencha Cmd to find the Android SDK Tools you need to have the paths to the
-`platform-tools` and `tools` directories in your `PATH`.
+Also, for Sencha Cmd to find the Android SDK Tools you need to have the paths
+to the `platform-tools` and `tools` directories in your `PATH`.
 
 For example:
 
@@ -76,38 +92,18 @@ following:
     $ ls build/LuxMob/android
     AndroidManifest.xml  ant.properties  assets  bin  build.xml  cordova  gen libs  local.properties  proguard-project.txt  project.properties  res  src
 
-## Run app in iOS emulator
+## Install and run app on Android
+
+To install the LuxMob app on an Android device you will use the `adb install`
+command. You can choose the device using the `-s` switch. Use `adb devices` to
+know what devices you have available.
+
+For example:
+
+    $ adb -s emulator-5554 install -r build/LuxMob/android/bin/LuxMob-debug.apk
+
+The LuxMob app should now available in the Android device.
+
+## Install and run app in iOS emulator
 
 Open `build/LuxMob/ios/LuxMob.xcodeproj` in `Xcode` and press `Run`.
-
-## Run app in Android emulator
-
-Make the apk file available to the emulator. This is done by running this
-command:
-
-    $ adb install build/LuxMob/android/bin/LuxMob-debug.apk
-
-The LuxMob app should now available in the emulated Android device.
-
-## Run app in an Android hardware device
-
-See http://developer.android.com/tools/device.html.
-
-With the Android device and the development machine plugged together via
-USB the `adb devices` should output the device name. For example:
-
-    $ adb devices
-    List of devices attached
-    SH0ANPL00676    device
-
-The doc on http://developer.android.com/tools/device.html says that a
-`/etc/udev/rules.d/51-android.rules` file need be created. For some
-reason I did not have to do it.
-
-Now to actually install the LuxMob app on the device use the
-following command:
-
-    adb -s SH0ANPL00676 install -r build/LuxMob/android/bin/LuxMob-debug.apk
-
-The LuxMob app should now be available as an application on the Android
-device.
