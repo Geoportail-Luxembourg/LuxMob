@@ -82,9 +82,32 @@ Open `build/LuxMob/ios/LuxMob.xcodeproj` in `Xcode` and press `Run`.
 
 ## Run app in Android emulator
 
-Make the apk file availble to the emulator. This is done by running this
+Make the apk file available to the emulator. This is done by running this
 command:
 
     $ adb install build/LuxMob/android/bin/LuxMob-debug.apk
 
 The LuxMob app should now available in the emulated Android device.
+
+## Run app in an Android hardware device
+
+See http://developer.android.com/tools/device.html.
+
+With the Android device and the development machine plugged together via
+USB the `adb devices` should output the device name. For example:
+
+    $ adb devices
+    List of devices attached
+    SH0ANPL00676    device
+
+The doc on http://developer.android.com/tools/device.html says that a
+`/etc/udev/rules.d/51-android.rules` file need be created. For some
+reason I did not have to do it.
+
+Now to actually install the LuxMob app on the device use the
+following command:
+
+    adb -s SH0ANPL00676 install -r build/LuxMob/android/bin/LuxMob-debug.apk
+
+The LuxMob app should now be available as an application on the Android
+device.
