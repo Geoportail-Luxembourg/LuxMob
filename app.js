@@ -1,12 +1,12 @@
 //<debug>
 Ext.Loader.setPath({
     'Ext': 'touch/src',
-    'LuxMob': 'app'
+    'App': 'app'
 });
 //</debug>
 
 Ext.application({
-    name: 'LuxMob',
+    name: 'App',
 
     requires: [
         'Ext.MessageBox'
@@ -37,7 +37,7 @@ Ext.application({
         Ext.fly('appLoadingIndicator').destroy();
 
         // Initialize the main view
-        Ext.Viewport.add(Ext.create('LuxMob.view.Main'));
+        Ext.Viewport.add(Ext.create('App.view.Main'));
     },
 
     onUpdated: function() {

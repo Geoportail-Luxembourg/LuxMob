@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="LuxMob" default=".help">
+<project name="App" default=".help">
     <import file="${basedir}/.sencha/app/build-impl.xml" />
     <import file="${basedir}/external/sencha-cordova-builder/build-cordova.xml" />
     <target name="-after-build" depends="-build-cordova-all" />

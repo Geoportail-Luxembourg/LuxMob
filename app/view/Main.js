@@ -1,4 +1,4 @@
-Ext.define('LuxMob.view.Main', {
+Ext.define('App.view.Main', {
     extend: 'Ext.Container',
     xtype: 'mainview',
     requires: [
