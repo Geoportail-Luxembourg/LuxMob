@@ -4,7 +4,8 @@
 Ext.define('App.view.layers.TabPanel', {
     extend: 'Ext.tab.Panel',
     requires: [
-        "App.view.layers.SavedMaps"
+        "App.view.layers.SavedMaps",
+        "App.view.layers.Layers"
     ],
 
     id: 'layersTabPanel',
@@ -29,7 +30,7 @@ Ext.define('App.view.layers.TabPanel', {
                 }]
             }, {
                 title: "Couches",
-                html: "somethinghere"
+                xclass: "App.view.layers.Layers"
             }, {
                 title: "Cartes enreg.",
                 xclass: "App.view.layers.SavedMaps"
