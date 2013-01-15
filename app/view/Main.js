@@ -27,6 +27,8 @@ Ext.define('App.view.Main', {
                     action: "settings",
                     iconMask: true
                 }]
+            }, {
+                html: "something<br />something<br />something<br />something<br />something<br />"
             }
         ]
     }

@@ -12,7 +12,8 @@ Ext.application({
         'Ext.MessageBox'
     ],
 
-    views: ['Main'],
+    views: ['Main', 'Layers'],
+    controllers: ['Main'],
 
     viewport: {
         autoMaximize: true
