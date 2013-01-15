@@ -1,3 +1,10 @@
+$base-color: #B58F69;                                                           
+/*$list-header-color: #666;                                                       */
+/*$list-header-bg-color: #ccc;                                                    */
+                                                                                
+/*$index-bar-bg-color: #ccc;                                                      */
+/*$index-bar-color: #666;*/
+
 @import 'sencha-touch/default/all';
 
 // You may remove any of the following modules that you
@@ -142,7 +149,7 @@ div.olControlZoom a {
     line-height: 28px;
     text-shadow: 0 0 3px rgba(0,0,0,0.8);
     background: #130085; /* fallback for IE - IE6 requires background shorthand*/
-    background: rgba(0, 60, 136, 0.5);
+    background: rgba(122,88,54, 0.5);
     filter: alpha(opacity=80);
 }
 a.olControlZoomIn {
@@ -153,12 +160,12 @@ a.olControlZoomOut {
 }
 div.olControlZoom a:hover {
     background: #130085; /* fallback for IE */
-    background: rgba(0, 60, 136, 0.7);
+    background: rgba(122,88,54, 0.7);
     filter: alpha(opacity=100);
 }
 @media only screen and (max-width: 600px) {
     div.olControlZoom a:hover {
-        background: rgba(0, 60, 136, 0.5);
+        background: rgba(122,88,54, 0.5);
     }
 }
 .olLayerGrid .olTileImage {
