@@ -5,8 +5,6 @@ Ext.define('App.view.Main', {
         'Ext.field.Search'
     ],
     config: {
-        tabBarPosition: 'bottom',
-
         items: [
             {
                 xtype: "toolbar",
