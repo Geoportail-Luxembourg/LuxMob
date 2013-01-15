@@ -38,11 +38,17 @@ Ext.application({
     },
 
     launch: function() {
-        // Destroy the #appLoadingIndicator element
+
+        // create the main view and set the map into it
+        var mainView = Ext.create('App.view.Main');
+        // App.map should be set in config.js
+        mainView.setMap(App.map);
+
+        // destroy the #appLoadingIndicator element
         Ext.fly('appLoadingIndicator').destroy();
 
-        // Initialize the main view
-        Ext.Viewport.add(Ext.create('App.view.Main'));
+        // now add the main view to the viewport
+        Ext.Viewport.add(mainView);
     },
 
     onUpdated: function() {
