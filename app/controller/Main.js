@@ -1,10 +1,10 @@
 Ext.define('App.controller.Main', {
     extend: 'Ext.app.Controller',
     
+    requires: ['App.view.layers.TabPanel'],
     config: {
         refs: {
-            mainView: 'mainview',
-            layersView: 'layersview'
+            mainView: 'mainview'
         },
         control: {
             'button[action=home]': {
@@ -30,10 +30,10 @@ Ext.define('App.controller.Main', {
     },
 
     showLayers: function() {
-        var view = this.getLayersView();
-        if (!view) {
-            view = Ext.create('App.view.Layers');
+        var layersTabPanel = Ext.getCmp('layersTabPanel');
+        if (!layersTabPanel) {
+            layersTabPanel = Ext.create('App.view.layers.TabPanel');
         }
-        Ext.Viewport.animateActiveItem(view, {type: 'cover', direction: "up"});
+        Ext.Viewport.animateActiveItem(layersTabPanel, {type: 'cover', direction: "up"});
     }
 });

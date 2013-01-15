@@ -1,8 +1,18 @@
-Ext.define('App.view.Layers', {
-    extend: 'Ext.Container',
-    xtype: 'layersview',
+/**
+ * The container for the layers config.
+ */
+Ext.define('App.view.layers.TabPanel', {
+    extend: 'Ext.tab.Panel',
     requires: [],
+
+    id: 'layersTabPanel',
     config: {
+        tabBar: {
+            minHeight: null,
+            layout: {
+                pack: "center"
+            }
+        },
         items: [
             {
                 xtype: "toolbar",
@@ -15,9 +25,12 @@ Ext.define('App.view.Layers', {
                     action: "home",
                     iconMask: true
                 }]
-                },
-            {
+            }, {
+                title: "Couches",
                 html: "somethinghere"
+            }, {
+                title: "Cartes enreg.",
+                html: "somethinghere<br /> something else"
             }
         ]
     }
