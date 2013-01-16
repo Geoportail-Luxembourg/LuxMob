@@ -4,7 +4,7 @@ Ext.define('App.view.Main', {
     requires: [
         'Ext.field.Search'
     ],
-    id: "main",
+    id: "mainView",
     config: {
         map: null,
         center: null,
@@ -95,5 +95,6 @@ Ext.define('App.view.Main', {
             new OpenLayers.Control.Zoom(),
             //new App.view.GeolocateControl()
         ]);
+        this.fireEvent('mapready', map);
     }
 });

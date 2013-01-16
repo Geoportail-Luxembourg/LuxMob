@@ -14,6 +14,7 @@ Ext.application({
 
     views: ['Main'],
     controllers: ['Main', 'Layers'],
+    stores: ['BaseLayers'],
 
     viewport: {
         autoMaximize: true

@@ -13,7 +13,8 @@ Ext.define('App.view.layers.Layers', {
                 title: "Fond",
                 items: [{
                     xtype: "button",
-                    action: "bglayer",
+                    id: "baseLayerButton",
+                    action: "baseLayers",
                     text: "Carte topographique",
                     iconCls: "code3",
                     iconMask: true,
