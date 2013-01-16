@@ -91,7 +91,9 @@ Ext.define('App.controller.Layers', {
     },
 
     onChooserChange: function(list, index, target, record) {
-        this.getMapSettingsView().setActiveItem(index);
+        this.getMapSettingsView().animateActiveItem(index, {
+            type: "flip"
+        });
         this.getMapSettingsView().getDockedItems()[0].setTitle(record.get('title'));
         this.getChooserListOverlay().hide();
     }
