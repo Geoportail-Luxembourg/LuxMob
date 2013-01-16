@@ -10,6 +10,11 @@ Ext.define('App.controller.Layers', {
         baseLayersStore: null,
         refs: {
             mainView: '#mainView',
+            baseLayersView: {
+                selector: "#baseLayersView",
+                xtype: "baselayersview",
+                autoCreate: true
+            },
             baseLayerButton: '#baseLayerButton'
         },
         control: {
@@ -30,11 +35,9 @@ Ext.define('App.controller.Layers', {
     },
 
     showBaseLayers: function() {
-        var baseLayers = Ext.getCmp('baseLayers');
-        if (!baseLayers) {
-            baseLayers = Ext.create('App.view.layers.BaseLayers');
-        }
-        Ext.Viewport.animateActiveItem(baseLayers, {type: 'slide', direction: "left"});
+        Ext.Viewport.animateActiveItem(this.getBaseLayersView(), {
+            type: 'slide', direction: "left"
+        });
     },
 
     updateMap: function(map) {
@@ -44,8 +47,25 @@ Ext.define('App.controller.Layers', {
         Ext.each(map.layers, function(layer) {
             if (layer.isBaseLayer) {
                 store.add(layer);
+                this.getBaseLayersView().add({
+                    name: "baselayer",
+                    label: layer.name,
+                    checked: layer == map.baseLayer,
+                    listeners: {
+                        check: Ext.bind(function(layer) {
+                            this.onBaseLayerChange(layer);
+                        }, this, [layer])
+                    }
+                });
             }
-        });
-        this.getBaseLayerButton().setText(map.baseLayer.name);
+        }, this);
+
+        this.getBaseLayerButton().setText(this.getMap().baseLayer.name);
+    },
+
+    onBaseLayerChange: function(layer) {
+        this.getMap().setBaseLayer(layer);
+        this.getBaseLayerButton().setText(layer.name);
+        this.redirectTo('layers');
     }
 });

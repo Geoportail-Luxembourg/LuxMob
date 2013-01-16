@@ -4,14 +4,16 @@ Ext.define('App.view.layers.BaseLayers', {
     requires: [
         "Ext.field.Radio"
     ],
+    xtype: "baselayersview",
 
-    id: "baseLayers",
+    id: "baseLayersView",
     config: {
         tabBar: {
             minHeight: null
         },
         defaults: {
-            xtype: 'radiofield'
+            xtype: 'radiofield',
+            labelWidth: '80%'
         },
         items: [
             {
@@ -25,9 +27,6 @@ Ext.define('App.view.layers.BaseLayers', {
                     ui: 'back',
                     action: "back"
                 }]
-            }, {
-                name: "the_name",
-                label: "something"
             }
         ]
     }

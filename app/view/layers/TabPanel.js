@@ -24,7 +24,7 @@ Ext.define('App.view.layers.TabPanel', {
                     xtype: "spacer"
                 }, {
                     xtype: "button",
-                    iconCls: "home",
+                    iconCls: "maps",
                     action: "home",
                     iconMask: true
                 }]

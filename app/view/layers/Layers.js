@@ -2,7 +2,7 @@ Ext.define('App.view.layers.Layers', {
     extend: 'Ext.Panel',
     requires: ['Ext.form.FieldSet'],
 
-    id: "layers",
+    id: "layersView",
     config: {
         layout: 'card',
         activeItem: 0,

@@ -4,7 +4,8 @@ Ext.define('App.controller.Main', {
     requires: ['App.view.layers.TabPanel'],
     config: {
         refs: {
-            mainView: '#mainView'
+            mainView: '#mainView',
+            layersTabPanel: '#layersTabPanel'
         },
         control: {
             'button[action=home]': {
@@ -35,10 +36,7 @@ Ext.define('App.controller.Main', {
     },
 
     showLayers: function() {
-        var layersTabPanel = Ext.getCmp('layersTabPanel');
-        if (!layersTabPanel) {
-            layersTabPanel = Ext.create('App.view.layers.TabPanel');
-        }
+        var layersTabPanel = this.getLayersTabPanel();
         var animation = {type: 'slide', direction: 'right'};
         if (Ext.Viewport.getActiveItem() == this.getMainView()) {
             animation = {type: 'cover', direction: "up"};

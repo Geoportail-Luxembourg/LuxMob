@@ -12,7 +12,7 @@ Ext.application({
         'Ext.MessageBox'
     ],
 
-    views: ['Main'],
+    views: ['Main', 'layers.TabPanel'],
     controllers: ['Main', 'Layers'],
     stores: ['BaseLayers'],
 
@@ -42,6 +42,9 @@ Ext.application({
 
         // create the main view and set the map into it
         var mainView = Ext.create('App.view.Main');
+
+        Ext.create('App.view.layers.TabPanel');
+
         // App.map should be set in config.js
         mainView.setMap(App.map);
 
