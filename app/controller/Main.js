@@ -1,6 +1,6 @@
 Ext.define('App.controller.Main', {
     extend: 'Ext.app.Controller',
-    
+
     requires: ['App.view.layers.TabPanel'],
     config: {
         refs: {
@@ -15,6 +15,11 @@ Ext.define('App.controller.Main', {
             'button[action=layers]': {
                 tap: function() {
                     this.redirectTo('layers');
+                }
+            },
+            'button[action=back]': {
+                tap: function() {
+                    window.history.back();
                 }
             }
         },
@@ -34,6 +39,10 @@ Ext.define('App.controller.Main', {
         if (!layersTabPanel) {
             layersTabPanel = Ext.create('App.view.layers.TabPanel');
         }
-        Ext.Viewport.animateActiveItem(layersTabPanel, {type: 'cover', direction: "up"});
+        var animation = {type: 'slide', direction: 'right'};
+        if (Ext.Viewport.getActiveItem().id == 'main') {
+            animation = {type: 'cover', direction: "up"};
+        }
+        Ext.Viewport.animateActiveItem(layersTabPanel, animation);
     }
 });

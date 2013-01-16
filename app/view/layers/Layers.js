@@ -4,17 +4,28 @@ Ext.define('App.view.layers.Layers', {
 
     id: "layers",
     config: {
+        layout: 'card',
+        activeItem: 0,
+        margin: 10,
         items: [{
-            xtype: 'fieldset',
-            title: "Fond",
             items: [{
-                html: "the layers"
-            }]
-        }, {
-            xtype: 'fieldset',
-            title: "Couches de données",
-            items: [{
-                html: "the layers"
+                xtype: 'fieldset',
+                title: "Fond",
+                items: [{
+                    xtype: "button",
+                    action: "bglayer",
+                    text: "Carte topographique",
+                    iconCls: "code3",
+                    iconMask: true,
+                    ui: "plain",
+                    iconAlign: "right"
+                }]
+            }, {
+                xtype: 'fieldset',
+                title: "Couches de données",
+                items: [{
+                    html: "the layers"
+                }]
             }]
         }]
     }

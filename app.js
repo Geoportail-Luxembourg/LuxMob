@@ -13,7 +13,7 @@ Ext.application({
     ],
 
     views: ['Main'],
-    controllers: ['Main'],
+    controllers: ['Main', 'Layers'],
 
     viewport: {
         autoMaximize: true

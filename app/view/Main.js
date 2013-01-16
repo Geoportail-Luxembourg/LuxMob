@@ -4,6 +4,7 @@ Ext.define('App.view.Main', {
     requires: [
         'Ext.field.Search'
     ],
+    id: "main",
     config: {
         map: null,
         center: null,
