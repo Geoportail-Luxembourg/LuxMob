@@ -12,7 +12,7 @@ Ext.application({
         'Ext.MessageBox'
     ],
 
-    views: ['Main', 'layers.TabPanel'],
+    views: ['Main', 'layers.MapSettings', 'layers.ChooserList'],
     controllers: ['Main', 'Layers'],
     stores: ['BaseLayers'],
 
@@ -43,7 +43,7 @@ Ext.application({
         // create the main view and set the map into it
         var mainView = Ext.create('App.view.Main');
 
-        Ext.create('App.view.layers.TabPanel');
+        Ext.create('App.view.layers.MapSettings');
 
         // App.map should be set in config.js
         mainView.setMap(App.map);
@@ -53,6 +53,9 @@ Ext.application({
 
         // now add the main view to the viewport
         Ext.Viewport.add(mainView);
+
+        var isPhone = Ext.os.deviceType == 'Phone';
+        Ext.Viewport.add(Ext.create('App.view.layers.ChooserList'));
     },
 
     onUpdated: function() {

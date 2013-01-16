@@ -17,7 +17,7 @@ $base-color: #B58F69;
 @include sencha-toolbar;
 @include sencha-toolbar-forms;
 /*@include sencha-indexbar;*/
-/*@include sencha-list;*/
+@include sencha-list;
 @include sencha-layout;
 /*@include sencha-carousel;*/
 @include sencha-form;
@@ -26,6 +26,7 @@ $base-color: #B58F69;
 // Your custom code goes here...
 
 @include pictos-iconmask('code3');
+@include pictos-iconmask('list');
 
 // cards
 .card {

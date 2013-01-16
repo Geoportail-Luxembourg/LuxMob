@@ -1,26 +1,27 @@
 /**
  * The container for the layers config.
  */
-Ext.define('App.view.layers.TabPanel', {
-    extend: 'Ext.tab.Panel',
+Ext.define('App.view.layers.MapSettings', {
+    extend: 'Ext.Panel',
     requires: [
         "App.view.layers.SavedMaps",
         "App.view.layers.Layers"
     ],
 
-    id: 'layersTabPanel',
+    id: 'mapSettingsView',
     config: {
-        tabBar: {
-            minHeight: null,
-            layout: {
-                pack: "center"
-            }
-        },
+        layout: 'card',
         items: [
             {
                 xtype: "toolbar",
                 docked: "top",
+                title: 'Couches',
                 items: [{
+                    xtype: "button",
+                    id: "chooserButton",
+                    iconCls: "list",
+                    iconMask: true
+                }, {
                     xtype: "spacer"
                 }, {
                     xtype: "button",

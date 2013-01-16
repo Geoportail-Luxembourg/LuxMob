@@ -1,11 +1,11 @@
 Ext.define('App.controller.Main', {
     extend: 'Ext.app.Controller',
 
-    requires: ['App.view.layers.TabPanel'],
+    requires: ['App.view.layers.MapSettings'],
     config: {
         refs: {
             mainView: '#mainView',
-            layersTabPanel: '#layersTabPanel'
+            mapSettingsView: '#mapSettingsView'
         },
         control: {
             'button[action=home]': {
@@ -36,11 +36,15 @@ Ext.define('App.controller.Main', {
     },
 
     showLayers: function() {
-        var layersTabPanel = this.getLayersTabPanel();
+        var mapSettingsView = this.getMapSettingsView();
+
         var animation = {type: 'slide', direction: 'right'};
         if (Ext.Viewport.getActiveItem() == this.getMainView()) {
             animation = {type: 'cover', direction: "up"};
         }
-        Ext.Viewport.animateActiveItem(layersTabPanel, animation);
+        Ext.Viewport.animateActiveItem(
+            mapSettingsView,
+            animation
+        );
     }
 });

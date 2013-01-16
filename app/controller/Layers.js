@@ -10,14 +10,21 @@ Ext.define('App.controller.Layers', {
         baseLayersStore: null,
         refs: {
             mainView: '#mainView',
+            mapSettingsView: '#mapSettingsView',
+            chooserListOverlay: '#chooserListOverlay',
+            chooserList: '#chooserList',
             baseLayersView: {
                 selector: "#baseLayersView",
                 xtype: "baselayersview",
                 autoCreate: true
             },
+            chooserButton: '#chooserButton',
             baseLayerButton: '#baseLayerButton'
         },
         control: {
+            chooserButton: {
+                tap: 'onChooserButton'
+            },
             baseLayerButton: {
                 tap: function() {
                     this.redirectTo('baselayers');
@@ -27,6 +34,9 @@ Ext.define('App.controller.Layers', {
                 mapready: function(map) {
                     this.setMap(map);
                 }
+            },
+            chooserList: {
+                itemtap: 'onChooserChange'
             }
         },
         routes: {
@@ -47,15 +57,21 @@ Ext.define('App.controller.Layers', {
         Ext.each(map.layers, function(layer) {
             if (layer.isBaseLayer) {
                 store.add(layer);
-                this.getBaseLayersView().add({
+                var radio = this.getBaseLayersView().add({
                     name: "baselayer",
                     label: layer.name,
                     checked: layer == map.baseLayer,
                     listeners: {
-                        check: Ext.bind(function(layer) {
-                            this.onBaseLayerChange(layer);
-                        }, this, [layer])
+                        element: 'label',
+                        tap: function() {
+                            this.setChecked(true);
+                        }
                     }
+                });
+                radio.on({
+                    check: Ext.bind(function(layer) {
+                        this.onBaseLayerChange(layer);
+                    }, this, [layer])
                 });
             }
         }, this);
@@ -67,5 +83,16 @@ Ext.define('App.controller.Layers', {
         this.getMap().setBaseLayer(layer);
         this.getBaseLayerButton().setText(layer.name);
         this.redirectTo('layers');
+    },
+
+    onChooserButton: function(button) {
+        var isPhone = Ext.os.deviceType == 'Phone';
+        this.getChooserListOverlay().showBy(button);
+    },
+
+    onChooserChange: function(list, index, target, record) {
+        this.getMapSettingsView().setActiveItem(index);
+        this.getMapSettingsView().getDockedItems()[0].setTitle(record.get('title'));
+        this.getChooserListOverlay().hide();
     }
 });
