@@ -28,6 +28,14 @@ $base-color: #B58F69;
 @include pictos-iconmask('code3');
 @include pictos-iconmask('list');
 
+// forms
+.x-form-fieldset {
+    margin-bottom: 1em;
+}
+.x-form-fieldset-title {
+    margin-top: 0;
+}
+
 // cards
 .card {
 
