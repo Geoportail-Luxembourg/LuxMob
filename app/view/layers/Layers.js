@@ -1,6 +1,9 @@
 Ext.define('App.view.layers.Layers', {
     extend: 'Ext.Panel',
-    requires: ['Ext.form.FieldSet'],
+    requires: [
+        'Ext.form.FieldSet',
+        'App.view.layers.SelectedOverlays'
+    ],
 
     id: "layersView",
     config: {
@@ -8,6 +11,7 @@ Ext.define('App.view.layers.Layers', {
         activeItem: 0,
         margin: 10,
         items: [{
+            scrollable: true,
             items: [{
                 xtype: 'fieldset',
                 title: "Fond",
@@ -15,17 +19,16 @@ Ext.define('App.view.layers.Layers', {
                     xtype: "button",
                     id: "baseLayerButton",
                     action: "baseLayers",
-                    text: "Carte topographique",
+                    text: " ",
                     iconCls: "code3",
                     iconMask: true,
-                    ui: "plain",
                     iconAlign: "right"
                 }]
             }, {
                 xtype: 'fieldset',
                 title: "Couches de données",
                 items: [{
-                    html: "the layers"
+                    xclass: "App.view.layers.SelectedOverlays"
                 }]
             }]
         }]

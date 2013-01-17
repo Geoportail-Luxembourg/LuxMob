@@ -3,11 +3,14 @@ Ext.define('App.controller.Layers', {
 
     requires: [
         'App.view.layers.BaseLayers',
-        'App.store.BaseLayers'
+        'App.store.BaseLayers',
+        'App.view.layers.Overlays',
+        'App.store.Overlays'
     ],
     config: {
         map: null,
         baseLayersStore: null,
+        overlaysStore: null,
         refs: {
             mainView: '#mainView',
             mapSettingsView: '#mapSettingsView',
@@ -19,7 +22,16 @@ Ext.define('App.controller.Layers', {
                 autoCreate: true
             },
             chooserButton: '#chooserButton',
-            baseLayerButton: '#baseLayerButton'
+            baseLayerButton: '#baseLayerButton',
+            selectedOverlaysList: '#selectedOverlaysList',
+            addOverlaysButton: '#addOverlaysButton',
+            overlaysView: {
+                selector: "#overlaysView",
+                xtype: "overlaysview",
+                autoCreate: true
+            },
+            overlaysList: "#overlaysList",
+            overlaysSearch: '#overlaysSearch'
         },
         control: {
             chooserButton: {
@@ -37,15 +49,35 @@ Ext.define('App.controller.Layers', {
             },
             chooserList: {
                 itemtap: 'onChooserChange'
+            },
+            addOverlaysButton: {
+                tap: function() {
+                    this.redirectTo('overlays');
+                }
+            },
+            overlaysList: {
+                select: 'onOverlaySelect',
+                deselect: 'onOverlayDeselect'
+            },
+            overlaysSearch: {
+                clearicontap: 'onSearchClearIconTap',
+                keyup: 'onSearchKeyUp'
             }
         },
         routes: {
-            'baselayers': 'showBaseLayers'
+            'baselayers': 'showBaseLayers',
+            'overlays': 'showOverlays'
         }
     },
 
     showBaseLayers: function() {
         Ext.Viewport.animateActiveItem(this.getBaseLayersView(), {
+            type: 'slide', direction: "left"
+        });
+    },
+
+    showOverlays: function() {
+        Ext.Viewport.animateActiveItem(this.getOverlaysView(), {
             type: 'slide', direction: "left"
         });
     },
@@ -77,6 +109,21 @@ Ext.define('App.controller.Layers', {
         }, this);
 
         this.getBaseLayerButton().setText(this.getMap().baseLayer.name);
+
+        this.setOverlaysStore(Ext.getStore('Overlays'));
+
+        this.getOverlaysStore().add(
+            [
+                { name: 'Tommy',   lastName: 'Maintz' },
+                { name: 'Rob',     lastName: 'Dougan' },
+                { name: 'Ed',      lastName: 'Avins' },
+                { name: 'Jamie',   lastName: 'Avins' },
+                { name: 'Dave',    lastName: 'Dougan' },
+                { name: 'Abraham', lastName: 'Elias' },
+                { name: 'Jacky',   lastName: 'Ngyuyen' },
+                { name: 'Jay',   lastName: 'Ngyuyen' }
+            ]
+        );
     },
 
     onBaseLayerChange: function(layer) {
@@ -96,5 +143,82 @@ Ext.define('App.controller.Layers', {
         });
         this.getMapSettingsView().getDockedItems()[0].setTitle(record.get('title'));
         this.getChooserListOverlay().hide();
+    },
+
+    onOverlaySelect: function(list, record) {
+        console.log(record);
+        this.getSelectedOverlaysList().insert(0, {
+            label: record.get('name'),
+            name: record.get('name'),
+            checked: true
+        });
+    },
+
+    onOverlayDeselect: function(list, record) {
+        var selList = this.getSelectedOverlaysList();
+        selList.remove(selList.down('field[name=' + record.get('name') + ']'));
+    },
+
+    /**
+     * Called when the search field has a keyup event.
+     *
+     * This will filter the store based on the fields content.
+     */
+    onSearchKeyUp: function(field) {
+        //get the store and the value of the field
+        var value = field.getValue(),
+            store = Ext.getStore("Overlays");
+
+        //first clear any current filters on thes tore
+        store.clearFilter();
+
+        //check if a value is set first, as if it isnt we dont have to do anything
+        if (value) {
+            //the user could have entered spaces, so we must split them so we can loop through them all
+            var searches = value.split(' '),
+                regexps = [],
+                i;
+
+            //loop them all
+            for (i = 0; i < searches.length; i++) {
+                //if it is nothing, continue
+                if (!searches[i]) continue;
+
+                //if found, create a new regular expression which is case insenstive
+                regexps.push(new RegExp(searches[i], 'i'));
+            }
+
+            //now filter the store by passing a method
+            //the passed method will be called for each record in the store
+            store.filter(function(record) {
+                var matched = [];
+
+                //loop through each of the regular expressions
+                for (i = 0; i < regexps.length; i++) {
+                    var search = regexps[i],
+                        didMatch = record.get('name').match(search);
+
+                    //if it matched the first or last name, push it into the matches array
+                    matched.push(didMatch);
+                }
+
+                //if nothing was found, return false (dont so in the store)
+                if (regexps.length > 1 && matched.indexOf(false) != -1) {
+                    return false;
+                } else {
+                    //else true true (show in the store)
+                    return matched[0];
+                }
+            });
+        }
+    },
+
+    /**
+     * Called when the user taps on the clear icon in the search field.
+     * It simply removes the filter form the store
+     */
+    onSearchClearIconTap: function() {
+        //call the clearFilter method on the store instance
+        Ext.getStore('Overlays').clearFilter();
     }
 });

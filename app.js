@@ -14,7 +14,7 @@ Ext.application({
 
     views: ['Main', 'layers.MapSettings', 'layers.ChooserList'],
     controllers: ['Main', 'Layers'],
-    stores: ['BaseLayers'],
+    stores: ['BaseLayers', 'Overlays'],
 
     viewport: {
         autoMaximize: true
