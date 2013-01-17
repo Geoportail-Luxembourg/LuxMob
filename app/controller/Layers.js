@@ -184,8 +184,8 @@ Ext.define('App.controller.Layers', {
                 layersParam.push(item.getValue());
             }
         });
-        layer.mergeNewParams({'LAYERS': layersParam});
         layer.setVisibility(layersParam.length);
+        layer.mergeNewParams({'LAYERS': layersParam});
     },
 
     /**
