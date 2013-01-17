@@ -156,7 +156,7 @@ Ext.define('App.controller.Layers', {
     },
 
     onOverlayAdd: function(list, record) {
-        this.getSelectedOverlaysList().insert(0, {
+        var field = this.getSelectedOverlaysList().insert(0, {
             label: OpenLayers.i18n(record.get('name')),
             name: record.get('name'),
             value: record.get('name'),
@@ -165,6 +165,12 @@ Ext.define('App.controller.Layers', {
                 check: this.onOverlayChange,
                 uncheck: this.onOverlayChange,
                 scope: this
+            }
+        });
+        field.on({
+            element: 'label',
+            tap: function() {
+                field.setChecked(!field.isChecked());
             }
         });
         this.onOverlayChange();
