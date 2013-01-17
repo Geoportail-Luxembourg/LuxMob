@@ -1,11 +1,19 @@
 Ext.define('App.controller.Main', {
     extend: 'Ext.app.Controller',
 
-    requires: ['App.view.layers.MapSettings'],
+    requires: [
+        'App.view.layers.MapSettings',
+        'App.view.Settings'
+    ],
     config: {
         refs: {
             mainView: '#mainView',
-            mapSettingsView: '#mapSettingsView'
+            mapSettingsView: '#mapSettingsView',
+            settingsView: {
+                selector: '#settingsView',
+                xtype: 'settingsview',
+                autoCreate: true
+            }
         },
         control: {
             'button[action=home]': {
@@ -18,6 +26,11 @@ Ext.define('App.controller.Main', {
                     this.redirectTo('mapsettings');
                 }
             },
+            'button[action=settings]': {
+                tap: function() {
+                    this.redirectTo('settings');
+                }
+            },
             'button[action=back]': {
                 tap: function() {
                     window.history.back();
@@ -27,7 +40,8 @@ Ext.define('App.controller.Main', {
         routes: {
             '': 'showHome',
             'home': 'showHome',
-            'mapsettings': 'showMapSettings'
+            'mapsettings': 'showMapSettings',
+            'settings': 'showSettings'
         }
     },
 
@@ -45,6 +59,13 @@ Ext.define('App.controller.Main', {
         Ext.Viewport.animateActiveItem(
             mapSettingsView,
             animation
+        );
+    },
+
+    showSettings: function() {
+        Ext.Viewport.animateActiveItem(
+            this.getSettingsView(),
+            {type: 'cover', direction: "up"}
         );
     }
 });
