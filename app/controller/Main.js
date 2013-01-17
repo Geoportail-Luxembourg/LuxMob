@@ -13,9 +13,9 @@ Ext.define('App.controller.Main', {
                     this.redirectTo('home');
                 }
             },
-            'button[action=layers]': {
+            'button[action=mapsettings]': {
                 tap: function() {
-                    this.redirectTo('layers');
+                    this.redirectTo('mapsettings');
                 }
             },
             'button[action=back]': {
@@ -27,7 +27,7 @@ Ext.define('App.controller.Main', {
         routes: {
             '': 'showHome',
             'home': 'showHome',
-            'layers': 'showLayers'
+            'mapsettings': 'showMapSettings'
         }
     },
 
@@ -35,7 +35,7 @@ Ext.define('App.controller.Main', {
         Ext.Viewport.animateActiveItem(0, {type:'reveal', direction: 'down'});
     },
 
-    showLayers: function() {
+    showMapSettings: function() {
         var mapSettingsView = this.getMapSettingsView();
 
         var animation = {type: 'slide', direction: 'right'};

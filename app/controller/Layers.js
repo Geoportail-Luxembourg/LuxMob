@@ -82,7 +82,7 @@ Ext.define('App.controller.Layers', {
     onBaseLayerChange: function(layer) {
         this.getMap().setBaseLayer(layer);
         this.getBaseLayerButton().setText(layer.name);
-        this.redirectTo('layers');
+        this.redirectTo('mapsettings');
     },
 
     onChooserButton: function(button) {

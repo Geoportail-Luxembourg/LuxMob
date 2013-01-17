@@ -24,7 +24,7 @@ Ext.define('App.view.Main', {
                 }, {
                     xtype: "button",
                     iconCls: "layers",
-                    action: "layers",
+                    action: "mapsettings",
                     iconMask: true
                 }, {
                     xtype: "button",
