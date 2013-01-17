@@ -21,5 +21,5 @@ Ext.define('App.view.layers.SelectedOverlays', {
             iconMask: true,
             iconAlign: "right"
         }]
-    } 
+    }
 });

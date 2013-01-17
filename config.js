@@ -27,6 +27,20 @@ App.map = new OpenLayers.Map({
             {
                 transitionEffect: 'resize'
             }
-        )
+        ),
+        new OpenLayers.Layer.WMS(
+            "Overlays",
+            "http://www.camptocamp.org/cgi-bin/c2corg_wms",
+            {
+                layers: [],
+                transparent: true
+            },
+            {
+                allLayers: ['summits', "huts", "sites", "users"],
+                singleTile: true,
+                ratio: 1,
+                visibility: false
+            }
+        )
     ]
 });

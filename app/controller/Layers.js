@@ -10,7 +10,7 @@ Ext.define('App.controller.Layers', {
     config: {
         map: null,
         baseLayersStore: null,
-        overlaysStore: null,
+        overlaysOLLayer: null,
         refs: {
             mainView: '#mainView',
             mapSettingsView: '#mapSettingsView',
@@ -56,8 +56,8 @@ Ext.define('App.controller.Layers', {
                 }
             },
             overlaysList: {
-                select: 'onOverlaySelect',
-                deselect: 'onOverlayDeselect'
+                select: 'onOverlayAdd',
+                deselect: 'onOverlayRemove'
             },
             overlaysSearch: {
                 clearicontap: 'onSearchClearIconTap',
@@ -110,20 +110,30 @@ Ext.define('App.controller.Layers', {
 
         this.getBaseLayerButton().setText(this.getMap().baseLayer.name);
 
-        this.setOverlaysStore(Ext.getStore('Overlays'));
+        this.setOverlaysOLLayer(map.getLayersByName('Overlays')[0]);
+        this.loadOverlays(map);
+    },
 
-        this.getOverlaysStore().add(
-            [
-                { name: 'Tommy',   lastName: 'Maintz' },
-                { name: 'Rob',     lastName: 'Dougan' },
-                { name: 'Ed',      lastName: 'Avins' },
-                { name: 'Jamie',   lastName: 'Avins' },
-                { name: 'Dave',    lastName: 'Dougan' },
-                { name: 'Abraham', lastName: 'Elias' },
-                { name: 'Jacky',   lastName: 'Ngyuyen' },
-                { name: 'Jay',   lastName: 'Ngyuyen' }
-            ]
-        );
+    loadOverlays: function(map) {
+        var store = Ext.getStore('Overlays');
+        var layer = this.getOverlaysOLLayer();
+        var allLayers = this.toArray(layer.allLayers),
+            layersParam = layer.params.LAYERS ?
+                this.toArray(layer.params.LAYERS) : [],
+            len = allLayers.length,
+            i, l;
+        for (i=0; i<len; i++) {
+            l = allLayers[i];
+            store.add({
+                label: OpenLayers.i18n(l),
+                name: l,
+                checked: layersParam.indexOf(l) != -1
+            });
+        }
+    },
+
+    toArray: function(value) {
+        return Ext.isArray(value) ? value : value.split(',');
     },
 
     onBaseLayerChange: function(layer) {
@@ -145,18 +155,37 @@ Ext.define('App.controller.Layers', {
         this.getChooserListOverlay().hide();
     },
 
-    onOverlaySelect: function(list, record) {
-        console.log(record);
+    onOverlayAdd: function(list, record) {
         this.getSelectedOverlaysList().insert(0, {
-            label: record.get('name'),
+            label: OpenLayers.i18n(record.get('name')),
             name: record.get('name'),
-            checked: true
+            value: record.get('name'),
+            checked: true,
+            listeners: {
+                check: this.onOverlayChange,
+                uncheck: this.onOverlayChange,
+                scope: this
+            }
         });
+        this.onOverlayChange();
     },
 
-    onOverlayDeselect: function(list, record) {
+    onOverlayRemove: function(list, record) {
         var selList = this.getSelectedOverlaysList();
         selList.remove(selList.down('field[name=' + record.get('name') + ']'));
+    },
+
+    onOverlayChange: function() {
+        var selList = this.getSelectedOverlaysList();
+        var layer = this.getOverlaysOLLayer(),
+            layersParam = [];
+        selList.items.each(function(item) {
+            if (item.isChecked && item.isChecked()) {
+                layersParam.push(item.getValue());
+            }
+        });
+        layer.mergeNewParams({'LAYERS': layersParam});
+        layer.setVisibility(layersParam.length);
     },
 
     /**

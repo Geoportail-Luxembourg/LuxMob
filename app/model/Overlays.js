@@ -3,7 +3,8 @@ Ext.define('App.model.Overlays', {
 
     config: {
         fields: [{
-            name: 'name'
+            name: 'name',
+            label: 'label'
         }]
     }
 });
