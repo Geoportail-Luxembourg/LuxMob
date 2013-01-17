@@ -11,7 +11,7 @@ $base-color: #B58F69;
 // do not use in order to create a smaller css file.
 @include sencha-panel;
 @include sencha-buttons;
-/*@include sencha-sheet;*/
+@include sencha-sheet;
 /*@include sencha-picker;*/
 /*@include sencha-tabs;*/ // custom style see below
 @include sencha-toolbar;

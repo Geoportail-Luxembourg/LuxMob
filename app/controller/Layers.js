@@ -5,7 +5,8 @@ Ext.define('App.controller.Layers', {
         'App.view.layers.BaseLayers',
         'App.store.BaseLayers',
         'App.view.layers.Overlays',
-        'App.store.Overlays'
+        'App.store.Overlays',
+        'Ext.ActionSheet'
     ],
     config: {
         map: null,
@@ -169,6 +170,7 @@ Ext.define('App.controller.Layers', {
         });
         field.on({
             element: 'label',
+            swipe: Ext.bind(this.onOverlaySwipe, this, [field]),
             tap: function() {
                 field.setChecked(!field.isChecked());
             }
@@ -192,6 +194,33 @@ Ext.define('App.controller.Layers', {
         });
         layer.setVisibility(layersParam.length);
         layer.mergeNewParams({'LAYERS': layersParam});
+    },
+
+    onOverlaySwipe: function(field) {
+        var actions = Ext.Viewport.add({
+            xtype: 'actionsheet',
+            items: [
+                {
+                    text: "Remove",
+                    ui: 'decline',
+                    handler: function() {
+                        field.getParent().remove(field);
+                        this.onOverlayChange();
+                        var list = this.getOverlaysList();
+                        list.deselect(Ext.getStore('Overlays')
+                            .findRecord('name', field.getValue()));
+                        actions.hide();
+                    },
+                    scope: this
+                }, {
+                    text: "Cancel",
+                    handler: function() {
+                        actions.hide();
+                    }
+                }
+            ]
+        });
+        actions.show();
     },
 
     /**
