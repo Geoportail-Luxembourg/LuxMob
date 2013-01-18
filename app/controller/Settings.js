@@ -1,3 +1,4 @@
+window.i18n = Ext.i18n.Bundle;
 Ext.define('App.controller.Settings', {
     extend: 'Ext.app.Controller',
     requires: [
@@ -9,7 +10,7 @@ Ext.define('App.controller.Settings', {
         control: {
             languageSelect: {
                 change: function(select, newValue) {
-                    Ext.i18n.Bundle.setLanguage(newValue);
+                    i18n.setLanguage(newValue);
                 }
             }
         }

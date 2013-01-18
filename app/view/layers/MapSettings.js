@@ -1,3 +1,4 @@
+window.i18n = Ext.i18n.Bundle;
 /**
  * The container for the layers config.
  */
