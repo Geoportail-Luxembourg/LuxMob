@@ -14,7 +14,7 @@ Ext.define("App.view.Settings", {
                 xtype: 'spacer'
             }, {
                 xtype: 'button',
-                iconCls: 'maps',
+                iconCls: 'home',
                 iconMask: true,
                 action: 'home'
             }]
