@@ -65,6 +65,10 @@
         {
             "path": "resources/css/app.css",
             "update": "delta"
+        },
+        {
+            "path": "resources/css/fontello.woff",
+            "update": "full"
         }
     ],
 
