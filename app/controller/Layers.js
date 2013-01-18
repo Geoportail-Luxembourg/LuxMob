@@ -156,6 +156,20 @@ Ext.define('App.controller.Layers', {
         this.getChooserListOverlay().hide();
     },
 
+    showMessage: function(msg) {
+        var actionSheet = Ext.create('Ext.ActionSheet', {
+            modal: false,
+            html: msg,
+            style: 'color:white;'
+        });
+
+        Ext.Viewport.add(actionSheet);
+        actionSheet.show();
+        Ext.Function.defer(function() {
+            actionSheet.hide();
+        }, 2000);
+    },
+
     onOverlayAdd: function(list, record) {
         var field = this.getSelectedOverlaysList().insert(0, {
             label: OpenLayers.i18n(record.get('name')),
@@ -170,17 +184,21 @@ Ext.define('App.controller.Layers', {
         });
         field.on({
             element: 'label',
+            longpress: Ext.bind(this.onOverlaySwipe, this, [field]),
             swipe: Ext.bind(this.onOverlaySwipe, this, [field]),
             tap: function() {
                 field.setChecked(!field.isChecked());
             }
         });
         this.onOverlayChange();
+
+        this.showMessage(i18n.message("overlays.layeradded"));
     },
 
     onOverlayRemove: function(list, record) {
         var selList = this.getSelectedOverlaysList();
         selList.remove(selList.down('field[name=' + record.get('name') + ']'));
+        this.showMessage(i18n.message("overlays.layerremoved"));
     },
 
     onOverlayChange: function() {
