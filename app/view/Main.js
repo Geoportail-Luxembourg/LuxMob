@@ -3,8 +3,7 @@ Ext.define('App.view.Main', {
     extend: 'Ext.Container',
     xtype: 'mainview',
     requires: [
-        'Ext.field.Search',
-        'App.view.GeolocateControl'
+        'Ext.field.Search'
     ],
     id: "mainView",
     config: {
@@ -95,7 +94,7 @@ Ext.define('App.view.Main', {
 
         map.addControls([
             new OpenLayers.Control.Zoom(),
-            new App.view.GeolocateControl()
+            new GeolocateControl()
         ]);
         this.fireEvent('mapready', map);
     }

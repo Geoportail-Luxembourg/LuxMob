@@ -1,5 +1,4 @@
-Ext.ns('App.view');
-App.view.GeolocateControl = OpenLayers.Class(OpenLayers.Control, {
+var GeolocateControl = OpenLayers.Class(OpenLayers.Control, {
 
     autoActivate: true,
     button: null,
