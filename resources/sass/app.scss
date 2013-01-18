@@ -12,7 +12,7 @@ $base-color: #B58F69;
 @include sencha-panel;
 @include sencha-buttons;
 @include sencha-sheet;
-/*@include sencha-picker;*/
+@include sencha-picker;
 /*@include sencha-tabs;*/ // custom style see below
 @include sencha-toolbar;
 @include sencha-toolbar-forms;

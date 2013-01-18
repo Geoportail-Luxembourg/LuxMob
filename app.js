@@ -1,19 +1,23 @@
 //<debug>
 Ext.Loader.setPath({
     'Ext': 'touch/src',
-    'App': 'app'
+    'App': 'app',
+    'Ext.i18n': 'lib/Ext.i18n.Bundle-touch/i18n'
 });
 //</debug>
+
 
 Ext.application({
     name: 'App',
 
     requires: [
-        'Ext.MessageBox'
+        'Ext.MessageBox',
+        'Ext.i18n.Bundle',
+        'App.util.Config'
     ],
 
     views: ['Main', 'layers.MapSettings', 'layers.ChooserList'],
-    controllers: ['Main', 'Layers'],
+    controllers: ['Main', 'Layers', 'Settings'],
     stores: ['BaseLayers', 'Overlays'],
 
     viewport: {
@@ -39,6 +43,8 @@ Ext.application({
     },
 
     launch: function() {
+
+         this.prepareI18n();
 
         // create the main view and set the map into it
         var mainView = Ext.create('App.view.Main');
@@ -68,5 +74,14 @@ Ext.application({
                 }
             }
         );
+    },
+
+    prepareI18n: function() {
+        Ext.i18n.Bundle.configure({
+            bundle: 'App',
+            path: 'resources/i18n',
+            language: App.util.Config.getLanguage(),
+            noCache: true
+        });
     }
 });

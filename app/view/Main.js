@@ -1,3 +1,4 @@
+window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.Main', {
     extend: 'Ext.Container',
     xtype: 'mainview',

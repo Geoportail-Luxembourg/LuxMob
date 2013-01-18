@@ -201,7 +201,7 @@ Ext.define('App.controller.Layers', {
             xtype: 'actionsheet',
             items: [
                 {
-                    text: "Remove",
+                    text: i18n.message("button.remove"),
                     ui: 'decline',
                     handler: function() {
                         field.getParent().remove(field);
@@ -213,7 +213,7 @@ Ext.define('App.controller.Layers', {
                     },
                     scope: this
                 }, {
-                    text: "Cancel",
+                    text: i18n.message("button.cancel"),
                     handler: function() {
                         actions.hide();
                     }

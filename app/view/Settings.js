@@ -1,14 +1,15 @@
 Ext.define("App.view.Settings", {
-    extend: 'Ext.Container',
+    extend: 'Ext.form.Panel',
     xtype: 'settingsview',
     requires: [
+        'Ext.field.Select'
     ],
 
     config: {
         items: [{
             docked: 'top',
             xtype: 'toolbar',
-            title: "Settings",
+            title: i18n.message("settings.settings"),
             items: [{
                 xtype: 'spacer'
             }, {
@@ -17,6 +18,16 @@ Ext.define("App.view.Settings", {
                 iconMask: true,
                 action: 'home'
             }]
+        }, {
+            xtype: "selectfield",
+            id: 'languageSelect',
+            label: i18n.message('settings.language'),
+            options: [
+                {text: 'English', value: 'en'},
+                {text: 'Français', value: 'fr'},
+                {text: 'Deutsch', value: 'de'},
+                {text: 'Lëtzebuergesch', value: 'lu'}
+            ]
         }]
     }
 });

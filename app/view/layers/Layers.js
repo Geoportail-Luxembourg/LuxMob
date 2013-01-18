@@ -14,7 +14,7 @@ Ext.define('App.view.layers.Layers', {
             scrollable: true,
             items: [{
                 xtype: 'fieldset',
-                title: "Fond",
+                title: i18n.message('layers.title.baselayer'),
                 items: [{
                     xtype: "button",
                     id: "baseLayerButton",
@@ -26,7 +26,7 @@ Ext.define('App.view.layers.Layers', {
                 }]
             }, {
                 xtype: 'fieldset',
-                title: "Couches de données",
+                title: i18n.message('layers.title.overlays'),
                 items: [{
                     xclass: "App.view.layers.SelectedOverlays"
                 }]

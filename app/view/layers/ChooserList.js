@@ -13,9 +13,9 @@ Ext.define('App.view.layers.ChooserList', {
             id: 'chooserList',
             itemTpl: '{title}',
             data: [{
-                title: 'Couches'
+                title: i18n.message('mapsettings.title.layers')
             }, {
-                title: 'Cartes téléchargées'
+                title: i18n.message('mapsettings.title.savedmaps')
             }]
         }]
     },

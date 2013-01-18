@@ -15,7 +15,7 @@ Ext.define('App.view.layers.MapSettings', {
             {
                 xtype: "toolbar",
                 docked: "top",
-                title: 'Couches',
+                title: i18n.message('mapsettings.title.layers'),
                 items: [{
                     xtype: "button",
                     id: "chooserButton",
@@ -30,10 +30,10 @@ Ext.define('App.view.layers.MapSettings', {
                     iconMask: true
                 }]
             }, {
-                title: "Couches",
+                title: i18n.message('mapsettings.title.layers'),
                 xclass: "App.view.layers.Layers"
             }, {
-                title: "Cartes enreg.",
+                title: i18n.message('mapsettings.title.savedmaps'),
                 xclass: "App.view.layers.SavedMaps"
             }
         ]

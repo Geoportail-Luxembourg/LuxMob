@@ -21,7 +21,7 @@ Ext.define('App.view.layers.BaseLayers', {
                 docked: "top",
                 items: [{
                     xtype: "button",
-                    text: "layers",
+                    text: i18n.message("button.layers"),
                     iconCls: "layers",
                     iconMask: true,
                     ui: 'back',

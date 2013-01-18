@@ -16,7 +16,7 @@ Ext.define('App.view.layers.SelectedOverlays', {
             xtype: "button",
             id: "addOverlaysButton",
             action: "addOverlays",
-            text: "+ Add more layers",
+            text: i18n.message('selectedoverlays.selectlayers'),
             iconCls: "code3",
             iconMask: true,
             iconAlign: "right"

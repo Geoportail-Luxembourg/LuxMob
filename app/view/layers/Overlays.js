@@ -27,7 +27,7 @@ Ext.define('App.view.layers.Overlays', {
                     items: [
                         {
                             xtype: "button",
-                            text: "layers",
+                            text: i18n.message("button.layers"),
                             iconCls: "layers",
                             iconMask: true,
                             ui: 'back',

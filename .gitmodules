@@ -1,3 +1,6 @@
 [submodule "external/openlayers"]
 	path = external/openlayers
 	url = https://github.com/openlayers/openlayers.git
+[submodule "lib/Ext.i18n.Bundle-touch"]
+	path = lib/Ext.i18n.Bundle-touch
+	url = git://github.com/elmasse/Ext.i18n.Bundle-touch.git
