@@ -22,6 +22,11 @@ Ext.define("App.view.Settings", {
             xtype: "selectfield",
             id: 'languageSelect',
             label: i18n.message('settings.language'),
+            listeners: {
+                painted: function() {
+                    this.setValue(Ext.i18n.Bundle.getLanguage());
+                }
+            },
             options: [
                 {text: 'English', value: 'en'},
                 {text: 'Français', value: 'fr'},
