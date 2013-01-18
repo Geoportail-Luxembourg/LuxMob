@@ -78,19 +78,21 @@ To persist that adjust the setting of the `PATH` in your `.bashrc`.
 
 ## Build
 
-To build the LuxMob app run this command:
+To build the web app run this command:
 
-    $ sencha app build package
+    $ make
 
-To check that the build process worked correctly list the content of the
-`build/LuxMob/ios` and `build/LuxMob/android` directories and compare to the
-following:
+To build the PhoneGap Android app run this command:
 
-    $ ls build/LuxMob/ios
-    cordova  CordovaLib  LuxMob  LuxMob.xcodeproj  www
+    $ make android
 
-    $ ls build/LuxMob/android
-    AndroidManifest.xml  ant.properties  assets  bin  build.xml  cordova  gen libs  local.properties  proguard-project.txt  project.properties  res  src
+To build the PhoneGap iOS app run this command:
+
+    $ make ios
+
+If you change the source code of the Sencha app you don't need to run `make`
+before running `make android` or `make ios`. The latter commands will build he
+Sencha app when required.
 
 ## Install and run app on Android
 
