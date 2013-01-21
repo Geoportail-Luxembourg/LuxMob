@@ -3,11 +3,13 @@ Ext.define('App.view.Main', {
     extend: 'Ext.Container',
     xtype: 'mainview',
     requires: [
-        'Ext.field.Search'
+        'Ext.field.Search',
+        'App.plugin.StatefulMap'
     ],
     id: "mainView",
     config: {
         map: null,
+        plugins: 'statefulmap',
         center: null,
         zoom: null,
         vectorLayer: null,
@@ -54,6 +56,10 @@ Ext.define('App.view.Main', {
                 new OpenLayers.LonLat(queryParams.x, queryParams.y));
             this.setZoom(queryParams.zoom);
         }
+    },
+
+    updateMap: function(map) {
+        this.fireEvent('setmap', this, map);
     },
 
     // initial rendering
