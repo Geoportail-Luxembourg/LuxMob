@@ -39,7 +39,7 @@ var GeolocateControl = OpenLayers.Class(OpenLayers.Control, {
         var div = OpenLayers.Control.prototype.draw.apply(this);
 
         var geolocate = document.createElement("a");
-        geolocate.appendChild(document.createTextNode("\u27a2"));
+        geolocate.appendChild(document.createTextNode("\ue800"));
         div.appendChild(geolocate);
         OpenLayers.Element.addClass(geolocate, "olButton");
         this.button = geolocate;
