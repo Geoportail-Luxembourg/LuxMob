@@ -199,7 +199,10 @@ div.olControlZoom a:hover {
 
 @font-face {
   font-family: 'fontello';
-  src: url("fontello.woff") format('woff');
+  src: url("../font/fontello.eot");
+  src: url("../font/fontello.eot?#iefix") format('embedded-opentype'), url("../font/fontello.woff") format('woff'), url("../font/fontello.ttf") format('truetype'), url("../font/fontello.svg#fontello") format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
 
 div.Geolocate {
