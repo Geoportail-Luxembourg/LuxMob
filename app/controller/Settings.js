@@ -11,6 +11,7 @@ Ext.define('App.controller.Settings', {
             languageSelect: {
                 change: function(select, newValue) {
                     i18n.setLanguage(newValue);
+                    localStorage.setItem('language', newValue);
                 }
             }
         }
