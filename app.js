@@ -62,6 +62,8 @@ Ext.application({
 
         var isPhone = Ext.os.deviceType == 'Phone';
         Ext.Viewport.add(Ext.create('App.view.layers.ChooserList'));
+
+        this.configurePicker();
     },
 
     onUpdated: function() {
@@ -82,6 +84,20 @@ Ext.application({
             path: 'resources/i18n',
             language: App.util.Config.getLanguage(),
             noCache: true
+        });
+    },
+
+    configurePicker: function() {
+        Ext.define('App.Picker', {
+            override : 'Ext.picker.Picker',
+            config: {
+                doneButton:{
+                    text : Ext.i18n.Bundle.message('button.done')
+                },
+                cancelButton:{
+                    text : Ext.i18n.Bundle.message('button.cancel')
+                }
+            }
         });
     }
 });
