@@ -5,7 +5,9 @@ window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.layers.MapSettings', {
     extend: 'Ext.Panel',
     requires: [
+        // FIXME both SavedMaps views are loaded, not good for performance
         "App.view.layers.SavedMaps",
+        "App.view.layers.SavedMapsNotAvailable",
         "App.view.layers.Layers"
     ],
 
@@ -35,7 +37,8 @@ Ext.define('App.view.layers.MapSettings', {
                 xclass: "App.view.layers.Layers"
             }, {
                 title: i18n.message('mapsettings.title.savedmaps'),
-                xclass: "App.view.layers.SavedMaps"
+                xclass: Ext.browser.is.PhoneGap ?
+                    "App.view.layers.SavedMaps" : "App.view.layers.SavedMapsNotAvailable"
             }
         ]
     }

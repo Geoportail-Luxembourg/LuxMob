@@ -5,6 +5,6 @@ Ext.define('App.view.layers.SavedMaps', {
     id: "savedmaps",
     config: {
         cls: "card",
-        html: "<p class='action'>" + i18n.message('savedmaps.html') + "</p>"
+        html: "Saved maps are allowed"
     }
 });
