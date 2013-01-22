@@ -40,5 +40,5 @@ Ext.define('App.view.Download', {
                 }]
             }]
         }]
-    },
+    }
 });
