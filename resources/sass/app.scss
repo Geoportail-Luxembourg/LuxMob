@@ -34,26 +34,12 @@ $base-color: #B58F69;
     background: none;
     padding: 0;
     box-shadow: none;
-    -webkit-box-shadown: none;
+    -webkit-box-shadow: none;
 }
 
 .maintoolbar .x-toolbar {
-    background-image: -webkit-linear-gradient(top, rgba(240,240,240,0.5), rgba(217,217,217,0.5) 3%, rgba(191,191,191,0.5));
-    border-bottom: 1px solid rgba(120,120,120,0.5);
-    background-color: transparent;
-}
-
-.x-button.download {
-    background-opacity: 0.5;
-    border-radius: 4px;
-    padding: 2px;
-    width: 36px;
-    background-color: transparent;
-    background-image: -webkit-linear-gradient(top, rgba(240,240,240,0.7), rgba(217,217,217,0.7) 3%, rgba(191,191,191,0.7));
-}
-
-.x-button.download span.x-button-icon {
-    background: rgba(60, 60, 60, 1);
+    border: 0;
+    background: none;
 }
 
 .x-panel.x-floating.usagehelp {
@@ -156,7 +142,7 @@ div.olMap {
 
 .olControlScaleLine {
     display: block;
-    left: 3px;
+    left: 60px;
     bottom: 3px;
     font-size: xx-small;
     padding: 4px;
@@ -250,7 +236,7 @@ div.Geolocate {
     left: 8px;
     padding: 2px;
     position: absolute;
-    top: 138px;
+    bottom: 8px;
 }
 div.Geolocate a {
     display: block;

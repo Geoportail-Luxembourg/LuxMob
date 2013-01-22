@@ -60,19 +60,6 @@ Ext.define('App.view.Main', {
                 id: "map-container"
             }
         ];
-
-        // FIXME remove this when in production
-        //if (Ext.browser.is.PhoneGap) {
-            items.push({
-                xtype: 'button',
-                action: 'download',
-                cls: "download",
-                iconCls: "cloud_download",
-                iconMask: true,
-                bottom: 30,
-                left: 10
-            });
-        //}
         return this.callParent([items, collection]);
     },
 
@@ -126,9 +113,11 @@ Ext.define('App.view.Main', {
         map.addLayer(this.getVectorLayer());
 
         map.addControls([
-            new OpenLayers.Control.Zoom(),
             new GeolocateControl()
         ]);
+        if (!Ext.os.is.iOS) {
+            map.addControls([new OpenLayers.Control.Zoom()]);
+        }
         this.fireEvent('mapready', map);
     }
 });

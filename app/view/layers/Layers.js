@@ -31,6 +31,14 @@ Ext.define('App.view.layers.Layers', {
                 items: [{
                     xclass: "App.view.layers.SelectedOverlays"
                 }]
+            }, {
+                    xtype: 'button',
+                    docked: 'bottom',
+                    action: 'download',
+                    cls: "download",
+                    iconCls: "cloud_download",
+                    text: "Télécharger cette carte",
+                    iconMask: true
             }]
         }]
     }
