@@ -1,3 +1,4 @@
+window.i18n = Ext.i18n.Bundle;
 Ext.define('App.controller.Download', {
     extend: 'Ext.app.Controller',
 
@@ -8,6 +9,7 @@ Ext.define('App.controller.Download', {
     config: {
         map: null,
         maskControl: null,
+        usageHelp: null,
         refs: {
             mainView: '#mainView',
             downloadView: {
@@ -37,14 +39,21 @@ Ext.define('App.controller.Download', {
     },
 
     showDownload: function() {
-        var downloadView = this.getDownloadView();
-        Ext.Viewport.animateActiveItem(downloadView, {type: 'flip'});
 
         // initial rendering
         var map = this.getMap();
         if (map) {
-            var mapContainer = this.getDownloadView().down('#map-container2').element;
-            map.render(mapContainer.dom);
+            var downloadView = this.getDownloadView();
+            Ext.Viewport.animateActiveItem(downloadView, {
+                type: 'flip',
+                listeners: {
+                    animationend: this.showUsageHelp,
+                    scope: this
+                }
+            });
+
+            var mapContainer = this.getDownloadView().down('#map-container2');
+            map.render(mapContainer.element.dom);
             // required so that the map gets effectively displayed
             // height = 0 if not set
             map.viewPortDiv.style.position = "absolute";
@@ -73,6 +82,29 @@ Ext.define('App.controller.Download', {
             map.render(mapContainer.dom);
         }
         this.redirectTo('');
+        this.getUsageHelp() && this.getUsageHelp().hide();
+    },
+
+    showUsageHelp: function() {
+        var overlay = Ext.Viewport.add({
+            xtype: 'panel',
+            cls: 'usagehelp',
+            modal: false,
+            padding: 10,
+            showAnimation: {
+                type: 'popIn'
+            },
+            hideAnimation: {
+                type: 'popOut'
+            },
+            html: i18n.message('download.usagehelp')
+        });
+        overlay.showBy(this.getDownloadView().items.get(1));
+        this.setUsageHelp(overlay);
+
+        Ext.Function.defer(function() {
+            overlay.hide();
+        }, 4000);
     }
 });
 
