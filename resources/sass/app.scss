@@ -28,6 +28,20 @@ $base-color: #B58F69;
 @include pictos-iconmask('code3');
 @include pictos-iconmask('list');
 @include pictos-iconmask('cloud_download');
+@include pictos-iconmask('search');
+
+.x-panel.x-floating.maintoolbar {
+    background: none;
+    padding: 0;
+    box-shadow: none;
+    -webkit-box-shadown: none;
+}
+
+.maintoolbar .x-toolbar {
+    background-image: -webkit-linear-gradient(top, rgba(240,240,240,0.5), rgba(217,217,217,0.5) 3%, rgba(191,191,191,0.5));
+    border-bottom: 1px solid rgba(120,120,120,0.5);
+    background-color: transparent;
+}
 
 .x-button.download {
     background-opacity: 0.5;
@@ -161,7 +175,7 @@ div.olMap {
 
 div.olControlZoom {
     position: absolute;
-    top: 8px;
+    top: 56px;
     left: 8px;
     background: rgba(255,255,255,0.4);
     border-radius: 4px;
@@ -236,7 +250,7 @@ div.Geolocate {
     left: 8px;
     padding: 2px;
     position: absolute;
-    top: 90px;
+    top: 138px;
 }
 div.Geolocate a {
     display: block;

@@ -27,24 +27,33 @@ Ext.define('App.view.Main', {
     applyItems: function(items, collection) {
         items = [
             {
-                xtype: "toolbar",
-                docked: "top",
+                xtype: 'panel',
+                top: 0,
+                width: '100%',
+                cls: 'maintoolbar',
                 items: [{
-                    xtype: "searchfield",
-                    flex: 4,
-                    action: "search"
-                }, {
-                    xtype: "spacer"
-                }, {
-                    xtype: "button",
-                    iconCls: "layers",
-                    action: "mapsettings",
-                    iconMask: true
-                }, {
-                    xtype: "button",
-                    iconCls: "settings",
-                    action: "settings",
-                    iconMask: true
+                    xtype: "toolbar",
+                    docked: "top",
+                    items: [{
+                        //xtype: "searchfield",
+                        xtype: "button",
+                        //flex: 4,
+                        iconCls: 'search',
+                        iconMask: true,
+                        action: "search"
+                    }, {
+                        xtype: "spacer"
+                    }, {
+                        xtype: "button",
+                        iconCls: "layers",
+                        action: "mapsettings",
+                        iconMask: true
+                    }, {
+                        xtype: "button",
+                        iconCls: "settings",
+                        action: "settings",
+                        iconMask: true
+                    }]
                 }]
             }, {
                 xtype: 'component',
