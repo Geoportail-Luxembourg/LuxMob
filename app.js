@@ -64,6 +64,7 @@ Ext.application({
         Ext.Viewport.add(Ext.create('App.view.layers.ChooserList'));
 
         this.configurePicker();
+        this.configureMessageBox();
     },
 
     onUpdated: function() {
@@ -84,6 +85,33 @@ Ext.application({
             path: 'resources/i18n',
             language: App.util.Config.getLanguage(),
             noCache: true
+        });
+    },
+
+    configureMessageBox: function() {
+        // Override MessageBox default messages
+        Ext.define('App.MessageBox', {
+            override: 'Ext.MessageBox',
+
+            statics: {
+                YES   : {text: Ext.i18n.Bundle.message('messagebox.yes'),    itemId: 'yes', ui: 'action'},
+                NO    : {text: Ext.i18n.Bundle.message('messagebox.no'),     itemId: 'no'},
+                CANCEL: {text: Ext.i18n.Bundle.message('messagebox.cancel'), itemId: 'cancel'},
+
+                OKCANCEL: [
+                    {text: Ext.i18n.Bundle.message('messagebox.ok'), itemId: 'ok', ui: 'action'},
+                    {text: Ext.i18n.Bundle.message('messagebox.cancel'), itemId: 'cancel'}
+                ],
+                YESNOCANCEL: [
+                    {text: Ext.i18n.Bundle.message('messagebox.yes'),    itemId: 'yes', ui: 'action'},
+                    {text: Ext.i18n.Bundle.message('messagebox.no'),     itemId: 'no'},
+                    {text: Ext.i18n.Bundle.message('messagebox.cancel'), itemId: 'cancel'}
+                ],
+                YESNO: [
+                    {text: Ext.i18n.Bundle.message('messagebox.yes'), itemId: 'yes', ui: 'action'},
+                    {text: Ext.i18n.Bundle.message('messagebox.no'),  itemId: 'no'}
+                ]
+            }
         });
     },
 
