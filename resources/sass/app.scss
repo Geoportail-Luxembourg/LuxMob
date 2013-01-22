@@ -21,7 +21,7 @@ $base-color: #B58F69;
 @include sencha-layout;
 /*@include sencha-carousel;*/
 @include sencha-form;
-/*@include sencha-msgbox;*/
+@include sencha-msgbox;
 
 // Your custom code goes here...
 

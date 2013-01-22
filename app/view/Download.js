@@ -35,6 +35,7 @@ Ext.define('App.view.Download', {
                     text: i18n.message('button.cancel')
                 }, {
                     xtype: 'button',
+                    action: 'dodownload',
                     ui: 'confirm',
                     text: i18n.message('button.OK')
                 }]

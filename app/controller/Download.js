@@ -27,6 +27,9 @@ Ext.define('App.controller.Download', {
             'button[action=canceldownload]': {
                 tap: 'showMain'
             },
+            'button[action=dodownload]': {
+                tap: 'promptForName'
+            },
             mainview: {
                 mapready: function(map) {
                     this.setMap(map);
@@ -105,6 +108,18 @@ Ext.define('App.controller.Download', {
         Ext.Function.defer(function() {
             overlay.hide();
         }, 4000);
+    },
+
+    promptForName: function() {
+        Ext.Msg.prompt(
+            i18n.message('download.mapname'),
+            i18n.message('download.name'),
+            function(buttonId, value) {
+                if (buttonId == 'ok') {
+                    alert(value);
+                }
+            }
+        );
     }
 });
 
