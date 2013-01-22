@@ -1,7 +1,7 @@
-$base-color: #B58F69;                                                           
+$base-color: #B58F69;
 /*$list-header-color: #666;                                                       */
 /*$list-header-bg-color: #ccc;                                                    */
-                                                                                
+
 /*$index-bar-bg-color: #ccc;                                                      */
 /*$index-bar-color: #666;*/
 
@@ -27,6 +27,20 @@ $base-color: #B58F69;
 
 @include pictos-iconmask('code3');
 @include pictos-iconmask('list');
+@include pictos-iconmask('cloud_download');
+
+.x-button.download {
+    background-opacity: 0.5;
+    border-radius: 4px;
+    padding: 2px;
+    width: 36px;
+    background-color: transparent;
+    background-image: -webkit-linear-gradient(top, rgba(240,240,240,0.7), rgba(217,217,217,0.7) 3%, rgba(191,191,191,0.7));
+}
+
+.x-button.download span.x-button-icon {
+    background: rgba(60, 60, 60, 1);
+}
 
 // forms
 .x-form-fieldset {
@@ -225,11 +239,19 @@ div.Geolocate a {
     width: 32px;
     line-height: 32px;
     text-shadow: 0 0 3px rgba(0,0,0,0.8);
-    background: rgba(120,120,120, 0.5);
+    background: rgba(122,88,54,0.5);
     border-radius: 4px;
     filter: alpha(opacity=80);
     font-family: 'fontello';
 }
 div.Geolocate a.active {
     color: #67B2FF;
+}
+
+div.Mask {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border: 20px solid rgba(120,120,120,0.5);
+    z-index: 1000 !important;
 }

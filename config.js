@@ -10,7 +10,6 @@ App.map = new OpenLayers.Map({
                 enableKinetic: true
             }
         }),
-        new OpenLayers.Control.Attribution(),
         new OpenLayers.Control.ScaleLine({geodesic: true})
     ],
     layers: [

@@ -13,7 +13,8 @@ Ext.define('App.controller.Main', {
                 selector: '#settingsView',
                 xtype: 'settingsview',
                 autoCreate: true
-            }
+            },
+            downloadView: "#downloadView"
         },
         control: {
             'button[action=home]': {
@@ -46,7 +47,11 @@ Ext.define('App.controller.Main', {
     },
 
     showHome: function() {
-        Ext.Viewport.animateActiveItem(0, {type:'reveal', direction: 'down'});
+        var animation = {type:'reveal', direction: 'down'};
+        if (Ext.Viewport.getActiveItem() == this.getDownloadView()) {
+            animation = {type: 'flip'};
+        }
+        Ext.Viewport.animateActiveItem(0, animation);
     },
 
     showMapSettings: function() {

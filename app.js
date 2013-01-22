@@ -17,7 +17,7 @@ Ext.application({
     ],
 
     views: ['Main', 'layers.MapSettings', 'layers.ChooserList'],
-    controllers: ['Main', 'Layers', 'Settings'],
+    controllers: ["Download",'Main', 'Layers', 'Settings'],
     stores: ['BaseLayers', 'Overlays'],
 
     viewport: {

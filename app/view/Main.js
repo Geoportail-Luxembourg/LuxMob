@@ -14,7 +14,18 @@ Ext.define('App.view.Main', {
         zoom: null,
         vectorLayer: null,
         layout: 'fit',
-        items: [
+        items: [ ]
+    },
+
+    initialize: function() {
+        this.callParent(arguments);
+        this.on('painted', this.render, this, {
+            single: true
+        });
+    },
+
+    applyItems: function(items, collection) {
+        items = [
             {
                 xtype: "toolbar",
                 docked: "top",
@@ -39,14 +50,21 @@ Ext.define('App.view.Main', {
                 xtype: 'component',
                 id: "map-container"
             }
-        ]
-    },
+        ];
 
-    initialize: function() {
-        this.callParent(arguments);
-        this.on('painted', this.render, this, {
-            single: true
-        });
+        // FIXME remove this when in production
+        //if (Ext.browser.is.PhoneGap) {
+            items.push({
+                xtype: 'button',
+                action: 'download',
+                cls: "download",
+                iconCls: "cloud_download",
+                iconMask: true,
+                bottom: 30,
+                left: 10
+            });
+        //}
+        return this.callParent([items, collection]);
     },
 
     setCenterZoomFromQueryParams: function() {
