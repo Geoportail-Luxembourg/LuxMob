@@ -12,6 +12,7 @@ Ext.define('App.controller.Download', {
         usageHelp: null,
         refs: {
             mainView: '#mainView',
+            mapSettingsView: '#mapSettingsView',
             downloadView: {
                 selector: '#downloadView',
                 xtype: 'downloadview',
@@ -25,7 +26,7 @@ Ext.define('App.controller.Download', {
                 }
             },
             'button[action=canceldownload]': {
-                tap: 'showMain'
+                tap: 'cancel'
             },
             'button[action=dodownload]': {
                 tap: 'promptForName'
@@ -64,7 +65,7 @@ Ext.define('App.controller.Download', {
         } else {
             // application is just launched, don't show the download view
             // directly even if '#download' is in the url
-            this.showMain();
+            Ext.Viewport.setActiveItem(this.getMainView());
         }
     },
 
@@ -74,7 +75,7 @@ Ext.define('App.controller.Download', {
         map.addControl(control);
     },
 
-    showMain: function() {
+    cancel: function() {
         var map = this.getMap();
 
         if (map) {
@@ -84,7 +85,10 @@ Ext.define('App.controller.Download', {
             var mapContainer = this.getMainView().down('#map-container').element;
             map.render(mapContainer.dom);
         }
-        this.redirectTo('');
+        Ext.Viewport.animateActiveItem(
+            this.getMapSettingsView(),
+            {type: 'flip'}
+        );
         this.getUsageHelp() && this.getUsageHelp().hide();
     },
 

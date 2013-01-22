@@ -14,7 +14,8 @@ Ext.define('App.controller.Main', {
                 xtype: 'settingsview',
                 autoCreate: true
             },
-            downloadView: "#downloadView"
+            downloadView: "#downloadView",
+            searchField: "#searchField"
         },
         control: {
             'button[action=home]': {
@@ -36,7 +37,24 @@ Ext.define('App.controller.Main', {
                 tap: function() {
                     window.history.back();
                 }
+            },
+            'button[action=search]': {
+                tap: function(button) {
+                    // hide all items but search field so that it gets bigger
+                    var toolbar = button.parent;
+                    toolbar.items.each(function(item) {item.hide();});
+                    this.getSearchField().show().focus();
+                },
+                scope: this
+            },
+            searchField: {
+                blur: function(field) {
+                    var toolbar = field.parent;
+                    toolbar.items.each(function(item) {item.show();});
+                    field.hide();
+                }
             }
+
         },
         routes: {
             '': 'showHome',

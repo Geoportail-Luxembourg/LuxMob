@@ -35,9 +35,12 @@ Ext.define('App.view.Main', {
                     xtype: "toolbar",
                     docked: "top",
                     items: [{
-                        //xtype: "searchfield",
+                        xtype: 'searchfield',
+                        id: "searchField",
+                        hidden: true,
+                        flex: 4
+                    }, {
                         xtype: "button",
-                        //flex: 4,
                         iconCls: 'search',
                         iconMask: true,
                         action: "search"
