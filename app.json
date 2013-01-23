@@ -100,6 +100,7 @@
         "resources/font",
         "resources/i18n",
         "openlayers-mobile.js",
+        "capabilities.xml",
         "GeolocateControl.js",
         "config.js"
     ],
