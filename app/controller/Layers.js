@@ -111,27 +111,63 @@ Ext.define('App.controller.Layers', {
         }, this);
 
         this.getBaseLayerButton().setText(this.getMap().baseLayer.name);
-
-        this.setOverlaysOLLayer(map.getLayersByName('Overlays')[0]);
         this.loadOverlays(map);
     },
 
     loadOverlays: function(map) {
-        var store = Ext.getStore('Overlays');
-        var layer = this.getOverlaysOLLayer();
-        var allLayers = this.toArray(layer.allLayers),
-            layersParam = layer.params.LAYERS ?
-                this.toArray(layer.params.LAYERS) : [],
-            len = allLayers.length,
-            i, l;
-        for (i=0; i<len; i++) {
-            l = allLayers[i];
-            store.add({
-                label: OpenLayers.i18n(l),
-                name: l,
-                checked: layersParam.indexOf(l) != -1
-            });
-        }
+        var format = new OpenLayers.Format.WMSCapabilities();
+        OpenLayers.Request.GET({
+            // FIXME load capabilities from mapproxy service
+            url: "capabilities.xml",
+            params: {
+                SERVICE: "WMS",
+                VERSION: "1.1.1",
+                REQUEST: "GetCapabilities"
+            },
+            success: function(request) {
+                var doc = request.responseXML;
+                if (!doc || !doc.documentElement) {
+                    doc = request.responseText;
+                }
+                var capabilities = format.read(doc);
+                var layers = [],
+                    l = capabilities.capability.layers;
+                for (var i = 0; i < l.length; i++) {
+                    layers.push(l[i].name);
+                }
+                App.map.addLayer(
+                    new OpenLayers.Layer.WMS(
+                        "Overlays",
+                        "http://geoportail-luxembourg.demo-camptocamp.com/~sbrga/mapproxy/service",
+                        {
+                            layers: [],
+                            transparent: true
+                        },
+                        {
+                            allLayers: layers,
+                            visibility: false
+                        }
+                    )
+                );
+                this.setOverlaysOLLayer(map.getLayersByName('Overlays')[0]);
+                var store = Ext.getStore('Overlays');
+                var layer = this.getOverlaysOLLayer();
+                var allLayers = this.toArray(layer.allLayers),
+                    layersParam = layer.params.LAYERS ?
+                        this.toArray(layer.params.LAYERS) : [],
+                    len = allLayers.length,
+                    i, l;
+                for (i=0; i<len; i++) {
+                    l = allLayers[i];
+                    store.add({
+                        label: OpenLayers.i18n(l),
+                        name: l,
+                        checked: layersParam.indexOf(l) != -1
+                    });
+                }
+            },
+            scope: this
+        });
     },
 
     toArray: function(value) {
