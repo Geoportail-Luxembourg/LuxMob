@@ -145,7 +145,7 @@ Ext.define('App.controller.Layers', {
     loadOverlays: function(map) {
         Ext.Ajax.request({
             // FIXME load layers from service
-            url: "layers.json",
+            url: "http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/theme/main/layers",
             success: function(response) {
                 var text = response.responseText;
                 var l = Ext.JSON.decode(text);
@@ -153,11 +153,11 @@ Ext.define('App.controller.Layers', {
                 var store = Ext.getStore('Overlays');
                 for (var i= 0; i < l.length; i++) {
                     store.add({
-                        fr: OpenLayers.Lang.fr[l[i].name] || l[i].name,
-                        en: OpenLayers.Lang.en[l[i].name] || l[i].name,
-                        de: OpenLayers.Lang.de[l[i].name] || l[i].name,
-                        lu: OpenLayers.Lang.lu[l[i].name] || l[i].name,
-                        name: l[i].name
+                        fr: OpenLayers.Lang.fr[l[i]] || l[i],
+                        en: OpenLayers.Lang.en[l[i]] || l[i],
+                        de: OpenLayers.Lang.de[l[i]] || l[i],
+                        lu: OpenLayers.Lang.lu[l[i]] || l[i],
+                        name: l[i]
                     });
                 }
 
