@@ -64,7 +64,7 @@ Ext.define('App.controller.Main', {
         if (Ext.Viewport.getActiveItem() == this.getDownloadView()) {
             animation = {type: 'flip'};
         } else if (Ext.Viewport.getActiveItem() == this.getSearchView()) {
-            animation = {type: 'fade', out: true};
+            animation = {type: 'fade', out: true, duration: 500};
         }
         Ext.Viewport.animateActiveItem(0, animation);
     },
@@ -92,7 +92,7 @@ Ext.define('App.controller.Main', {
     showSearch: function() {
         Ext.Viewport.animateActiveItem(
             this.getSearchView(),
-            {type: 'fade'}
+            {type: 'fade', duration: 500}
         );
     },
 
