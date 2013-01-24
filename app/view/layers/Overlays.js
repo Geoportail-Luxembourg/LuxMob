@@ -32,7 +32,7 @@ Ext.define('App.view.layers.Overlays', {
                             iconCls: "layers",
                             iconMask: true,
                             ui: 'back',
-                            action: "back"
+                            action: "backtolayers"
                         },
                         {
                             xtype: 'searchfield',

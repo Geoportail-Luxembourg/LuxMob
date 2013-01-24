@@ -4,7 +4,19 @@ Ext.define('App.view.layers.SavedMaps', {
 
     id: "savedmaps",
     config: {
-        cls: "card",
-        html: "Saved maps are allowed"
+        layout: 'fit',
+        items: [{ xtype: "toolbar",
+            docked: "top",
+            items: [{
+                xtype: "button",
+                text: i18n.message('button.close'),
+                action: "main",
+                iconMask: true
+            }]
+        }, {
+            xtype: 'panel',
+            cls: 'card',
+            html: "Saved maps are allowed"
+        }]
     }
 });

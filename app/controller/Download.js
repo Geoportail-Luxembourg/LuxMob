@@ -86,7 +86,7 @@ Ext.define('App.controller.Download', {
             map.render(mapContainer.dom);
         }
         Ext.Viewport.animateActiveItem(
-            this.getMapSettingsView(),
+            this.getMainView(),
             {type: 'flip'}
         );
         this.getUsageHelp() && this.getUsageHelp().hide();

@@ -15,15 +15,13 @@ Ext.define('App.controller.Layers', {
         overlaysOLLayer: null,
         refs: {
             mainView: '#mainView',
+            layersView: '#layersView',
             mapSettingsView: '#mapSettingsView',
-            chooserListOverlay: '#chooserListOverlay',
-            chooserList: '#chooserList',
             baseLayersView: {
                 selector: "#baseLayersView",
                 xtype: "baselayersview",
                 autoCreate: true
             },
-            chooserButton: '#chooserButton',
             baseLayerButton: '#baseLayerButton',
             selectedOverlaysList: '#selectedOverlaysList',
             addOverlaysButton: '#addOverlaysButton',
@@ -36,9 +34,6 @@ Ext.define('App.controller.Layers', {
             overlaysSearch: '#overlaysSearch'
         },
         control: {
-            chooserButton: {
-                tap: 'onChooserButton'
-            },
             baseLayerButton: {
                 tap: function() {
                     this.redirectTo('baselayers');
@@ -48,9 +43,6 @@ Ext.define('App.controller.Layers', {
                 mapready: function(map) {
                     this.setMap(map);
                 }
-            },
-            chooserList: {
-                itemtap: 'onChooserChange'
             },
             addOverlaysButton: {
                 tap: function() {
@@ -64,6 +56,9 @@ Ext.define('App.controller.Layers', {
             overlaysSearch: {
                 clearicontap: 'onSearchClearIconTap',
                 keyup: 'onSearchKeyUp'
+            },
+            'button[action=backtolayers]': {
+                tap: 'showLayers'
             }
         },
         routes: {
@@ -72,14 +67,20 @@ Ext.define('App.controller.Layers', {
         }
     },
 
+    showLayers: function() {
+        this.getLayersView().animateActiveItem(0, {
+            type: 'slide', direction: 'right'
+        });
+    },
+
     showBaseLayers: function() {
-        Ext.Viewport.animateActiveItem(this.getBaseLayersView(), {
+        this.getLayersView().animateActiveItem(this.getBaseLayersView(), {
             type: 'slide', direction: "left"
         });
     },
 
     showOverlays: function() {
-        Ext.Viewport.animateActiveItem(this.getOverlaysView(), {
+        this.getLayersView().animateActiveItem(this.getOverlaysView(), {
             type: 'slide', direction: "left"
         });
     },
@@ -177,20 +178,7 @@ Ext.define('App.controller.Layers', {
     onBaseLayerChange: function(layer) {
         this.getMap().setBaseLayer(layer);
         this.getBaseLayerButton().setText(layer.name);
-        this.redirectTo('mapsettings');
-    },
-
-    onChooserButton: function(button) {
-        var isPhone = Ext.os.deviceType == 'Phone';
-        this.getChooserListOverlay().showBy(button);
-    },
-
-    onChooserChange: function(list, index, target, record) {
-        this.getMapSettingsView().animateActiveItem(index, {
-            type: "flip"
-        });
-        this.getMapSettingsView().getDockedItems()[0].setTitle(record.get('title'));
-        this.getChooserListOverlay().hide();
+        this.redirectTo('main');
     },
 
     showMessage: function(msg) {
@@ -228,8 +216,7 @@ Ext.define('App.controller.Layers', {
             }
         });
         this.onOverlayChange();
-
-        this.showMessage(i18n.message("overlays.layeradded"));
+        this.redirectTo('main');
     },
 
     onOverlayRemove: function(list, record) {
@@ -256,7 +243,7 @@ Ext.define('App.controller.Layers', {
             xtype: 'actionsheet',
             items: [
                 {
-                    text: i18n.message("button.remove"),
+                    text: i18n.message("button.layer_remove"),
                     ui: 'decline',
                     handler: function() {
                         field.getParent().remove(field);

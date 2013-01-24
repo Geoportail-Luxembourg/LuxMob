@@ -10,11 +10,21 @@ Ext.define('App.view.layers.Layers', {
     config: {
         layout: 'card',
         activeItem: 0,
-        margin: 10,
         items: [{
             scrollable: true,
             items: [{
+                xtype: "toolbar",
+                title: i18n.message('mapsettings.title.layers'),
+                docked: "top",
+                items: [{
+                    xtype: "button",
+                    text: i18n.message('button.close'),
+                    action: "main",
+                    iconMask: true
+                }]
+            }, {
                 xtype: 'fieldset',
+                margin: 10,
                 title: i18n.message('layers.title.baselayer'),
                 items: [{
                     xtype: "button",
@@ -26,19 +36,12 @@ Ext.define('App.view.layers.Layers', {
                     iconAlign: "right"
                 }]
             }, {
+                margin: 10,
                 xtype: 'fieldset',
                 title: i18n.message('layers.title.overlays'),
                 items: [{
                     xclass: "App.view.layers.SelectedOverlays"
                 }]
-            }, {
-                    xtype: 'button',
-                    docked: 'bottom',
-                    action: 'download',
-                    cls: "download",
-                    iconCls: "cloud_download",
-                    text: "Télécharger cette carte",
-                    iconMask: true
             }]
         }]
     }

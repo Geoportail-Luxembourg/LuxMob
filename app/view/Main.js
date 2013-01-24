@@ -49,12 +49,12 @@ Ext.define('App.view.Main', {
                     }, {
                         xtype: "button",
                         iconCls: "layers",
-                        action: "mapsettings",
-                        iconMask: true
+                        iconMask: true,
+                        action: "mapsettings"
                     }, {
                         xtype: "button",
-                        iconCls: "settings",
-                        action: "settings",
+                        iconCls: "more",
+                        action: "more",
                         iconMask: true
                     }]
                 }]

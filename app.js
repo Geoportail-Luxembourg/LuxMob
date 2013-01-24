@@ -16,7 +16,7 @@ Ext.application({
         'App.util.Config'
     ],
 
-    views: ['Main', 'layers.MapSettings', 'layers.ChooserList'],
+    views: ['Main', 'layers.MapSettings', 'MoreMenu'],
     controllers: ["Download",'Main', 'Layers', 'Settings'],
     stores: ['BaseLayers', 'Overlays'],
 
@@ -60,8 +60,7 @@ Ext.application({
         // now add the main view to the viewport
         Ext.Viewport.add(mainView);
 
-        var isPhone = Ext.os.deviceType == 'Phone';
-        Ext.Viewport.add(Ext.create('App.view.layers.ChooserList'));
+        Ext.Viewport.add(Ext.create('App.view.MoreMenu'));
 
         this.configurePicker();
         this.configureMessageBox();

@@ -3,11 +3,13 @@ Ext.define('App.controller.Main', {
 
     requires: [
         'App.view.layers.MapSettings',
-        'App.view.Settings'
+        'App.view.Settings',
+        'App.view.MoreMenu'
     ],
     config: {
         refs: {
             mainView: '#mainView',
+            moreMenu: '#moreMenu',
             mapSettingsView: '#mapSettingsView',
             settingsView: {
                 selector: '#settingsView',
@@ -18,9 +20,12 @@ Ext.define('App.controller.Main', {
             searchField: "#searchField"
         },
         control: {
-            'button[action=home]': {
+            'button[action=more]': {
+                tap: 'onMore'
+            },
+            'button[action=main]': {
                 tap: function() {
-                    this.redirectTo('home');
+                    this.redirectTo('main');
                 }
             },
             'button[action=mapsettings]': {
@@ -31,11 +36,6 @@ Ext.define('App.controller.Main', {
             'button[action=settings]': {
                 tap: function() {
                     this.redirectTo('settings');
-                }
-            },
-            'button[action=back]': {
-                tap: function() {
-                    window.history.back();
                 }
             },
             'button[action=search]': {
@@ -57,14 +57,14 @@ Ext.define('App.controller.Main', {
 
         },
         routes: {
-            '': 'showHome',
-            'home': 'showHome',
+            '': 'showMain',
+            'main': 'showMain',
             'mapsettings': 'showMapSettings',
             'settings': 'showSettings'
         }
     },
 
-    showHome: function() {
+    showMain: function() {
         var animation = {type:'reveal', direction: 'down'};
         if (Ext.Viewport.getActiveItem() == this.getDownloadView()) {
             animation = {type: 'flip'};
@@ -90,5 +90,9 @@ Ext.define('App.controller.Main', {
             this.getSettingsView(),
             {type: 'cover', direction: "up"}
         );
+    },
+
+    onMore: function(button) {
+        this.getMoreMenu().showBy(button);
     }
 });

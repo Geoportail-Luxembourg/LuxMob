@@ -26,7 +26,7 @@ Ext.define('App.view.layers.BaseLayers', {
                     iconCls: "layers",
                     iconMask: true,
                     ui: 'back',
-                    action: "back"
+                    action: "backtolayers"
                 }]
             }
         ]

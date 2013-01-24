@@ -12,12 +12,9 @@ Ext.define("App.view.Settings", {
             xtype: 'toolbar',
             title: i18n.message("settings.settings"),
             items: [{
-                xtype: 'spacer'
-            }, {
                 xtype: 'button',
-                iconCls: 'home',
-                iconMask: true,
-                action: 'home'
+                text: i18n.message('button.close'),
+                action: 'main'
             }]
         }, {
             xtype: "selectfield",

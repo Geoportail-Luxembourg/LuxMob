@@ -3,7 +3,7 @@ window.i18n = Ext.i18n.Bundle;
  * The container for the layers config.
  */
 Ext.define('App.view.layers.MapSettings', {
-    extend: 'Ext.Panel',
+    extend: 'Ext.tab.Panel',
     requires: [
         // FIXME both SavedMaps views are loaded, not good for performance
         "App.view.layers.SavedMaps",
@@ -13,29 +13,17 @@ Ext.define('App.view.layers.MapSettings', {
 
     id: 'mapSettingsView',
     config: {
-        layout: 'card',
+        fullScreen: true,
+        tabBarPosition: 'bottom',
         items: [
             {
-                xtype: "toolbar",
-                docked: "top",
-                title: i18n.message('mapsettings.title.layers'),
-                items: [{
-                    xtype: "button",
-                    id: "chooserButton",
-                    iconCls: "list",
-                    iconMask: true
-                }, {
-                    xtype: "spacer"
-                }, {
-                    xtype: "button",
-                    iconCls: "home",
-                    action: "home",
-                    iconMask: true
-                }]
-            }, {
+                iconCls: 'layers',
+                iconMask: true,
                 title: i18n.message('mapsettings.title.layers'),
                 xclass: "App.view.layers.Layers"
             }, {
+                iconCls: 'cloud_download',
+                iconMask: true,
                 title: i18n.message('mapsettings.title.savedmaps'),
                 xclass: Ext.browser.is.PhoneGap ?
                     "App.view.layers.SavedMaps" : "App.view.layers.SavedMapsNotAvailable"
