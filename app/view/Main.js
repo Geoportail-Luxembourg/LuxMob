@@ -3,7 +3,6 @@ Ext.define('App.view.Main', {
     extend: 'Ext.Container',
     xtype: 'mainview',
     requires: [
-        'Ext.field.Search',
         'App.plugin.StatefulMap'
     ],
     id: "mainView",

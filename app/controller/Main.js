@@ -4,7 +4,8 @@ Ext.define('App.controller.Main', {
     requires: [
         'App.view.layers.MapSettings',
         'App.view.Settings',
-        'App.view.MoreMenu'
+        'App.view.MoreMenu',
+        'App.view.Search'
     ],
     config: {
         refs: {
@@ -14,6 +15,11 @@ Ext.define('App.controller.Main', {
             settingsView: {
                 selector: '#settingsView',
                 xtype: 'settingsview',
+                autoCreate: true
+            },
+            searchView: {
+                selector: '#searchView',
+                xtype: 'searchview',
                 autoCreate: true
             },
             downloadView: "#downloadView",
@@ -39,13 +45,17 @@ Ext.define('App.controller.Main', {
                 }
             },
             'button[action=search]': {
+                tap: function() {
+                    this.redirectTo('search');
+                }
             }
         },
         routes: {
             '': 'showMain',
             'main': 'showMain',
             'mapsettings': 'showMapSettings',
-            'settings': 'showSettings'
+            'settings': 'showSettings',
+            'search': 'showSearch'
         }
     },
 
@@ -53,6 +63,8 @@ Ext.define('App.controller.Main', {
         var animation = {type:'reveal', direction: 'down'};
         if (Ext.Viewport.getActiveItem() == this.getDownloadView()) {
             animation = {type: 'flip'};
+        } else if (Ext.Viewport.getActiveItem() == this.getSearchView()) {
+            animation = {type: 'fade', out: true};
         }
         Ext.Viewport.animateActiveItem(0, animation);
     },
@@ -74,6 +86,13 @@ Ext.define('App.controller.Main', {
         Ext.Viewport.animateActiveItem(
             this.getSettingsView(),
             {type: 'cover', direction: "up"}
+        );
+    },
+
+    showSearch: function() {
+        Ext.Viewport.animateActiveItem(
+            this.getSearchView(),
+            {type: 'fade'}
         );
     },
 
