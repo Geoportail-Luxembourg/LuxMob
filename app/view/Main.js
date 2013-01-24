@@ -27,40 +27,29 @@ Ext.define('App.view.Main', {
     applyItems: function(items, collection) {
         items = [
             {
-                xtype: 'panel',
-                top: 0,
-                width: '100%',
-                cls: 'maintoolbar',
-                items: [{
-                    xtype: "toolbar",
-                    docked: "top",
-                    items: [{
-                        xtype: 'searchfield',
-                        id: "searchField",
-                        hidden: true,
-                        flex: 4
-                    }, {
-                        xtype: "button",
-                        iconCls: 'search',
-                        iconMask: true,
-                        action: "search"
-                    }, {
-                        xtype: "spacer"
-                    }, {
-                        xtype: "button",
-                        iconCls: "layers",
-                        iconMask: true,
-                        action: "mapsettings"
-                    }, {
-                        xtype: "button",
-                        iconCls: "more",
-                        action: "more",
-                        iconMask: true
-                    }]
-                }]
-            }, {
                 xtype: 'component',
                 id: "map-container"
+            }, {
+                xtype: "button",
+                iconCls: 'search',
+                iconMask: true,
+                action: "search",
+                top: 10,
+                left: 10
+            }, {
+                xtype: "button",
+                iconCls: "layers",
+                iconMask: true,
+                action: "mapsettings",
+                top: 10,
+                right: 10
+            }, {
+                xtype: "button",
+                iconCls: "more",
+                iconMask: true,
+                action: "more",
+                bottom: 10,
+                right: 10
             }
         ];
         return this.callParent([items, collection]);
