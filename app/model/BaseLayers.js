@@ -4,6 +4,14 @@ Ext.define('App.model.BaseLayers', {
     config: {
         fields: [{
             name: 'name'
+        }, {
+            name: 'fr'
+        }, {
+            name: 'en'
+        }, {
+            name: 'de'
+        }, {
+            name: 'lu'
         }]
     }
 });

@@ -11,7 +11,9 @@ Ext.define('App.controller.Settings', {
             languageSelect: {
                 change: function(select, newValue) {
                     i18n.setLanguage(newValue);
+                    OpenLayers.Lang.setCode(newValue);
                     localStorage.setItem('language', newValue);
+                    this.fireEvent('languagechange', newValue);
                 }
             }
         }

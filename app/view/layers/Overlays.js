@@ -15,7 +15,7 @@ Ext.define('App.view.layers.Overlays', {
             id: 'overlaysList',
 
             //itemTpl defines the template for each item in the list
-            itemTpl: '{name}',
+            itemTpl: null,
             mode: 'SIMPLE',
 
             //give it a link to the store instance
@@ -47,6 +47,8 @@ Ext.define('App.view.layers.Overlays', {
     },
 
     initialize: function() {
-        this.down('#overlaysList').setStore(Ext.getStore('Overlays'));
+        this.down('#overlaysList')
+            .setStore(Ext.getStore('Overlays'))
+            .setItemTpl(['{', i18n.getLanguage(), '}'].join());
     }
 });

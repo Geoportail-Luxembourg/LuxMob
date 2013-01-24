@@ -85,6 +85,7 @@ Ext.application({
             language: App.util.Config.getLanguage(),
             noCache: true
         });
+        OpenLayers.Lang.setCode(App.util.Config.getLanguage());
     },
 
     configureMessageBox: function() {
