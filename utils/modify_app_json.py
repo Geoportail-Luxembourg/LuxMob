@@ -22,9 +22,7 @@ json_str = re.sub(r'\n', '', json_str)
 json_str = json_str.encode('string-escape')
 
 obj = json.loads(json_str)
-js_list = [{'path': 'cordova-2.3.0.js'}]
-js_list.extend(obj['js'])
-obj['js'] = js_list
+obj['js'].append({'path': 'cordova-2.3.0.js', 'type': 'js'})
 
 f = open(output_file, 'w')
 f.write(json.dumps(obj))
