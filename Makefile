@@ -22,6 +22,8 @@ android: build/cordova-android/local.properties app
 	cp -r build/App/production/* build/cordova-android/assets/www/
 	python utils/modify_app_json.py build/App/production/app.json build/cordova-android/assets/www/app.json
 	./build/cordova-android/cordova/build
+	adb uninstall com.c2c.LuxMob
+	./build/cordova-android/cordova/run
 
 build/cordova-android/local.properties:
 	android update project -p build/cordova-android/
