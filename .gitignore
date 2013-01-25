@@ -16,5 +16,9 @@ build/phonegap-android/assets/www/app.json
 build/phonegap-android/assets/www/cache.appcache
 build/phonegap-android/assets/www/index.html
 build/phonegap-android/assets/www/resources/
+build/phonegap-android/bin/
+build/phonegap-android/gen/
 build/App/production/
+build/App/testing/
+build/App/package/
 stderr.txt
