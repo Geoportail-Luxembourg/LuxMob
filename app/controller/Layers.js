@@ -111,9 +111,12 @@ Ext.define('App.controller.Layers', {
     },
 
     loadOverlaysFromCache: function() {
-        var overlays = localStorage.getItem('overlays').split(',');
-        for (var i = 0; i < overlays.length; i++) {
-            this.onOverlayAdd(overlays[i], true);
+        var overlays = localStorage.getItem('overlays');
+        if (overlays) {
+            overlays = overlays.split(',');
+            for (var i = 0; i < overlays.length; i++) {
+                this.onOverlayAdd(overlays[i], true);
+            }
         }
     },
 
