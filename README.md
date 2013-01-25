@@ -106,6 +106,10 @@ For example:
 
 The LuxMob app should now available in the Android device.
 
+To see (filtered) logs in a console:
+
+    $ adb logcat | grep -v '^[W\/Trace|E\/StrictMode|E\/ActivityThread]'
+
 ## Install and run app in iOS emulator
 
 Open `build/LuxMob/ios/LuxMob.xcodeproj` in `Xcode` and press `Run`.
