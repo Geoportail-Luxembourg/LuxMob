@@ -9,6 +9,9 @@ build/cordova-ios/www/cache.appcache
 build/cordova-ios/www/index.html
 build/cordova-ios/www/resources/
 build/cordova-ios/www/app/
+build/cordova-ios/LuxMob.xcodeproj/project.pbxproj
+build/cordova-ios/CordovaLib/build/
+build/cordova-ios/build/
 build/cordova-android/assets/www/app.js
 build/cordova-android/assets/www/GeolocateControl.js
 build/cordova-android/assets/www/openlayers-mobile.js
