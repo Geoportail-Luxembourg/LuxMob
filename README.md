@@ -32,6 +32,10 @@ Ant, used by Sencha Cmd, and the Android SDK require a JDK. Make sure you have
 JDK 7 installed. See
 http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html.
 
+### Compass
+
+Compass is needed for the project: http://compass-style.org/install/
+
 ### Android SDK
 
 Download the Android SDK Tools from
