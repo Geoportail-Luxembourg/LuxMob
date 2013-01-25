@@ -118,7 +118,8 @@ div.olMap {
 
 .olControlScaleLine {
     display: block;
-    left: 60px;
+    left: 50%;
+    margin-left: -25px;
     bottom: 3px;
     font-size: xx-small;
     padding: 4px;
