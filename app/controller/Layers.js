@@ -178,7 +178,8 @@ Ext.define('App.controller.Layers', {
                     transparent: true
                 },
                 {
-                    visibility: !!cache
+                    visibility: !!cache,
+                    buffer: 0
                 }
             )
         );
