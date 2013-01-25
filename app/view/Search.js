@@ -1,19 +1,26 @@
 window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.Search', {
-    extend: 'Ext.Panel',
+    extend: 'Ext.dataview.List',
     xtype: 'searchview',
     requires: [
-        'Ext.field.Search'
+        'Ext.field.Search',
+        'App.store.Search'
     ],
     id: "searchView",
 
     config: {
+        itemTpl: "<div>{listlabel}</div>",
+        store: 'Search',
+        emptyText: i18n.message('search.empty'),
+        pinHeaders: true,
+        grouped: true,
         items: [
             {
                 xtype: 'toolbar',
                 docked: 'top',
                 items: [{
                     xtype: 'searchfield',
+                    id: 'searchField',
                     flex: 4
                 }, {
                     xtype: 'button',

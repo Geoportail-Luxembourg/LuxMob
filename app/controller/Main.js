@@ -22,8 +22,7 @@ Ext.define('App.controller.Main', {
                 xtype: 'searchview',
                 autoCreate: true
             },
-            downloadView: "#downloadView",
-            searchField: "#searchField"
+            downloadView: "#downloadView"
         },
         control: {
             'button[action=more]': {
