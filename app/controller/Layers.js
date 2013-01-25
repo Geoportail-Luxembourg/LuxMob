@@ -246,7 +246,7 @@ Ext.define('App.controller.Layers', {
             }
         });
         layer.setVisibility(layersParam.length);
-        layer.mergeNewParams({'LAYERS': layersParam});
+        layer.mergeNewParams({'LAYERS': layersParam.reverse()});
     },
 
     onOverlaySwipe: function(field) {
