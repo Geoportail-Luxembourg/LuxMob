@@ -49,8 +49,22 @@ Ext.define('App.controller.Layers', {
                     this.redirectTo('overlays');
                 }
             },
+            selectedOverlaysList: {
+                ready: 'loadOverlaysFromCache'
+            },
+            overlaysView: {
+                ready: function() {
+                    var cache = localStorage.getItem('overlays');
+                    var selected = Ext.getStore('Overlays').queryBy(function(record) {
+                        return (cache.indexOf(record.get('name')) != -1);
+                    });
+                    this.getOverlaysList().select(selected.items, false, true);
+                }
+            },
             overlaysList: {
-                select: 'onOverlayAdd',
+                select: function(list, record) {
+                    this.onOverlayAdd(record.get('name'));
+                },
                 deselect: 'onOverlayRemove'
             },
             overlaysSearch: {
@@ -89,8 +103,21 @@ Ext.define('App.controller.Layers', {
                     }
                 });
             },
+            themechange: function(theme) {
+                this.loadOverlays(this.getMap(), theme);
+            },
             scope: this
         });
+    },
+
+    loadOverlaysFromCache: function() {
+        var overlays = localStorage.getItem('overlays');
+        if (overlays) {
+            overlays = overlays.split(',');
+            for (var i = 0; i < overlays.length; i++) {
+                this.onOverlayAdd(overlays[i], true);
+            }
+        }
     },
 
     showLayers: function() {
@@ -140,17 +167,36 @@ Ext.define('App.controller.Layers', {
 
         this.getBaseLayerButton().setText(this.getMap().baseLayer.name);
         this.loadOverlays(map);
+
+        var cache = localStorage.getItem('overlays');
+        App.map.addLayer(
+            new OpenLayers.Layer.WMS(
+                "Overlays",
+                "http://geoportail-luxembourg.demo-camptocamp.com/~sbrga/mapproxy/service",
+                {
+                    layers: cache || [],
+                    transparent: true
+                },
+                {
+                    visibility: !!cache
+                }
+            )
+        );
+        this.setOverlaysOLLayer(map.getLayersByName('Overlays')[0]);
+
     },
 
-    loadOverlays: function(map) {
+    loadOverlays: function(map, theme) {
+        theme = theme || 'main';
         Ext.Ajax.request({
             // FIXME load layers from service
-            url: "http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/theme/main/layers",
+            url: "http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/theme/" + theme + "/layers",
             success: function(response) {
                 var text = response.responseText;
                 var l = Ext.JSON.decode(text);
 
                 var store = Ext.getStore('Overlays');
+                store.removeAll();
                 for (var i= 0; i < l.length; i++) {
                     store.add({
                         fr: OpenLayers.Lang.fr[l[i]] || l[i],
@@ -160,22 +206,6 @@ Ext.define('App.controller.Layers', {
                         name: l[i]
                     });
                 }
-
-                var records = Ext.pluck(store.getRange(), 'data');
-                App.map.addLayer(
-                    new OpenLayers.Layer.WMS(
-                        "Overlays",
-                        "http://geoportail-luxembourg.demo-camptocamp.com/~sbrga/mapproxy/service",
-                        {
-                            layers: [],
-                            transparent: true
-                        },
-                        {
-                            visibility: false
-                        }
-                    )
-                );
-                this.setOverlaysOLLayer(map.getLayersByName('Overlays')[0]);
             },
             scope: this
         });
@@ -205,11 +235,11 @@ Ext.define('App.controller.Layers', {
         }, 2000);
     },
 
-    onOverlayAdd: function(list, record) {
+    onOverlayAdd: function(name, silent) {
         var field = this.getSelectedOverlaysList().insert(0, {
-            label: OpenLayers.i18n(record.get('name')),
-            name: record.get('name'),
-            value: record.get('name'),
+            label: OpenLayers.i18n(name),
+            name: name,
+            value: name,
             checked: true,
             listeners: {
                 check: this.onOverlayChange,
@@ -225,7 +255,9 @@ Ext.define('App.controller.Layers', {
                 field.setChecked(!field.isChecked());
             }
         });
-        this.onOverlayChange();
+        if (!silent) {
+            this.onOverlayChange();
+        }
         this.redirectTo('main');
     },
 
@@ -247,6 +279,8 @@ Ext.define('App.controller.Layers', {
         });
         layer.setVisibility(layersParam.length);
         layer.mergeNewParams({'LAYERS': layersParam.reverse()});
+
+        localStorage.setItem('overlays', layersParam.join(','));
     },
 
     onOverlaySwipe: function(field) {
@@ -260,7 +294,7 @@ Ext.define('App.controller.Layers', {
                         field.getParent().remove(field);
                         this.onOverlayChange();
                         var list = this.getOverlaysList();
-                        list.deselect(Ext.getStore('Overlays')
+                        list && list.deselect(Ext.getStore('Overlays')
                             .findRecord('name', field.getValue()));
                         actions.hide();
                     },

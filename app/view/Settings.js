@@ -17,20 +17,35 @@ Ext.define("App.view.Settings", {
                 action: 'main'
             }]
         }, {
-            xtype: "selectfield",
-            id: 'languageSelect',
-            label: i18n.message('settings.language'),
-            listeners: {
-                painted: function() {
-                    this.setValue(Ext.i18n.Bundle.getLanguage());
-                }
-            },
-            options: [
-                {text: 'English', value: 'en'},
-                {text: 'Français', value: 'fr'},
-                {text: 'Deutsch', value: 'de'},
-                {text: 'Lëtzebuergesch', value: 'lu'}
-            ]
+            xtype: "fieldset",
+            items: [{
+                xtype: "selectfield",
+                id: 'languageSelect',
+                label: i18n.message('settings.language'),
+                listeners: {
+                    painted: function() {
+                        this.setValue(Ext.i18n.Bundle.getLanguage());
+                    }
+                },
+                options: [
+                    {text: 'English', value: 'en'},
+                    {text: 'Français', value: 'fr'},
+                    {text: 'Deutsch', value: 'de'},
+                    {text: 'Lëtzebuergesch', value: 'lu'}
+                ]
+            }]
+        }, {
+            xtype: "fieldset",
+            instructions: i18n.message('settings.themes.instructions'),
+            items: [{
+                xtype: "selectfield",
+                id: 'themeSelect',
+                label: i18n.message('settings.themes'),
+                options: [
+                    {text: OpenLayers.i18n('theme.main'), value: 'main'},
+                    {text: OpenLayers.i18n('theme.tourisme'), value: 'tourisme'}
+                ]
+            }]
         }]
     }
 });

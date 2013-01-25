@@ -50,5 +50,6 @@ Ext.define('App.view.layers.Overlays', {
         this.down('#overlaysList')
             .setStore(Ext.getStore('Overlays'))
             .setItemTpl(['{', i18n.getLanguage(), '}'].join());
+        this.fireEvent('ready');
     }
 });
