@@ -3,8 +3,15 @@ Ext.define('App.model.Overlays', {
 
     config: {
         fields: [{
-            name: 'name',
-            label: 'label'
+            name: 'name'
+        }, {
+            name: 'fr'
+        }, {
+            name: 'en'
+        }, {
+            name: 'de'
+        }, {
+            name: 'lu'
         }]
     }
 });

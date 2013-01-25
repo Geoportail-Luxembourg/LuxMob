@@ -67,6 +67,32 @@ Ext.define('App.controller.Layers', {
         }
     },
 
+    init: function() {
+        // support language change for some widgets
+        this.getApplication().getController('Settings').on({
+            languagechange: function(code) {
+                var list = this.getOverlaysList();
+                list && list.setItemTpl(['{', code, '}'].join(''));
+
+                this.getBaseLayersView().items.each(function(item) {
+                    if (item.getXTypes().indexOf('radio') != -1) {
+                        item.setLabel(OpenLayers.i18n(item.getValue()));
+                        if (item.isChecked()) {
+                            this.getBaseLayerButton()
+                                .setText(OpenLayers.i18n(item.getValue()));
+                        }
+                    }
+                }, this);
+                this.getSelectedOverlaysList().items.each(function(item) {
+                    if (item.getXTypes().indexOf('field') != -1) {
+                        item.setLabel(OpenLayers.i18n(item.getValue()));
+                    }
+                });
+            },
+            scope: this
+        });
+    },
+
     showLayers: function() {
         this.getLayersView().animateActiveItem(0, {
             type: 'slide', direction: 'right'
@@ -94,8 +120,9 @@ Ext.define('App.controller.Layers', {
                 store.add(layer);
                 var radio = this.getBaseLayersView().add({
                     name: "baselayer",
-                    label: layer.name,
+                    label: OpenLayers.i18n(layer.name),
                     checked: layer == map.baseLayer,
+                    value: layer.name,
                     listeners: {
                         element: 'label',
                         tap: function() {
@@ -116,26 +143,25 @@ Ext.define('App.controller.Layers', {
     },
 
     loadOverlays: function(map) {
-        var format = new OpenLayers.Format.WMSCapabilities();
-        OpenLayers.Request.GET({
-            // FIXME load capabilities from mapproxy service
-            url: "capabilities.xml",
-            params: {
-                SERVICE: "WMS",
-                VERSION: "1.1.1",
-                REQUEST: "GetCapabilities"
-            },
-            success: function(request) {
-                var doc = request.responseXML;
-                if (!doc || !doc.documentElement) {
-                    doc = request.responseText;
+        Ext.Ajax.request({
+            // FIXME load layers from service
+            url: "http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/theme/main/layers",
+            success: function(response) {
+                var text = response.responseText;
+                var l = Ext.JSON.decode(text);
+
+                var store = Ext.getStore('Overlays');
+                for (var i= 0; i < l.length; i++) {
+                    store.add({
+                        fr: OpenLayers.Lang.fr[l[i]] || l[i],
+                        en: OpenLayers.Lang.en[l[i]] || l[i],
+                        de: OpenLayers.Lang.de[l[i]] || l[i],
+                        lu: OpenLayers.Lang.lu[l[i]] || l[i],
+                        name: l[i]
+                    });
                 }
-                var capabilities = format.read(doc);
-                var layers = [],
-                    l = capabilities.capability.layers;
-                for (var i = 0; i < l.length; i++) {
-                    layers.push(l[i].name);
-                }
+
+                var records = Ext.pluck(store.getRange(), 'data');
                 App.map.addLayer(
                     new OpenLayers.Layer.WMS(
                         "Overlays",
@@ -145,27 +171,11 @@ Ext.define('App.controller.Layers', {
                             transparent: true
                         },
                         {
-                            allLayers: layers,
                             visibility: false
                         }
                     )
                 );
                 this.setOverlaysOLLayer(map.getLayersByName('Overlays')[0]);
-                var store = Ext.getStore('Overlays');
-                var layer = this.getOverlaysOLLayer();
-                var allLayers = this.toArray(layer.allLayers),
-                    layersParam = layer.params.LAYERS ?
-                        this.toArray(layer.params.LAYERS) : [],
-                    len = allLayers.length,
-                    i, l;
-                for (i=0; i<len; i++) {
-                    l = allLayers[i];
-                    store.add({
-                        label: OpenLayers.i18n(l),
-                        name: l,
-                        checked: layersParam.indexOf(l) != -1
-                    });
-                }
             },
             scope: this
         });
@@ -177,7 +187,7 @@ Ext.define('App.controller.Layers', {
 
     onBaseLayerChange: function(layer) {
         this.getMap().setBaseLayer(layer);
-        this.getBaseLayerButton().setText(layer.name);
+        this.getBaseLayerButton().setText(OpenLayers.i18n(layer.name));
         this.redirectTo('main');
     },
 
@@ -223,6 +233,7 @@ Ext.define('App.controller.Layers', {
         var selList = this.getSelectedOverlaysList();
         selList.remove(selList.down('field[name=' + record.get('name') + ']'));
         this.showMessage(i18n.message("overlays.layerremoved"));
+        this.onOverlayChange();
     },
 
     onOverlayChange: function() {
@@ -235,7 +246,7 @@ Ext.define('App.controller.Layers', {
             }
         });
         layer.setVisibility(layersParam.length);
-        layer.mergeNewParams({'LAYERS': layersParam});
+        layer.mergeNewParams({'LAYERS': layersParam.reverse()});
     },
 
     onOverlaySwipe: function(field) {
@@ -326,5 +337,23 @@ Ext.define('App.controller.Layers', {
     onSearchClearIconTap: function() {
         //call the clearFilter method on the store instance
         Ext.getStore('Overlays').clearFilter();
+    }
+});
+
+Ext.define('ListItemTplFix',  {
+   override: 'Ext.dataview.List',
+
+   updateItemTpl: function(newTpl, oldTpl) {
+        var listItems = this.listItems,
+            ln = listItems.length || 0,
+            i, listItem;
+
+        for (i = 0; i < ln; i++) {
+            listItem = listItems[i];
+            listItem.setTpl(newTpl);
+        }
+        if (this.getStore()) {
+            this.doRefresh();
+        }
     }
 });
