@@ -34,18 +34,6 @@ Ext.define("App.view.Settings", {
                     {text: 'Lëtzebuergesch', value: 'lu'}
                 ]
             }]
-        }, {
-            xtype: "fieldset",
-            instructions: i18n.message('settings.themes.instructions'),
-            items: [{
-                xtype: "selectfield",
-                id: 'themeSelect',
-                label: i18n.message('settings.themes'),
-                options: [
-                    {text: OpenLayers.i18n('theme.main'), value: 'main'},
-                    {text: OpenLayers.i18n('theme.tourisme'), value: 'tourisme'}
-                ]
-            }]
         }]
     }
 });
