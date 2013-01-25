@@ -171,7 +171,6 @@ Ext.define('App.controller.Layers', {
                             transparent: true
                         },
                         {
-                            allLayers: Ext.pluck(records, 'name'),
                             visibility: false
                         }
                     )
@@ -234,6 +233,7 @@ Ext.define('App.controller.Layers', {
         var selList = this.getSelectedOverlaysList();
         selList.remove(selList.down('field[name=' + record.get('name') + ']'));
         this.showMessage(i18n.message("overlays.layerremoved"));
+        this.onOverlayChange();
     },
 
     onOverlayChange: function() {
