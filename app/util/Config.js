@@ -145,7 +145,7 @@ App.map = new OpenLayers.Map({
                 enableKinetic: true
             }
         }),
-        new OpenLayers.Control.ScaleLine({geodesic: true})
+        new OpenLayers.Control.ScaleLine()
     ],
     layers: getBaseLayers()
 });
