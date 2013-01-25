@@ -9,6 +9,9 @@ build/phonegap-ios/www/cache.appcache
 build/phonegap-ios/www/index.html
 build/phonegap-ios/www/resources/
 build/phonegap-ios/www/app/
+build/phonegap-ios/CordovaLib/CordovaLib.xcodeproj/xcuserdata/
+build/phonegap-ios/LuxMob.xcodeproj/project.xcworkspace/
+build/phonegap-ios/LuxMob.xcodeproj/xcuserdata/
 build/phonegap-android/assets/www/app.js
 build/phonegap-android/assets/www/GeolocateControl.js
 build/phonegap-android/assets/www/openlayers-mobile.js
