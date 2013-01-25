@@ -103,6 +103,9 @@ Ext.define('App.controller.Layers', {
                     }
                 });
             },
+            themechange: function(theme) {
+                this.loadOverlays(this.getMap(), theme);
+            },
             scope: this
         });
     },
@@ -161,17 +164,36 @@ Ext.define('App.controller.Layers', {
 
         this.getBaseLayerButton().setText(this.getMap().baseLayer.name);
         this.loadOverlays(map);
+
+        var cache = localStorage.getItem('overlays');
+        App.map.addLayer(
+            new OpenLayers.Layer.WMS(
+                "Overlays",
+                "http://geoportail-luxembourg.demo-camptocamp.com/~sbrga/mapproxy/service",
+                {
+                    layers: cache || [],
+                    transparent: true
+                },
+                {
+                    visibility: !!cache
+                }
+            )
+        );
+        this.setOverlaysOLLayer(map.getLayersByName('Overlays')[0]);
+
     },
 
-    loadOverlays: function(map) {
+    loadOverlays: function(map, theme) {
+        theme = theme || 'main';
         Ext.Ajax.request({
             // FIXME load layers from service
-            url: "http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/theme/main/layers",
+            url: "http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/theme/" + theme + "/layers",
             success: function(response) {
                 var text = response.responseText;
                 var l = Ext.JSON.decode(text);
 
                 var store = Ext.getStore('Overlays');
+                store.removeAll();
                 for (var i= 0; i < l.length; i++) {
                     store.add({
                         fr: OpenLayers.Lang.fr[l[i]] || l[i],
@@ -181,24 +203,6 @@ Ext.define('App.controller.Layers', {
                         name: l[i]
                     });
                 }
-
-                var cache = localStorage.getItem('overlays');
-                var records = Ext.pluck(store.getRange(), 'data');
-                App.map.addLayer(
-                    new OpenLayers.Layer.WMS(
-                        "Overlays",
-                        "http://geoportail-luxembourg.demo-camptocamp.com/~sbrga/mapproxy/service",
-                        {
-                            layers: cache || [],
-                            transparent: true
-                        },
-                        {
-                            visibility: !!cache
-                        }
-                    )
-                );
-                this.setOverlaysOLLayer(map.getLayersByName('Overlays')[0]);
-
             },
             scope: this
         });

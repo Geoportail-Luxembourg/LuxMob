@@ -5,7 +5,8 @@ Ext.define('App.controller.Settings', {
     ],
     config: {
         refs: {
-            languageSelect: '#languageSelect'
+            languageSelect: '#languageSelect',
+            themeSelect: '#themeSelect'
         },
         control: {
             languageSelect: {
@@ -14,6 +15,20 @@ Ext.define('App.controller.Settings', {
                     OpenLayers.Lang.setCode(newValue);
                     localStorage.setItem('language', newValue);
                     this.fireEvent('languagechange', newValue);
+
+                    var themes = this.getThemeSelect();
+                    var options = themes.getOptions();
+                    var value = themes.getValue();
+                    Ext.each(options, function(option) {
+                        option.text = OpenLayers.i18n('theme.' + option.value);
+                    });
+                    themes.updateOptions(options);
+                    themes.setValue(value);
+                }
+            },
+            themeSelect: {
+                change: function(select, newValue) {
+                    this.fireEvent('themechange', newValue);
                 }
             }
         }
