@@ -1,4 +1,5 @@
-SRC = app.js app.json index.html $(shell find app -name \*.js)
+SRC = app.js app.json index.html openlayers-mobile.js GeolocateControl.js
+SRC_APP = $(shell find app -name \*.js)
 
 .PHONY: all
 all: app
@@ -9,6 +10,13 @@ ios: app
 	python utils/modify_app_json.py build/App/production/app.json build/phonegap-ios/www/app.json
 	./build/phonegap-ios/cordova/build
 
+.PHONY: ios-debug
+ios-debug: $(SRC) $(SRC_APP)
+	cp -r app build/phonegap-ios/www/
+	cp -r resources build/phonegap-ios/www/
+	cp $(SRC) build/phonegap-ios/www/
+	python utils/modify_app_json.py app.json build/phonegap-ios/www/app.json
+
 .PHONY: android
 android: app
 	cp -r build/App/production/* build/phonegap-android/assets/www/
@@ -18,7 +26,7 @@ android: app
 .PHONY: app
 app: build/App/production/app.js
 
-build/App/production/app.js: $(SRC)
+build/App/production/app.js: $(SRC) $(SRC_APP)
 	sencha app build production || rm $@
 
 .PHONY:

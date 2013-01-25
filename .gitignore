@@ -8,6 +8,7 @@ build/phonegap-ios/www/app.json
 build/phonegap-ios/www/cache.appcache
 build/phonegap-ios/www/index.html
 build/phonegap-ios/www/resources/
+build/phonegap-ios/www/app/
 build/phonegap-android/assets/www/app.js
 build/phonegap-android/assets/www/GeolocateControl.js
 build/phonegap-android/assets/www/openlayers-mobile.js
@@ -16,6 +17,7 @@ build/phonegap-android/assets/www/app.json
 build/phonegap-android/assets/www/cache.appcache
 build/phonegap-android/assets/www/index.html
 build/phonegap-android/assets/www/resources/
+build/phonegap-android/assets/www/app/
 build/phonegap-android/bin/
 build/phonegap-android/gen/
 build/App/production/
