@@ -19,7 +19,7 @@ android: app
 app: build/App/production/app.js
 
 build/App/production/app.js: $(SRC)
-	sencha app build production
+	sencha app build production || rm $@
 
 .PHONY:
 clean:
