@@ -14,6 +14,8 @@ ios: app
 ios-debug: $(SRC) $(SRC_APP)
 	cp -r app build/phonegap-ios/www/
 	cp -r resources build/phonegap-ios/www/
+	cp -r touch build/phonegap-ios/www/
+	cp -r lib build/phonegap-ios/www/
 	cp $(SRC) build/phonegap-ios/www/
 	python utils/modify_app_json.py app.json build/phonegap-ios/www/app.json
 
