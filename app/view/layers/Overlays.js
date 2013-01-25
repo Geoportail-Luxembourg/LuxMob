@@ -36,8 +36,10 @@ Ext.define('App.view.layers.Overlays', {
                         },
                         {
                             xtype: 'searchfield',
-                            placeHolder: 'Search...',
                             id: "overlaysSearch",
+                            autoComplete: false,
+                            autoCapitalize: false,
+                            autoCorrect: false,
                             flex: 2
                         }
                     ]

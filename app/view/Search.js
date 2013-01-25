@@ -21,6 +21,9 @@ Ext.define('App.view.Search', {
                 items: [{
                     xtype: 'searchfield',
                     id: 'searchField',
+                    autoComplete: false,
+                    autoCapitalize: false,
+                    autoCorrect: false,
                     flex: 4
                 }, {
                     xtype: 'button',
