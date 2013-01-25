@@ -25,6 +25,17 @@ android: build/cordova-android/local.properties app
 	adb uninstall com.c2c.LuxMob
 	./build/cordova-android/cordova/run
 
+# !! The app doesn't currently work in debug mode in the Android emulator !!
+.PHONY: ios-debug
+android-debug: $(SRC) $(SRC_APP)
+	cp -r app build/cordova-android/assets/www/
+	cp -r resources build/cordova-android/assets/www/
+	cp $(SRC) build/cordova-android/assets/www/
+	python utils/modify_app_json.py app.json build/cordova-android/assets/www/app.json
+	./build/cordova-android/cordova/build
+	adb uninstall com.c2c.LuxMob
+	./build/cordova-android/cordova/run
+
 build/cordova-android/local.properties:
 	android update project -p build/cordova-android/
 
