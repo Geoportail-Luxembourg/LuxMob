@@ -24,5 +24,5 @@ build/App/production/app.js: $(SRC)
 .PHONY:
 clean:
 	rm -rf build/App/production/*
-	rm -rf $(filter-out build/phonegap-ios/www/cordova-2.3.0.js, $(shell find build/phonegap-ios/www/ -mindepth 1 -maxdepth 1))
-	rm -rf $(filter-out build/phonegap-android/assets/www/cordova-2.3.0.js, $(shell find build/phonegap-android/assets/www/ -mindepth 1 -maxdepth 1))
+	rm -rf $(filter-out build/phonegap-ios/www/cordova-2.3.0.js, $(shell find build/phonegap-ios/www -mindepth 1 -maxdepth 1))
+	rm -rf $(filter-out build/phonegap-android/assets/www/cordova-2.3.0.js, $(shell find build/phonegap-android/assets/www -mindepth 1 -maxdepth 1))
