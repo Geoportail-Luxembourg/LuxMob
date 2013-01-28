@@ -3,7 +3,6 @@ Ext.define('App.controller.Download', {
     extend: 'Ext.app.Controller',
 
     requires: [
-        'App.view.Download'
     ],
 
     config: {
