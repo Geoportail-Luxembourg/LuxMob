@@ -7,20 +7,9 @@ Ext.define('App.view.layers.Overlays', {
     id: "overlaysView",
 
     config: {
-
         layout: 'fit',
         items: [{
-            xtype: "list",
-            //ui: 'round',
-            id: 'overlaysList',
-
-            //itemTpl defines the template for each item in the list
-            itemTpl: null,
-            mode: 'SIMPLE',
-
-            //give it a link to the store instance
-            store: null,
-            emptyText: '<div style="margin-top: 20px; text-align: center">No Matching Items</div>',
+            layout: 'vbox',
             items: [
                 {
                     xtype: 'toolbar',
@@ -33,14 +22,35 @@ Ext.define('App.view.layers.Overlays', {
                             iconMask: true,
                             ui: 'back',
                             action: "backtolayers"
-                        },
-                        {
-                            xtype: 'searchfield',
-                            placeHolder: 'Search...',
-                            id: "overlaysSearch",
+                        }, {
+                            xtype: "selectfield",
+                            id: 'themeSelect',
+                            options: [
+                                {text: OpenLayers.i18n('theme.main'), value: 'main'},
+                                {text: OpenLayers.i18n('theme.tourisme'), value: 'tourisme'}
+                            ],
                             flex: 2
                         }
                     ]
+                },
+                {
+                    xtype: 'searchfield',
+                    id: "overlaysSearch",
+                    autoComplete: false,
+                    autoCapitalize: false,
+                    autoCorrect: false
+                },
+                {
+                    xtype: "list",
+                    id: 'overlaysList',
+                    //itemTpl defines the template for each item in the list
+                    itemTpl: null,
+                    mode: 'SIMPLE',
+
+                    //give it a link to the store instance
+                    store: null,
+                    emptyText: '<div style="margin-top: 20px; text-align: center">No Matching Items</div>',
+                    flex: 2
                 }
             ]
         }]

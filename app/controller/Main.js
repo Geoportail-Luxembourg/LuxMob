@@ -21,9 +21,7 @@ Ext.define('App.controller.Main', {
                 selector: '#searchView',
                 xtype: 'searchview',
                 autoCreate: true
-            },
-            downloadView: "#downloadView",
-            searchField: "#searchField"
+            }
         },
         control: {
             'button[action=more]': {
@@ -61,9 +59,7 @@ Ext.define('App.controller.Main', {
 
     showMain: function() {
         var animation = {type:'reveal', direction: 'down'};
-        if (Ext.Viewport.getActiveItem() == this.getDownloadView()) {
-            animation = {type: 'flip'};
-        } else if (Ext.Viewport.getActiveItem() == this.getSearchView()) {
+        if (Ext.Viewport.getActiveItem() == this.getSearchView()) {
             animation = {type: 'fade', out: true, duration: 500};
         }
         Ext.Viewport.animateActiveItem(0, animation);
