@@ -12,7 +12,7 @@ Ext.define('App.view.Main', {
         center: null,
         zoom: null,
         vectorLayer: null,
-        layout: 'fit',
+        layout: 'vbox',
         items: [ ]
     },
 
@@ -27,6 +27,7 @@ Ext.define('App.view.Main', {
         items = [
             {
                 xtype: 'component',
+                flex: 1,
                 id: "map-container"
             }, {
                 xtype: "button",
@@ -72,6 +73,10 @@ Ext.define('App.view.Main', {
         var map = this.getMap();
         var mapContainer = this.down('#map-container').element;
         map.render(mapContainer.dom);
+
+        // required so that the map gets effectively displayed
+        // height = 0 if not set
+        map.viewPortDiv.style.position = "absolute";
 
         this.setCenterZoomFromQueryParams();
 
