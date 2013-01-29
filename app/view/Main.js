@@ -27,6 +27,7 @@ Ext.define('App.view.Main', {
         items = [
             {
                 xtype: 'container',
+                cls: 'x-toolbar', // trick to get the search field displaying as in a toolbar
                 layout: 'fit',
                 flex: 1,
                 items: [
@@ -39,26 +40,25 @@ Ext.define('App.view.Main', {
                             zIndex: 0
                         }
                     }, {
-                        xtype: "button",
-                        iconCls: 'search',
-                        iconMask: true,
+                        xtype: "searchfield",
+                        width: 100,
                         action: "search",
-                        top: 10,
-                        left: 10
+                        top: 0,
+                        left: 3
                     }, {
                         xtype: "button",
                         iconCls: "layers",
                         iconMask: true,
                         action: "mapsettings",
-                        top: 10,
-                        right: 10
+                        top: 6,
+                        right: 4
                     }, {
                         xtype: "button",
                         iconCls: "more",
                         iconMask: true,
                         action: "more",
-                        bottom: 10,
-                        right: 10
+                        bottom: 6,
+                        right: 4
                     }
                 ]
             }

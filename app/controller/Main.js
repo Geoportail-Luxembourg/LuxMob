@@ -43,8 +43,8 @@ Ext.define('App.controller.Main', {
                     this.redirectTo('settings');
                 }
             },
-            'button[action=search]': {
-                tap: function() {
+            'searchfield[action=search]': {
+                focus: function() {
                     this.redirectTo('search');
                 }
             },
@@ -67,6 +67,7 @@ Ext.define('App.controller.Main', {
         var animation = {type:'reveal', direction: 'down'};
         if (Ext.Viewport.getActiveItem() == this.getSearchView()) {
             animation = {type: 'fade', out: true, duration: 500};
+            this.getSearchView().down('searchfield').blur();
         } else if (Ext.Viewport.getActiveItem() == this.getQueryResultsView()) {
             animation = {type: 'slide', direction: 'right'};
         }
@@ -96,8 +97,12 @@ Ext.define('App.controller.Main', {
     showSearch: function() {
         Ext.Viewport.animateActiveItem(
             this.getSearchView(),
-            {type: 'fade', duration: 500}
+            {
+                type: 'fade',
+                duration: 500
+            }
         );
+        this.getSearchView().down('searchfield').focus();
     },
 
     onMore: function(button) {
