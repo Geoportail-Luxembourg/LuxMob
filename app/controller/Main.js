@@ -46,6 +46,11 @@ Ext.define('App.controller.Main', {
                 tap: function() {
                     this.redirectTo('search');
                 }
+            },
+            mainView: {
+                query: function(view, bounds, map) {
+                    this.onMapQuery(view, bounds, map);
+                }
             }
         },
         routes: {
@@ -94,5 +99,17 @@ Ext.define('App.controller.Main', {
 
     onMore: function(button) {
         this.getMoreMenu().showBy(button);
+    },
+
+    onMapQuery: function(view, bounds, map) {
+        var layers = map.getLayersByName('Overlays')[0].params.LAYERS;
+        var scale = map.getScale();
+        // launch query only if there are layers to query
+        if (layers.length) {
+            var p = [bounds, layers, parseInt(scale, 0)];
+            var joinedParams = p.join('-');
+            joinedParams = encodeURIComponent(joinedParams);
+            this.redirectTo('query/' + joinedParams);
+        }
     }
 });

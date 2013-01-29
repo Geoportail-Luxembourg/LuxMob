@@ -26,30 +26,41 @@ Ext.define('App.view.Main', {
     applyItems: function(items, collection) {
         items = [
             {
-                xtype: 'component',
+                xtype: 'container',
+                layout: 'fit',
                 flex: 1,
-                id: "map-container"
-            }, {
-                xtype: "button",
-                iconCls: 'search',
-                iconMask: true,
-                action: "search",
-                top: 10,
-                left: 10
-            }, {
-                xtype: "button",
-                iconCls: "layers",
-                iconMask: true,
-                action: "mapsettings",
-                top: 10,
-                right: 10
-            }, {
-                xtype: "button",
-                iconCls: "more",
-                iconMask: true,
-                action: "more",
-                bottom: 10,
-                right: 10
+                items: [
+                    {
+                        xtype: 'component',
+                        id: "map-container",
+                        height: '100%',
+                        style: {
+                            position: 'relative',
+                            zIndex: 0
+                        }
+                    }, {
+                        xtype: "button",
+                        iconCls: 'search',
+                        iconMask: true,
+                        action: "search",
+                        top: 10,
+                        left: 10
+                    }, {
+                        xtype: "button",
+                        iconCls: "layers",
+                        iconMask: true,
+                        action: "mapsettings",
+                        top: 10,
+                        right: 10
+                    }, {
+                        xtype: "button",
+                        iconCls: "more",
+                        iconMask: true,
+                        action: "more",
+                        bottom: 10,
+                        right: 10
+                    }
+                ]
             }
         ];
         return this.callParent([items, collection]);
@@ -74,11 +85,11 @@ Ext.define('App.view.Main', {
         var mapContainer = this.down('#map-container').element;
         map.render(mapContainer.dom);
 
+        this.setCenterZoomFromQueryParams();
+
         // required so that the map gets effectively displayed
         // height = 0 if not set
         map.viewPortDiv.style.position = "absolute";
-
-        this.setCenterZoomFromQueryParams();
 
         var center = this.getCenter(),
             zoom = this.getZoom();
@@ -88,7 +99,7 @@ Ext.define('App.view.Main', {
             map.zoomToMaxExtent();
         }
 
-        mapContainer.on('longpress', function(event, node) {
+        Ext.get(mapContainer).on('longpress', function(event, node) {
             var map = this.getMap();
             var el = Ext.get(map.div);
             var pixel = new OpenLayers.Pixel(
@@ -96,7 +107,7 @@ Ext.define('App.view.Main', {
                 event.pageY - el.getY()
             );
             var bounds = this.pixelToBounds(pixel);
-            this.fireEvent('longpress', this, bounds, map, event);
+            this.fireEvent('query', this, bounds, map, event);
         }, this);
 
         // highlight layer
@@ -115,5 +126,29 @@ Ext.define('App.view.Main', {
             map.addControls([new OpenLayers.Control.Zoom()]);
         }
         this.fireEvent('mapready', map);
+    },
+
+
+
+    /**
+     * Method: pixelToBounds
+     * Takes a pixel as argument and creates bounds after adding the
+     * <clickTolerance>.
+     *
+     * Parameters:
+     * pixel - {<OpenLayers.Pixel>}
+     */
+    pixelToBounds: function(pixel) {
+        var tolerance = 40;
+        var llPx = pixel.add(-tolerance/2, tolerance/2);
+        var urPx = pixel.add(tolerance/2, -tolerance/2);
+        var ll = this.getMap().getLonLatFromPixel(llPx);
+        var ur = this.getMap().getLonLatFromPixel(urPx);
+        return new OpenLayers.Bounds(
+            parseInt(ll.lon),
+            parseInt(ll.lat),
+            parseInt(ur.lon),
+            parseInt(ur.lat)
+        );
     }
 });
