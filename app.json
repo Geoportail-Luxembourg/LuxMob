@@ -99,6 +99,7 @@
         "resources/startup",
         "resources/font",
         "resources/i18n",
+        "proj4js-compressed.js",
         "openlayers-mobile.js",
         "GeolocateControl.js"
     ],
