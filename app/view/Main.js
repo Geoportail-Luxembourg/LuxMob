@@ -112,10 +112,14 @@ Ext.define('App.view.Main', {
 
         // highlight layer
         this.setVectorLayer(new OpenLayers.Layer.Vector('Vector', {
-            styleMap: new OpenLayers.StyleMap(OpenLayers.Util.applyDefaults({
-                strokeWidth: 3,
-                strokeColor: 'red'
-            }, OpenLayers.Feature.Vector.style['default']))
+            rendererOptions: {zIndexing: true},
+            styleMap: new OpenLayers.StyleMap({
+                'default': OpenLayers.Util.applyDefaults({
+                    strokeWidth: 3,
+                    strokeColor: 'red',
+                    graphicZIndex: 0
+                }, OpenLayers.Feature.Vector.style['default'])
+            })
         }));
         map.addLayer(this.getVectorLayer());
 

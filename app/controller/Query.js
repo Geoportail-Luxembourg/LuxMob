@@ -2,15 +2,22 @@ Ext.define('App.controller.Query', {
     extend: 'Ext.app.Controller',
     requires: [
         'Ext.Anim',
-        'Ext.data.proxy.JsonP'
+        'Ext.data.proxy.JsonP',
+        'App.view.QueryResults'
     ],
 
     config: {
         protocol: null,
         resultsPreview: null,
         map: null,
+        vectorLayer: null,
         refs: {
-            mainView: '#mainView'
+            mainView: '#mainView',
+            queryResultsView: {
+                selector: '#queryResultsView',
+                xtype: 'queryresultsview',
+                autoCreate: true
+            }
         },
         control: {
             mainview: {
@@ -22,6 +29,12 @@ Ext.define('App.controller.Query', {
                         scope: this
                     });
                     this.setMap(map);
+                    this.setVectorLayer(this.getMap().getLayersByName('Vector')[0]);
+                }
+            },
+            queryResultsView: {
+                select: function(list, record) {
+                    this.highlightFeature(record);
                 }
             }
         },
@@ -29,7 +42,8 @@ Ext.define('App.controller.Query', {
             'query/:coords': {
                 action: 'launchSearch',
                 condition: '.+'
-            }
+            },
+            'query': 'showQueryResults'
         }
     },
 
@@ -50,25 +64,7 @@ Ext.define('App.controller.Query', {
         // FIXME defer is for debug, simulate a real query
         Ext.defer(
             function() {
-                Ext.define('Query', {
-                    extend: 'Ext.data.Model',
-                    config: {
-                        fields: ['id', 'properties']
-                    }
-                });
-
-                var store = Ext.create('Ext.data.Store', {
-                    model: 'Query',
-                    proxy: {
-                        type: 'jsonp',
-                        url : "http://tourisme.geoportail.lu/bodfeature/search",
-                        callbackKey: 'cb',
-                        reader: {
-                            rootProperty: 'features'
-                        }
-                    }
-                });
-
+                var store = Ext.getStore('Query');
                 store.load({
                     params: {
                         bbox: params[0],
@@ -78,19 +74,37 @@ Ext.define('App.controller.Query', {
                     },
                     callback: function() {
                         var preview = this.getResultsPreview();
+                        preview.removeAll();
                         preview.unmask();
                         var html;
                         var count = store.getCount();
                         if (count === 0) {
                             html = i18n.message('query.noresults');
+                            preview.setHtml(html);
                         } else if (count > 1) {
-                            html = i18n.message('query.results', {
-                                count: count
+                            preview.add({
+                                xtype: 'button',
+                                ui: 'plain',
+                                cls: 'x-textalign-left',
+                                iconCls: "code3",
+                                iconMask: true,
+                                iconAlign: "right",
+                                text: i18n.message('query.results', {
+                                    count: count
+                                }),
+                                listeners: {
+                                    tap: function() {
+                                        this.redirectTo('query');
+                                    },
+                                    scope: this
+                                }
                             });
+                            this.showFeatures(store.getData().items);
                         } else {
+                            this.showFeatures([store.getAt(0)]);
                             html = store.getAt(0).get('properties').TEXT;
+                            preview.setHtml(html);
                         }
-                        this.getResultsPreview().setHtml(html);
                     },
                     scope: this
                 });
@@ -98,13 +112,18 @@ Ext.define('App.controller.Query', {
             500,
             this
         );
+
+        var layer = this.getVectorLayer();
+        var index = Math.max(this.getMap().Z_INDEX_BASE['Feature'] - 1,
+            layer.getZIndex()) + 1;
+        layer.setZIndex(index);
     },
 
     showPreview: function() {
         this.hidePreview();
         var preview = this.getMainView().add({
             xtype: 'container',
-            height: 50,
+            height: 40,
             padding: 5,
             style: {
                 backgroundColor: 'white'
@@ -132,6 +151,8 @@ Ext.define('App.controller.Query', {
     },
 
     hidePreview: function() {
+        var layer = this.getVectorLayer();
+        layer.removeAllFeatures();
         var preview = this.getResultsPreview();
         if (preview) {
             Ext.Animator.run({
@@ -155,5 +176,34 @@ Ext.define('App.controller.Query', {
                 }
             });
         }
+    },
+
+    showFeatures: function(records) {
+        var format = new OpenLayers.Format.GeoJSON();
+        Ext.each(records, function(record) {
+            var geometry = format.read(record.get('geometry'), 'Geometry');
+            var feature = new OpenLayers.Feature.Vector(geometry);
+            feature.fid = record.get('id');
+            this.getVectorLayer().addFeatures([
+                feature
+            ]);
+        }, this);
+    },
+
+    showQueryResults: function() {
+        Ext.Viewport.animateActiveItem(
+            this.getQueryResultsView(),
+            {type: 'slide', direction: 'left'}
+        );
+    },
+
+    highlightFeature: function(record) {
+        var layer = this.getVectorLayer();
+        Ext.each(layer.features, function(feature) {
+            feature.layer.drawFeature(feature, 'default');
+        });
+        var feature = layer.getFeatureByFid(record.get('id'));
+        layer.drawFeature(feature, 'select');
+        this.redirectTo('');
     }
 });

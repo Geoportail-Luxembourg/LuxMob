@@ -21,7 +21,8 @@ Ext.define('App.controller.Main', {
                 selector: '#searchView',
                 xtype: 'searchview',
                 autoCreate: true
-            }
+            },
+            queryResultsView: '#queryResultsView'
         },
         control: {
             'button[action=more]': {
@@ -66,6 +67,8 @@ Ext.define('App.controller.Main', {
         var animation = {type:'reveal', direction: 'down'};
         if (Ext.Viewport.getActiveItem() == this.getSearchView()) {
             animation = {type: 'fade', out: true, duration: 500};
+        } else if (Ext.Viewport.getActiveItem() == this.getQueryResultsView()) {
+            animation = {type: 'slide', direction: 'right'};
         }
         Ext.Viewport.animateActiveItem(0, animation);
     },

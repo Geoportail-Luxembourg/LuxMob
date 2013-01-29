@@ -64,6 +64,11 @@ $base-color: #B58F69;
 #moreMenu .x-button-label {
     text-align: left;
 }
+.x-textalign-left .x-button-label {
+    font-weight: normal;
+    text-align: left;
+}
+
 
 // cards
 .card {
