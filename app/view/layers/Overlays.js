@@ -10,6 +10,7 @@ Ext.define('App.view.layers.Overlays', {
         layout: 'fit',
         items: [{
             layout: 'vbox',
+            cls: 'x-toolbar',
             items: [
                 {
                     xtype: 'toolbar',
@@ -35,6 +36,7 @@ Ext.define('App.view.layers.Overlays', {
                 },
                 {
                     xtype: 'searchfield',
+                    width: '95%',
                     id: "overlaysSearch",
                     autoComplete: false,
                     autoCapitalize: false,
