@@ -127,7 +127,7 @@ Ext.define('App.controller.Layers', {
     },
 
     showBaseLayers: function() {
-        this.getLayersView().animateActiveItem(this.getBaseLayersView(), {
+        Ext.Viewport.animateActiveItem(this.getBaseLayersView(), {
             type: 'slide', direction: "left"
         });
     },
