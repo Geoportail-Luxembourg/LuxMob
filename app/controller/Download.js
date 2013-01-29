@@ -75,7 +75,7 @@ Ext.define('App.controller.Download', {
                 }]
             });
 
-            this.getMainView().items.each(function(item) {
+            this.getMainView().items.get(0).items.each(function(item) {
                 if (item.isXType('button')) {
                     item.hide();
                 }
@@ -102,7 +102,7 @@ Ext.define('App.controller.Download', {
             control.destroy();
         }
         this.getUsageHelp() && this.getUsageHelp().hide();
-        this.getMainView().items.each(function(item) {
+        this.getMainView().items.get(0).items.each(function(item) {
             if (item.isXType('button')) {
                 item.show();
             }
