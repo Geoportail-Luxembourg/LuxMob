@@ -121,7 +121,7 @@ Ext.define('App.controller.Layers', {
     },
 
     showLayers: function() {
-        this.getLayersView().animateActiveItem(0, {
+        Ext.Viewport.animateActiveItem(this.getMapSettingsView(), {
             type: 'slide', direction: 'right'
         });
     },
@@ -133,7 +133,7 @@ Ext.define('App.controller.Layers', {
     },
 
     showOverlays: function() {
-        this.getLayersView().animateActiveItem(this.getOverlaysView(), {
+        Ext.Viewport.animateActiveItem(this.getOverlaysView(), {
             type: 'slide', direction: "left"
         });
     },
