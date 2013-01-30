@@ -213,8 +213,11 @@ Ext.define('App.controller.Layers', {
 
                 var layersParam = this.getOverlaysOLLayer().params.LAYERS;
                 var selected = Ext.getStore('Overlays').queryBy(function(record) {
+                    if (layersParam.split) {
+                        layersParam = layersParam.split(',');
+                    }
                     return Ext.Array.contains(
-                        layersParam.split(','),
+                        layersParam,
                         record.get('name')
                     );
                 });
