@@ -22,7 +22,8 @@ Ext.define('App.controller.Main', {
                 xtype: 'searchview',
                 autoCreate: true
             },
-            queryResultsView: '#queryResultsView'
+            queryResultsView: '#queryResultsView',
+            searchField: 'searchfield[action=search]'
         },
         control: {
             'button[action=more]': {
@@ -43,7 +44,7 @@ Ext.define('App.controller.Main', {
                     this.redirectTo('settings');
                 }
             },
-            'searchfield[action=search]': {
+            searchField: {
                 focus: function() {
                     this.redirectTo('search');
                 }
@@ -71,7 +72,19 @@ Ext.define('App.controller.Main', {
         } else if (Ext.Viewport.getActiveItem() == this.getQueryResultsView()) {
             animation = {type: 'slide', direction: 'right'};
         }
+        // hide the search field to prevent intempestive focus
+        var field = this.getSearchField();
+        field && field.hide() && field.setDisabled(true);
+
         Ext.Viewport.animateActiveItem(0, animation);
+
+        // show the search field again
+        if (field) {
+            field.show({
+                type: "fadeIn"
+            });
+            Ext.defer(field.enable, 1000, field);
+        }
     },
 
     showMapSettings: function() {
