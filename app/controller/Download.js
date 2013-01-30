@@ -137,13 +137,133 @@ Ext.define('App.controller.Download', {
         Ext.Msg.prompt(
             i18n.message('download.mapname'),
             i18n.message('download.name'),
-            function(buttonId, value) {
+            Ext.bind(function(buttonId, value) {
                 if (buttonId == 'ok') {
-                    alert(value);
+                    this.initDownload(value);
                 }
+            }, this)
+        );
+    },
+
+    initDownload: function(value) {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
+            Ext.bind(function(fs) {
+                fs.root.getFile(
+                    "dummy.html",
+                    {create: true, exclusive: false},
+                    Ext.bind(function (fileEntry) {
+                        var basePath = fileEntry.fullPath.replace("dummy.html","");
+                        this.download(value, fs, basePath, new FileTransfer());
+                    }, this),
+                    function() {
+                        console.log('fail root.getFile("dummy.html")');
+                });
+            }, this),
+            function() {
+                console.log('fail requestFileSystem');
+            }
+        );
+    },
+
+    download: function(value, fs, basePath, fileTransfer) {
+        var map = this.getMap(),
+            zoom = map.getZoom(),
+            bounds = map.calculateBounds(),
+            i = 0,
+            total = 0,
+            z = zoom,
+            range,
+            cols,
+            rows,
+            loaded = 0;
+        while (i < 4) {
+            console.log("zoom level", zoom);
+            range = getTileRangeForExtentAndResolution(
+                map.layers[0], bounds, map.getResolutionForZoom(z));
+            cols = range[2] - range[0] + 1;
+            rows = range[3] - range[1] + 1;
+            total += cols * rows;
+            z++;
+            i++;
+        }
+
+        i = 0;
+        z = zoom;
+        while (i < 4) {
+            range = getTileRangeForExtentAndResolution(
+                map.layers[0], bounds, map.getResolutionForZoom(z));
+            cols = range[2] - range[0] + 1;
+            rows = range[3] - range[1] + 1;
+            for (col = range[0]; col <= range[2]; col++) {
+                for (row = range[1]; row <= range[3]; row++) {
+                    console.log(getURL(map.getLayersByName('Overlays')[0], col, row, z)),
+                    this.downloadFile(
+                        [ value, col, row, z ].join('_'),
+                        getURL(map.getLayersByName('Overlays')[0], col, row, z),
+                        basePath,
+                        fileTransfer
+                    );
+                }
+            }
+            z++;
+            i++;
+        }
+
+        function getURL(layer, tileX, tileY, tileZ) {
+            var top, right, bottom, left,
+                resolution = layer.map.getResolutionForZoom(tileZ);
+
+            left = ( tileX * resolution * OpenLayers.Map.TILE_WIDTH ) + layer.maxExtent.left;
+            bottom = ( tileY * resolution * OpenLayers.Map.TILE_HEIGHT ) + layer.maxExtent.bottom;
+            right = left + resolution * OpenLayers.Map.TILE_WIDTH;
+            top = bottom + resolution * OpenLayers.Map.TILE_HEIGHT;
+
+            return layer.getURL(new OpenLayers.Bounds(left, bottom, right, top));
+        }
+
+        function getTileRangeForExtentAndResolution(layer, extent, resolution) {
+            var min = getTileCoordForCoordAndResolution(
+                layer,
+                new OpenLayers.LonLat(extent.left, extent.bottom), resolution);
+                var max = getTileCoordForCoordAndResolution(
+                    layer,
+                    new OpenLayers.LonLat(extent.right, extent.top), resolution);
+                    return min.concat(max);
+        }
+
+        function getTileCoordForCoordAndResolution(layer, lonlat, resolution) {
+            var origin = layer.getTileOrigin();
+
+            var offsetFromOrigin = new OpenLayers.LonLat(
+                Math.floor((lonlat.lon - origin.lon) / resolution),
+                Math.floor((lonlat.lat - origin.lat) / resolution)
+            );
+
+            var x, y;
+            x = Math.floor(offsetFromOrigin.lon / layer.tileSize.w);
+            y = Math.floor(offsetFromOrigin.lat / layer.tileSize.h);
+
+            return [x, y];
+        }
+    },
+
+    downloadFile: function(name, url, basePath, fileTransfer) {
+        var fileName = url.split('://')[1].substr(2).replace(/\//g,'_');
+        fileName = name + '.png';
+        fileTransfer.download(
+            url,
+            basePath + fileName,
+            function(file) {
+                console.log(file.toURL());
+            },
+            function(error) {
+                console.log("download error source: " + error.source);
+                console.log("download error target: " + error.target);
+                console.log("upload error code: " + error.code);
             }
         );
     }
+
 });
 
 App.MaskControl = OpenLayers.Class(OpenLayers.Control, {
