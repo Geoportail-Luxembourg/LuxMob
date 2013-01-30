@@ -61,13 +61,7 @@ Ext.define('App.controller.Query', {
     },
 
     launchSearch: function(params) {
-        // initial rendering
-        var map = this.getMap();
-        if (!map) {
-            // application is just launched
-            this.redirectTo('');
-            return;
-        }
+        this.redirectTo('');
 
         params = decodeURIComponent(params);
         params = params.split('-');
@@ -94,7 +88,22 @@ Ext.define('App.controller.Query', {
                         if (count === 0) {
                             html = i18n.message('query.noresults');
                             preview.setHtml(html);
-                        } else if (count > 1) {
+                        } else {
+                            var text, cb;
+                            if (count > 1) {
+                                text = i18n.message('query.results', {
+                                    count: count
+                                });
+                                cb = Ext.bind(
+                                    this.redirectTo, this, ['query']
+                                );
+                            } else {
+                                text = store.getAt(0).get('id');
+                                var id = store.getAt(0).get('id');
+                                cb = Ext.bind(
+                                    this.redirectTo, this, ['detail/' + id]
+                                );
+                            }
                             preview.add({
                                 xtype: 'button',
                                 ui: 'plain',
@@ -102,21 +111,13 @@ Ext.define('App.controller.Query', {
                                 iconCls: "code3",
                                 iconMask: true,
                                 iconAlign: "right",
-                                text: i18n.message('query.results', {
-                                    count: count
-                                }),
+                                text: text,
                                 listeners: {
-                                    tap: function() {
-                                        this.redirectTo('query');
-                                    },
+                                    tap: cb,
                                     scope: this
                                 }
                             });
                             this.showFeatures(store.getData().items);
-                        } else {
-                            this.showFeatures([store.getAt(0)]);
-                            html = store.getAt(0).get('id');
-                            preview.setHtml(html);
                         }
                     },
                     scope: this

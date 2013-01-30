@@ -23,6 +23,7 @@ Ext.define('App.controller.Main', {
                 autoCreate: true
             },
             queryResultsView: '#queryResultsView',
+            queryDetailView: '#queryDetailView',
             searchField: 'searchfield[action=search]'
         },
         control: {
@@ -74,7 +75,8 @@ Ext.define('App.controller.Main', {
         if (Ext.Viewport.getActiveItem() == this.getSearchView()) {
             animation = {type: 'fade', out: true, duration: 500};
             this.getSearchView().down('searchfield').blur();
-        } else if (Ext.Viewport.getActiveItem() == this.getQueryResultsView()) {
+        } else if (Ext.Viewport.getActiveItem() == this.getQueryResultsView() ||
+                   Ext.Viewport.getActiveItem() == this.getQueryDetailView()) {
             animation = {type: 'slide', direction: 'right'};
         }
         // hide the search field to prevent intempestive focus
