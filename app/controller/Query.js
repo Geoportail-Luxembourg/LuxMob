@@ -72,6 +72,7 @@ Ext.define('App.controller.Query', {
         Ext.defer(
             function() {
                 var store = Ext.getStore('Query');
+                store.removeAll();
                 store.load({
                     params: {
                         bbox: params[0],
