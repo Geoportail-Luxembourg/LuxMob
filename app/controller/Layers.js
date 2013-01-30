@@ -121,19 +121,19 @@ Ext.define('App.controller.Layers', {
     },
 
     showLayers: function() {
-        this.getLayersView().animateActiveItem(0, {
+        Ext.Viewport.animateActiveItem(this.getMapSettingsView(), {
             type: 'slide', direction: 'right'
         });
     },
 
     showBaseLayers: function() {
-        this.getLayersView().animateActiveItem(this.getBaseLayersView(), {
+        Ext.Viewport.animateActiveItem(this.getBaseLayersView(), {
             type: 'slide', direction: "left"
         });
     },
 
     showOverlays: function() {
-        this.getLayersView().animateActiveItem(this.getOverlaysView(), {
+        Ext.Viewport.animateActiveItem(this.getOverlaysView(), {
             type: 'slide', direction: "left"
         });
     },
@@ -172,7 +172,7 @@ Ext.define('App.controller.Layers', {
         App.map.addLayer(
             new OpenLayers.Layer.WMS(
                 "Overlays",
-                "http://geoportail-luxembourg.demo-camptocamp.com/~sbrga/mapproxy/service",
+                "http://demo.geoportail.lu/mapproxy/service",
                 {
                     layers: cache || [],
                     transparent: true

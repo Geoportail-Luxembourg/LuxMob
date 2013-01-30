@@ -148,6 +148,7 @@ App.map = new OpenLayers.Map({
         new OpenLayers.Control.ScaleLine()
     ],
     layers: getBaseLayers(),
-    tileManager: tileManager
+    tileManager: tileManager,
+    fallThrough: true
 });
 

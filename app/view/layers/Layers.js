@@ -19,8 +19,7 @@ Ext.define('App.view.layers.Layers', {
                 items: [{
                     xtype: "button",
                     text: i18n.message('button.close'),
-                    action: "main",
-                    iconMask: true
+                    action: "main"
                 }]
             }, {
                 xtype: 'fieldset',

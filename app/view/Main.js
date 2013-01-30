@@ -26,30 +26,41 @@ Ext.define('App.view.Main', {
     applyItems: function(items, collection) {
         items = [
             {
-                xtype: 'component',
+                xtype: 'container',
+                cls: 'x-toolbar', // trick to get the search field displaying as in a toolbar
+                layout: 'fit',
                 flex: 1,
-                id: "map-container"
-            }, {
-                xtype: "button",
-                iconCls: 'search',
-                iconMask: true,
-                action: "search",
-                top: 10,
-                left: 10
-            }, {
-                xtype: "button",
-                iconCls: "layers",
-                iconMask: true,
-                action: "mapsettings",
-                top: 10,
-                right: 10
-            }, {
-                xtype: "button",
-                iconCls: "more",
-                iconMask: true,
-                action: "more",
-                bottom: 10,
-                right: 10
+                items: [
+                    {
+                        xtype: 'component',
+                        id: "map-container",
+                        height: '100%',
+                        style: {
+                            position: 'relative',
+                            zIndex: 0
+                        }
+                    }, {
+                        xtype: "searchfield",
+                        width: 100,
+                        action: "search",
+                        top: 0,
+                        left: 3
+                    }, {
+                        xtype: "button",
+                        iconCls: "layers",
+                        iconMask: true,
+                        action: "mapsettings",
+                        top: 6,
+                        right: 4
+                    }, {
+                        xtype: "button",
+                        iconCls: "more",
+                        iconMask: true,
+                        action: "more",
+                        bottom: 6,
+                        right: 4
+                    }
+                ]
             }
         ];
         return this.callParent([items, collection]);
@@ -74,11 +85,11 @@ Ext.define('App.view.Main', {
         var mapContainer = this.down('#map-container').element;
         map.render(mapContainer.dom);
 
+        this.setCenterZoomFromQueryParams();
+
         // required so that the map gets effectively displayed
         // height = 0 if not set
         map.viewPortDiv.style.position = "absolute";
-
-        this.setCenterZoomFromQueryParams();
 
         var center = this.getCenter(),
             zoom = this.getZoom();
@@ -88,7 +99,7 @@ Ext.define('App.view.Main', {
             map.zoomToMaxExtent();
         }
 
-        mapContainer.on('longpress', function(event, node) {
+        Ext.get(mapContainer).on('longpress', function(event, node) {
             var map = this.getMap();
             var el = Ext.get(map.div);
             var pixel = new OpenLayers.Pixel(
@@ -96,15 +107,19 @@ Ext.define('App.view.Main', {
                 event.pageY - el.getY()
             );
             var bounds = this.pixelToBounds(pixel);
-            this.fireEvent('longpress', this, bounds, map, event);
+            this.fireEvent('query', this, bounds, map, event);
         }, this);
 
         // highlight layer
         this.setVectorLayer(new OpenLayers.Layer.Vector('Vector', {
-            styleMap: new OpenLayers.StyleMap(OpenLayers.Util.applyDefaults({
-                strokeWidth: 3,
-                strokeColor: 'red'
-            }, OpenLayers.Feature.Vector.style['default']))
+            rendererOptions: {zIndexing: true},
+            styleMap: new OpenLayers.StyleMap({
+                'default': OpenLayers.Util.applyDefaults({
+                    strokeWidth: 3,
+                    strokeColor: 'red',
+                    graphicZIndex: 0
+                }, OpenLayers.Feature.Vector.style['default'])
+            })
         }));
         map.addLayer(this.getVectorLayer());
 
@@ -115,5 +130,29 @@ Ext.define('App.view.Main', {
             map.addControls([new OpenLayers.Control.Zoom()]);
         }
         this.fireEvent('mapready', map);
+    },
+
+
+
+    /**
+     * Method: pixelToBounds
+     * Takes a pixel as argument and creates bounds after adding the
+     * <clickTolerance>.
+     *
+     * Parameters:
+     * pixel - {<OpenLayers.Pixel>}
+     */
+    pixelToBounds: function(pixel) {
+        var tolerance = 40;
+        var llPx = pixel.add(-tolerance/2, tolerance/2);
+        var urPx = pixel.add(tolerance/2, -tolerance/2);
+        var ll = this.getMap().getLonLatFromPixel(llPx);
+        var ur = this.getMap().getLonLatFromPixel(urPx);
+        return new OpenLayers.Bounds(
+            parseInt(ll.lon),
+            parseInt(ll.lat),
+            parseInt(ur.lon),
+            parseInt(ur.lat)
+        );
     }
 });
