@@ -348,7 +348,8 @@ Ext.define('App.controller.Layers', {
                 //loop through each of the regular expressions
                 for (i = 0; i < regexps.length; i++) {
                     var search = regexps[i],
-                        didMatch = record.get('name').match(search);
+                        didMatch = record.get('name').match(search) ||
+                                   record.get(i18n.getLanguage()).match(search);
 
                     //if it matched the first or last name, push it into the matches array
                     matched.push(didMatch);
