@@ -7,6 +7,8 @@ Ext.define('App.controller.Download', {
 
     config: {
         map: null,
+        count: 0,
+        total: 0,
         maskControl: null,
         usageHelp: null,
         refs: {
@@ -186,6 +188,7 @@ Ext.define('App.controller.Download', {
             z++;
             i++;
         }
+        this.setTotal(total);
 
         i = 0;
         z = zoom;
@@ -259,15 +262,26 @@ Ext.define('App.controller.Download', {
         fileTransfer.download(
             url,
             basePath + fileName,
-            function(file) {
-                console.log(file.toURL());
-            },
-            function(error) {
+            Ext.bind(function(file) {
+                this.increaseAndCheck();
+            }, this),
+            Ext.bind(function(error) {
+                this.increaseAndCheck();
                 console.log("download error source: " + error.source);
                 console.log("download error target: " + error.target);
                 console.log("upload error code: " + error.code);
-            }
+            }, this)
         );
+    },
+
+    increaseAndCheck: function() {
+        this.setCount(this.getCount()+1);
+        if (this.getTotal()!=this.getCount()) {
+            return;
+        }
+        this.setCount(0);
+        this.setTotal(0);
+        alert('done');
     }
 
 });
