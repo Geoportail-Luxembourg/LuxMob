@@ -9,6 +9,8 @@ build/cordova-ios/www/cache.appcache
 build/cordova-ios/www/index.html
 build/cordova-ios/www/resources/
 build/cordova-ios/www/app/
+build/cordova-ios/www/lib/
+build/cordova-ios/www/touch/
 build/cordova-ios/CordovaLib/CordovaLib.xcodeproj/xcuserdata/
 build/cordova-ios/LuxMob.xcodeproj/project.pbxproj
 build/cordova-ios/LuxMob.xcodeproj/project.xcworkspace/
