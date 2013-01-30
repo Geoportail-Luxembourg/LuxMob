@@ -172,7 +172,7 @@ Ext.define('App.controller.Layers', {
         App.map.addLayer(
             new OpenLayers.Layer.WMS(
                 "Overlays",
-                "http://geoportail-luxembourg.demo-camptocamp.com/~sbrga/mapproxy/service",
+                "http://demo.geoportail.lu/mapproxy/service",
                 {
                     layers: cache || [],
                     transparent: true
