@@ -9,13 +9,15 @@ Ext.define('App.view.QueryResults', {
     config: {
         store: 'Query',
         fullscreen: true,
-        itemTpl: '<div>{properties.TEXT}</div>',
+        itemTpl: '<div>{id}</div>',
+        onItemDisclosure: true,
         items: [{
             docked: 'top',
             xtype: 'toolbar',
+            title: i18n.message('query.title'),
             items: [{
                 xtype: "button",
-                text: i18n.message('button.map'),
+                text: i18n.message('button.back'),
                 ui: 'back',
                 action: "main"
             }]

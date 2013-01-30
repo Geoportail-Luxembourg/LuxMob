@@ -34,6 +34,11 @@ Ext.define('App.controller.Main', {
                     this.redirectTo('main');
                 }
             },
+            'button[action=back]': {
+                tap: function() {
+                    window.history.back();
+                }
+            },
             'button[action=mapsettings]': {
                 tap: function() {
                     this.redirectTo('mapsettings');
