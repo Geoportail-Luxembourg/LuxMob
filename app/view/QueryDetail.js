@@ -1,25 +1,25 @@
 window.i18n = Ext.i18n.Bundle;
-Ext.define('App.view.QueryResults', {
-    extend: "Ext.List",
+Ext.define('App.view.QueryDetail', {
+    extend: "Ext.Panel",
 
-    xtype: "queryresultsview",
+    xtype: "querydetailview",
 
-    id: "queryResultsView",
+    id: "queryDetailView",
 
     config: {
-        store: 'Query',
         fullscreen: true,
-        itemTpl: '<div>{id}</div>',
-        onItemDisclosure: true,
+        padding: 10,
+        tpl: '{html}',
+        data: null,
         items: [{
             docked: 'top',
             xtype: 'toolbar',
-            title: i18n.message('query.title'),
+            title: i18n.message('query.detail.title'),
             items: [{
                 xtype: "button",
                 text: i18n.message('button.back'),
                 ui: 'back',
-                action: "main"
+                action: "back"
             }]
         }]
     }

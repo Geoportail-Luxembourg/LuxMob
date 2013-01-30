@@ -56,7 +56,10 @@ Ext.define('App.controller.Layers', {
                 ready: function() {
                     var cache = localStorage.getItem('overlays');
                     var selected = Ext.getStore('Overlays').queryBy(function(record) {
-                        return (cache.indexOf(record.get('name')) != -1);
+                        return Ext.Array.contains(
+                            cache.split(','),
+                            record.get('name')
+                        );
                     });
                     this.getOverlaysList().select(selected.items, false, true);
                 }
@@ -207,6 +210,16 @@ Ext.define('App.controller.Layers', {
                         name: l[i]
                     });
                 }
+
+                var layersParam = this.getOverlaysOLLayer().params.LAYERS;
+                var selected = Ext.getStore('Overlays').queryBy(function(record) {
+                    return Ext.Array.contains(
+                        layersParam.split(','),
+                        record.get('name')
+                    );
+                });
+                var list = this.getOverlaysList();
+                list && list.select(selected.items, false, true);
             },
             scope: this
         });
@@ -348,7 +361,8 @@ Ext.define('App.controller.Layers', {
                 //loop through each of the regular expressions
                 for (i = 0; i < regexps.length; i++) {
                     var search = regexps[i],
-                        didMatch = record.get('name').match(search);
+                        didMatch = record.get('name').match(search) ||
+                                   record.get(i18n.getLanguage()).match(search);
 
                     //if it matched the first or last name, push it into the matches array
                     matched.push(didMatch);

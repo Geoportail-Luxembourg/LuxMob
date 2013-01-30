@@ -3,7 +3,8 @@ Ext.define('App.controller.Query', {
     requires: [
         'Ext.Anim',
         'Ext.data.proxy.JsonP',
-        'App.view.QueryResults'
+        'App.view.QueryResults',
+        'App.view.QueryDetail'
     ],
 
     config: {
@@ -16,6 +17,11 @@ Ext.define('App.controller.Query', {
             queryResultsView: {
                 selector: '#queryResultsView',
                 xtype: 'queryresultsview',
+                autoCreate: true
+            },
+            queryDetailView: {
+                selector: '#queryDetailView',
+                xtype: 'querydetailview',
                 autoCreate: true
             }
         },
@@ -35,6 +41,9 @@ Ext.define('App.controller.Query', {
             queryResultsView: {
                 select: function(list, record) {
                     this.highlightFeature(record);
+                },
+                disclose: function(list, record) {
+                    this.redirectTo('detail/' + record.getId());
                 }
             }
         },
@@ -43,18 +52,16 @@ Ext.define('App.controller.Query', {
                 action: 'launchSearch',
                 condition: '.+'
             },
-            'query': 'showQueryResults'
+            'query': 'showQueryResults',
+            'detail/:id': {
+                action: 'showDetail',
+                condition: '.+'
+            }
         }
     },
 
     launchSearch: function(params) {
-        // initial rendering
-        var map = this.getMap();
-        if (!map) {
-            // application is just launched
-            this.redirectTo('');
-            return;
-        }
+        this.redirectTo('');
 
         params = decodeURIComponent(params);
         params = params.split('-');
@@ -65,12 +72,13 @@ Ext.define('App.controller.Query', {
         Ext.defer(
             function() {
                 var store = Ext.getStore('Query');
+                store.removeAll();
                 store.load({
                     params: {
                         bbox: params[0],
                         layers: params[1],
                         scale: params[2],
-                        nohtml: true
+                        lang: i18n.getLanguage()
                     },
                     callback: function() {
                         var preview = this.getResultsPreview();
@@ -81,7 +89,22 @@ Ext.define('App.controller.Query', {
                         if (count === 0) {
                             html = i18n.message('query.noresults');
                             preview.setHtml(html);
-                        } else if (count > 1) {
+                        } else {
+                            var text, cb;
+                            if (count > 1) {
+                                text = i18n.message('query.results', {
+                                    count: count
+                                });
+                                cb = Ext.bind(
+                                    this.redirectTo, this, ['query']
+                                );
+                            } else {
+                                text = store.getAt(0).get('id');
+                                var id = store.getAt(0).get('id');
+                                cb = Ext.bind(
+                                    this.redirectTo, this, ['detail/' + id]
+                                );
+                            }
                             preview.add({
                                 xtype: 'button',
                                 ui: 'plain',
@@ -89,21 +112,13 @@ Ext.define('App.controller.Query', {
                                 iconCls: "code3",
                                 iconMask: true,
                                 iconAlign: "right",
-                                text: i18n.message('query.results', {
-                                    count: count
-                                }),
+                                text: text,
                                 listeners: {
-                                    tap: function() {
-                                        this.redirectTo('query');
-                                    },
+                                    tap: cb,
                                     scope: this
                                 }
                             });
                             this.showFeatures(store.getData().items);
-                        } else {
-                            this.showFeatures([store.getAt(0)]);
-                            html = store.getAt(0).get('properties').TEXT;
-                            preview.setHtml(html);
                         }
                     },
                     scope: this
@@ -191,9 +206,13 @@ Ext.define('App.controller.Query', {
     },
 
     showQueryResults: function() {
+        var animation = {type: 'slide', direction: 'left'};
+        if (Ext.Viewport.getActiveItem() == this.getQueryDetailView()) {
+            animation = {type: 'slide', direction: 'right'};
+        }
         Ext.Viewport.animateActiveItem(
             this.getQueryResultsView(),
-            {type: 'slide', direction: 'left'}
+            animation
         );
     },
 
@@ -205,5 +224,14 @@ Ext.define('App.controller.Query', {
         var feature = layer.getFeatureByFid(record.get('id'));
         layer.drawFeature(feature, 'select');
         this.redirectTo('');
+    },
+
+    showDetail: function(id) {
+        Ext.Viewport.animateActiveItem(
+            this.getQueryDetailView(),
+            {type: 'slide', direction: 'left'}
+        );
+        this.getQueryDetailView()
+            .setData(Ext.getStore('Query').getById(id).get('properties'));
     }
 });
