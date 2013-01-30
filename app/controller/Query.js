@@ -99,7 +99,7 @@ Ext.define('App.controller.Query', {
                                     this.redirectTo, this, ['query']
                                 );
                             } else {
-                                text = store.getAt(0).get('id');
+                                text = store.getAt(0).get('properties').text;
                                 var id = store.getAt(0).get('id');
                                 cb = Ext.bind(
                                     this.redirectTo, this, ['detail/' + id]
