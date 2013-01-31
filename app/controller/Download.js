@@ -187,7 +187,6 @@ Ext.define('App.controller.Download', {
             rows,
             loaded = 0;
         while (i < this.getNbZoomLevels()) {
-            console.log("zoom level", zoom);
             range = getTileRangeForExtentAndResolution(
                 map.layers[0], bounds, map.getResolutionForZoom(z));
             cols = range[2] - range[0] + 1;
@@ -207,7 +206,6 @@ Ext.define('App.controller.Download', {
             rows = range[3] - range[1] + 1;
             for (col = range[0]; col <= range[2]; col++) {
                 for (row = range[1]; row <= range[3]; row++) {
-                    console.log(getURL(map.getLayersByName('Overlays')[0], col, row, z)),
                     this.downloadFile(
                         [ this.getValue(), col, row, z ].join('_'),
                         getURL(map.getLayersByName('Overlays')[0], col, row, z),
@@ -285,7 +283,7 @@ Ext.define('App.controller.Download', {
     increaseAndCheck: function() {
         var ls = localStorage,
             value = this.getValue(),
-            savedmaps = ls.getItem('savedmaps');
+            store = Ext.getStore('SavedMaps');
         this.setCount(this.getCount()+1);
         if (this.getTotal()!=this.getCount() && arguments.length==0) {
             return;
@@ -293,10 +291,12 @@ Ext.define('App.controller.Download', {
         this.setCount(0);
         this.setTotal(0);
 
-        savedmaps = (savedmaps) ? savedmaps.split(',') : [];
-        savedmaps.push(value);
-        ls.setItem('savedmaps', savedmaps.join(','));
-        ls.setItem(value, value);
+        store.add({
+            name: value,
+            key: value,
+            extent: ''
+        });
+        store.sync();
     }
 
 });

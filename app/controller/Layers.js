@@ -7,6 +7,7 @@ Ext.define('App.controller.Layers', {
         'App.store.BaseLayers',
         'App.view.layers.Overlays',
         'App.store.Overlays',
+        'App.store.SavedMaps',
         'Ext.ActionSheet'
     ],
     config: {
@@ -68,15 +69,7 @@ Ext.define('App.controller.Layers', {
             },
             savedMapsView: {
                 ready: function() {
-                    var cache = localStorage.getItem('savedmaps'),
-                        store = Ext.getStore('SavedMaps');
-                    store.removeAll();
-                    Ext.each(cache.split(','), function (map) {
-                        store.add(Ext.create('App.model.SavedMaps', {
-                            name: map,
-                            key: localStorage.getItem(map)
-                        }));
-                    });
+                    Ext.getStore('SavedMaps').load();
                 }
             },
             savedMapsList: {
