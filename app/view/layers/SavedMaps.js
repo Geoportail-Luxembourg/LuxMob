@@ -3,12 +3,12 @@ Ext.define('App.view.layers.SavedMaps', {
     extend: 'Ext.Panel',
 
     requires: [
-        //'App.store.SavedMaps'
+        'App.store.SavedMaps'
     ],
 
     id: "savedmaps",
     config: {
-//        layout: 'fit',
+        layout: 'fit',
         items: [{ xtype: "toolbar",
             docked: "top",
             title: i18n.message('savedmaps.title'),
@@ -20,9 +20,16 @@ Ext.define('App.view.layers.SavedMaps', {
             }]
         }, {
             xtype: 'list',
+            id: 'savedmapsList',
             itemTpl: '<div>{name}</div>',
+            emptyText: i18n.message('savedmaps.nomaps'),
             store: null
-            //store: 'SavedMaps'
         }]
+    },
+
+    initialize: function() {
+        this.down('#savedmapsList')
+            .setStore(Ext.getStore('SavedMaps'));
+        this.fireEvent('ready');
     }
 });

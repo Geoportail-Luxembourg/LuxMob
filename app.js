@@ -18,7 +18,7 @@ Ext.application({
 
     views: ['Main', 'layers.MapSettings', 'MoreMenu'],
     controllers: ["Download",'Main', 'Layers', 'Settings', 'Search', 'Query'],
-    stores: ['BaseLayers', 'Overlays', 'Search', 'Query'],
+    stores: ['BaseLayers', 'Overlays', 'Search', 'Query', 'SavedMaps'],
 
     viewport: {
         autoMaximize: true

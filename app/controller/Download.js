@@ -9,6 +9,8 @@ Ext.define('App.controller.Download', {
         map: null,
         count: 0,
         total: 0,
+        value: null,
+        nbZoomLevels: 3,
         maskControl: null,
         usageHelp: null,
         refs: {
@@ -148,6 +150,12 @@ Ext.define('App.controller.Download', {
     },
 
     initDownload: function(value) {
+        this.setValue(value);
+        if (!window.requestFileSystem) {
+            this.increaseAndCheck(true);
+            return;
+        }
+
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
             Ext.bind(function(fs) {
                 fs.root.getFile(
@@ -155,7 +163,7 @@ Ext.define('App.controller.Download', {
                     {create: true, exclusive: false},
                     Ext.bind(function (fileEntry) {
                         var basePath = fileEntry.fullPath.replace("dummy.html","");
-                        this.download(value, fs, basePath, new FileTransfer());
+                        this.download(fs, basePath, new FileTransfer());
                     }, this),
                     function() {
                         console.log('fail root.getFile("dummy.html")');
@@ -167,7 +175,7 @@ Ext.define('App.controller.Download', {
         );
     },
 
-    download: function(value, fs, basePath, fileTransfer) {
+    download: function(fs, basePath, fileTransfer) {
         var map = this.getMap(),
             zoom = map.getZoom(),
             bounds = map.calculateBounds(),
@@ -178,7 +186,7 @@ Ext.define('App.controller.Download', {
             cols,
             rows,
             loaded = 0;
-        while (i < 4) {
+        while (i < this.getNbZoomLevels()) {
             console.log("zoom level", zoom);
             range = getTileRangeForExtentAndResolution(
                 map.layers[0], bounds, map.getResolutionForZoom(z));
@@ -192,7 +200,7 @@ Ext.define('App.controller.Download', {
 
         i = 0;
         z = zoom;
-        while (i < 4) {
+        while (i < this.getNbZoomLevels()) {
             range = getTileRangeForExtentAndResolution(
                 map.layers[0], bounds, map.getResolutionForZoom(z));
             cols = range[2] - range[0] + 1;
@@ -201,7 +209,7 @@ Ext.define('App.controller.Download', {
                 for (row = range[1]; row <= range[3]; row++) {
                     console.log(getURL(map.getLayersByName('Overlays')[0], col, row, z)),
                     this.downloadFile(
-                        [ value, col, row, z ].join('_'),
+                        [ this.getValue(), col, row, z ].join('_'),
                         getURL(map.getLayersByName('Overlays')[0], col, row, z),
                         basePath,
                         fileTransfer
@@ -275,13 +283,20 @@ Ext.define('App.controller.Download', {
     },
 
     increaseAndCheck: function() {
+        var ls = localStorage,
+            value = this.getValue(),
+            savedmaps = ls.getItem('savedmaps');
         this.setCount(this.getCount()+1);
-        if (this.getTotal()!=this.getCount()) {
+        if (this.getTotal()!=this.getCount() && arguments.length==0) {
             return;
         }
         this.setCount(0);
         this.setTotal(0);
-        alert('done');
+
+        savedmaps = (savedmaps) ? savedmaps.split(',') : [];
+        savedmaps.push(value);
+        ls.setItem('savedmaps', savedmaps.join(','));
+        ls.setItem(value, value);
     }
 
 });

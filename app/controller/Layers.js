@@ -17,6 +17,8 @@ Ext.define('App.controller.Layers', {
             mainView: '#mainView',
             layersView: '#layersView',
             mapSettingsView: '#mapSettingsView',
+            savedMapsView: '#savedmaps',
+            savedMapsList: '#savedmapsList',
             baseLayersView: {
                 selector: "#baseLayersView",
                 xtype: "baselayersview",
@@ -62,6 +64,24 @@ Ext.define('App.controller.Layers', {
                         );
                     });
                     this.getOverlaysList().select(selected.items, false, true);
+                }
+            },
+            savedMapsView: {
+                ready: function() {
+                    var cache = localStorage.getItem('savedmaps'),
+                        store = Ext.getStore('SavedMaps');
+                    store.removeAll();
+                    Ext.each(cache.split(','), function (map) {
+                        store.add(Ext.create('App.model.SavedMaps', {
+                            name: map,
+                            key: localStorage.getItem(map)
+                        }));
+                    });
+                }
+            },
+            savedMapsList: {
+                select: function(list, record) {
+                    alert(record.get('name'));
                 }
             },
             overlaysList: {
