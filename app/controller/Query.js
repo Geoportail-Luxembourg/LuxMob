@@ -88,6 +88,7 @@ Ext.define('App.controller.Query', {
             callback: function() {
                 this.setLoading(false);
                 var preview = this.getResultsPreview();
+                preview.removeAll();
                 preview.unmask();
                 var count = store.getCount();
                 var text, cb = Ext.emptyFn;
@@ -191,7 +192,9 @@ Ext.define('App.controller.Query', {
                 },
                 listeners: {
                     animationend: function() {
-                        preview.removeAll();
+                        if (this.getLoading()) {
+                            preview.removeAll();
+                        }
                         preview.hide();
                         if (callback) {
                             callback.call();
