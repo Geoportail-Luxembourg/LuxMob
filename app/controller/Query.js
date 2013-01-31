@@ -137,6 +137,7 @@ Ext.define('App.controller.Query', {
         if (!preview) {
             preview = this.getMainView().add({
                 xtype: 'container',
+                cls: 'results-preview',
                 height: 40,
                 padding: 5,
                 style: {
