@@ -10,6 +10,7 @@ Ext.define('App.controller.Download', {
         count: 0,
         total: 0,
         value: null,
+        extent: null,
         nbZoomLevels: 3,
         maskControl: null,
         usageHelp: null,
@@ -151,6 +152,7 @@ Ext.define('App.controller.Download', {
 
     initDownload: function(value) {
         this.setValue(value);
+        this.setExtent(this.getMap().getExtent());
         if (!window.requestFileSystem) {
             this.increaseAndCheck(true);
             return;
@@ -294,7 +296,7 @@ Ext.define('App.controller.Download', {
         store.add({
             name: value,
             key: value,
-            extent: ''
+            extent: this.getExtent()
         });
         store.sync();
     }

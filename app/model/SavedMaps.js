@@ -4,7 +4,7 @@ Ext.define('App.model.SavedMaps', {
         fields: ['name', 'key', 'extent'],
         proxy: {
             type: 'localstorage',
-            id  : '#savedMapsProxy'
+            id  : 'savedMapsProxy'
         }
     }
 });
