@@ -6,6 +6,12 @@ Ext.Loader.setPath({
 });
 //</debug>
 
+Ext.define('Ext.overrides.event.recognizer.LongPress', {
+    override: 'Ext.event.recognizer.LongPress',
+    config: {
+        minDuration: 250
+    }
+});
 
 Ext.application({
     name: 'App',
