@@ -174,6 +174,7 @@ Ext.define('App.controller.Query', {
     hidePreview: function(callback) {
         var layer = this.getVectorLayer();
         layer.removeAllFeatures();
+        App.map.getLayersByName('Overlays')[0].setOpacity(1);
         var preview = this.getResultsPreview();
         if (preview && !preview.isHidden()) {
             Ext.Animator.run({
@@ -216,6 +217,7 @@ Ext.define('App.controller.Query', {
                 feature
             ]);
         }, this);
+        App.map.getLayersByName('Overlays')[0].setOpacity(0.4);
     },
 
     showQueryResults: function() {
