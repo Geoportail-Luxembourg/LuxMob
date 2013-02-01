@@ -180,7 +180,9 @@ Ext.define('App.controller.Download', {
     download: function(fs, basePath, fileTransfer) {
         var map = this.getMap(),
             zoom = map.getZoom(),
+            value = this.getValue(),
             bounds = map.calculateBounds(),
+            store = Ext.getStore('SavedMaps'),
             i = 0,
             total = 0,
             z = zoom,
@@ -198,6 +200,14 @@ Ext.define('App.controller.Download', {
             i++;
         }
         this.setTotal(total);
+
+        store.add({
+            name: value,
+            key: value,
+            extent: this.getExtent(),
+            done: 0
+        });
+        store.sync();
 
         i = 0;
         z = zoom;
@@ -219,6 +229,9 @@ Ext.define('App.controller.Download', {
             z++;
             i++;
         }
+
+        Ext.Viewport.setActiveItem(this.getMapSettingsView());
+        this.getMapSettingsView().setActiveItem(1);
 
         function getURL(layer, tileX, tileY, tileZ) {
             var top, right, bottom, left,
@@ -285,20 +298,20 @@ Ext.define('App.controller.Download', {
     increaseAndCheck: function() {
         var ls = localStorage,
             value = this.getValue(),
-            store = Ext.getStore('SavedMaps');
+            store = Ext.getStore('SavedMaps'),
+            percent,
+            record;
         this.setCount(this.getCount()+1);
+        // update download indicator size
+        percent =  Math.round(( this.getCount() * 100 ) / this.getTotal());
+        record = store.findRecord('name', value);
+        record.set('done', percent);
+        record.save();
         if (this.getTotal()!=this.getCount() && arguments.length==0) {
             return;
         }
         this.setCount(0);
         this.setTotal(0);
-
-        store.add({
-            name: value,
-            key: value,
-            extent: this.getExtent()
-        });
-        store.sync();
     }
 
 });

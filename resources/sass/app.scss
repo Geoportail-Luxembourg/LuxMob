@@ -259,3 +259,32 @@ div.Mask {
     border: 20px solid rgba(120,120,120,0.5);
     z-index: 1000 !important;
 }
+.savedmapsline {
+    position: relative;
+}
+.progress {
+    height: 1em;
+    width: 100px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0.3em;
+    right: 0;
+}
+.progress_bar {
+    height: 1em;
+    width: 0%;
+    background: #9A744D;
+    border-radius: 0.5em;
+}
+.progress_value {
+    height: 1em;
+    width: 100%;
+    position:absolute;
+    top:0;
+    left:0;
+    line-height: 1em;
+    text-align: center;
+    color: black;
+    text-shadow: 0 0 2px #fff;
+}
