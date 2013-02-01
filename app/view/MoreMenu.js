@@ -4,6 +4,8 @@ Ext.define('App.view.MoreMenu', {
     id: 'moreMenu',
     xtype: 'moremenu',
     config: {
+        left: 0,
+        top: 0,
         modal: true,
         hideOnMaskTap: true,
         defaults: {

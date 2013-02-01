@@ -22,7 +22,7 @@ Ext.application({
         'App.util.Config'
     ],
 
-    views: ['Main', 'layers.MapSettings', 'MoreMenu'],
+    views: ['Main', 'layers.MapSettings'],
     controllers: ["Download",'Main', 'Layers', 'Settings', 'Search', 'Query'],
     stores: ['BaseLayers', 'Overlays', 'Search', 'Query'],
 
@@ -65,8 +65,6 @@ Ext.application({
 
         // now add the main view to the viewport
         Ext.Viewport.add(mainView);
-
-        Ext.Viewport.add(Ext.create('App.view.MoreMenu'));
 
         this.configurePicker();
         this.configureMessageBox();

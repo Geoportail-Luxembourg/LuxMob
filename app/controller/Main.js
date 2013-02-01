@@ -10,7 +10,11 @@ Ext.define('App.controller.Main', {
     config: {
         refs: {
             mainView: '#mainView',
-            moreMenu: '#moreMenu',
+            moreMenu: {
+                selector: '#moreMenu',
+                xtype: 'moremenu',
+                autoCreate: true
+            },
             mapSettingsView: '#mapSettingsView',
             settingsView: {
                 selector: '#settingsView',
