@@ -264,32 +264,37 @@ div.Mask {
     border: 20px solid rgba(120,120,120,0.5);
     z-index: 1000 !important;
 }
-.savedmapsline {
-    position: relative;
-}
 .progress {
-    height: 1em;
-    width: 100px;
+    height: 1.2em;
+    width: 100%;
     border: 1px solid #ddd;
     box-sizing: border-box;
-    position: absolute;
-    top: 0.3em;
-    right: 0;
+    padding: 0.2em;
+    border-radius: 0.7em;
+    background: #9A744D;
+    background-image: -webkit-linear-gradient(top,
+    #bd9c7a,
+    #ad8258 3%,
+    #8c6945);
+    position: relative;
 }
 .progress_bar {
-    height: 1em;
+    height: 100%;
     width: 0%;
-    background: #9A744D;
+    background: rgb(247,247,247);
     border-radius: 0.5em;
+    box-sizing: border-box;
+    border: 1px solid white;
 }
 .progress_value {
-    height: 1em;
+    height: 1.2rem;
     width: 100%;
     position:absolute;
     top:0;
     left:0;
-    line-height: 1em;
+    line-height: 1.2rem;
     text-align: center;
     color: black;
     text-shadow: 0 0 2px #fff;
+    font-size: 80%;
 }
