@@ -8,6 +8,7 @@ Ext.define('App.view.QueryDetail', {
 
     config: {
         fullscreen: true,
+        scrollable: true,
         padding: 10,
         tpl: '{html}',
         data: null,

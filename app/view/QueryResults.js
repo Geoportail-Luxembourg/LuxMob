@@ -9,7 +9,7 @@ Ext.define('App.view.QueryResults', {
     config: {
         store: 'Query',
         fullscreen: true,
-        itemTpl: '<div>{id}</div>',
+        itemTpl: '<div>{properties.text}</div>',
         onItemDisclosure: true,
         items: [{
             docked: 'top',

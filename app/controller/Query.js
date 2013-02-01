@@ -12,6 +12,8 @@ Ext.define('App.controller.Query', {
         resultsPreview: null,
         map: null,
         vectorLayer: null,
+        searching: false, // used to prevent error with longpress firing singletap
+        loading: false, // tells whether a request if finished loading
         refs: {
             mainView: '#mainView',
             queryResultsView: {
@@ -29,8 +31,12 @@ Ext.define('App.controller.Query', {
             mainview: {
                 mapready: function(map) {
                     Ext.get(App.map.viewPortDiv).on({
-                        touchstart: function() {
-                            this.hidePreview();
+                        singletap: function() {
+                            if (this.getSearching()) {
+                                this.setSearching(false);
+                            } else {
+                                this.hidePreview();
+                            }
                         },
                         scope: this
                     });
@@ -61,72 +67,65 @@ Ext.define('App.controller.Query', {
     },
 
     launchSearch: function(params) {
+        this.setSearching(true);
+        this.setLoading(true);
         this.redirectTo('');
 
         params = decodeURIComponent(params);
         params = params.split('-');
 
-        this.showPreview();
+        this.hidePreview(Ext.bind(this.showPreview, this));
 
-        // FIXME defer is for debug, simulate a real query
-        Ext.defer(
-            function() {
-                var store = Ext.getStore('Query');
-                store.removeAll();
-                store.load({
-                    params: {
-                        bbox: params[0],
-                        layers: params[1],
-                        scale: params[2],
-                        lang: i18n.getLanguage()
-                    },
-                    callback: function() {
-                        var preview = this.getResultsPreview();
-                        preview.removeAll();
-                        preview.unmask();
-                        var html;
-                        var count = store.getCount();
-                        if (count === 0) {
-                            html = i18n.message('query.noresults');
-                            preview.setHtml(html);
-                        } else {
-                            var text, cb;
-                            if (count > 1) {
-                                text = i18n.message('query.results', {
-                                    count: count
-                                });
-                                cb = Ext.bind(
-                                    this.redirectTo, this, ['query']
-                                );
-                            } else {
-                                text = store.getAt(0).get('id');
-                                var id = store.getAt(0).get('id');
-                                cb = Ext.bind(
-                                    this.redirectTo, this, ['detail/' + id]
-                                );
-                            }
-                            preview.add({
-                                xtype: 'button',
-                                ui: 'plain',
-                                cls: 'x-textalign-left',
-                                iconCls: "code3",
-                                iconMask: true,
-                                iconAlign: "right",
-                                text: text,
-                                listeners: {
-                                    tap: cb,
-                                    scope: this
-                                }
-                            });
-                            this.showFeatures(store.getData().items);
-                        }
-                    },
-                    scope: this
-                });
+        var store = Ext.getStore('Query');
+        store.removeAll();
+        store.load({
+            params: {
+                bbox: params[0],
+                layers: params[1],
+                scale: params[2],
+                lang: i18n.getLanguage()
             },
-            500,
-            this
-        );
+            callback: function() {
+                this.setLoading(false);
+                var preview = this.getResultsPreview();
+                preview.removeAll();
+                preview.unmask();
+                var count = store.getCount();
+                var text, cb = Ext.emptyFn;
+
+                if (count === 0) {
+                    text = i18n.message('query.noresults');
+                } else if (count > 1) {
+                    text = i18n.message('query.results', {
+                        count: count
+                    });
+                    cb = Ext.bind(
+                        this.redirectTo, this, ['query']
+                    );
+                } else {
+                    text = store.getAt(0).get('properties').text;
+                    var id = store.getAt(0).get('id');
+                    cb = Ext.bind(
+                        this.redirectTo, this, ['detail/' + id]
+                    );
+                }
+                preview.add({
+                    xtype: 'button',
+                    ui: 'plain',
+                    cls: 'x-textalign-left',
+                    iconCls: "code3",
+                    iconMask: true,
+                    iconAlign: "right",
+                    text: text,
+                    listeners: {
+                        tap: cb,
+                        scope: this
+                    }
+                });
+                this.showFeatures(store.getData().items);
+            },
+            scope: this
+        });
 
         var layer = this.getVectorLayer();
         var index = Math.max(this.getMap().Z_INDEX_BASE['Feature'] - 1,
@@ -135,20 +134,29 @@ Ext.define('App.controller.Query', {
     },
 
     showPreview: function() {
-        this.hidePreview();
-        var preview = this.getMainView().add({
-            xtype: 'container',
-            height: 40,
-            padding: 5,
-            style: {
-                backgroundColor: 'white'
-            },
-            masked: {
-                xtype: 'loadmask',
-                message: i18n.message('querying'),
-                indicator: false
+        var preview = this.getResultsPreview();
+        if (!preview) {
+            preview = this.getMainView().add({
+                xtype: 'container',
+                cls: 'results-preview',
+                height: 40,
+                padding: 5,
+                style: {
+                    backgroundColor: 'white'
+                },
+                masked: {
+                    xtype: 'loadmask',
+                    message: i18n.message('querying'),
+                    indicator: false
+                }
+            });
+            this.setResultsPreview(preview);
+        } else {
+            if (this.getLoading()) {
+                preview.mask();
             }
-        });
+            preview.show();
+        }
         Ext.Animator.run({
             element: preview.element,
             easing: 'easeInOut',
@@ -162,14 +170,14 @@ Ext.define('App.controller.Query', {
                 height: preview.getHeight()
             }
         });
-        this.setResultsPreview(preview);
     },
 
-    hidePreview: function() {
+    hidePreview: function(callback) {
         var layer = this.getVectorLayer();
         layer.removeAllFeatures();
+        App.map.getLayersByName('Overlays')[0].setOpacity(1);
         var preview = this.getResultsPreview();
-        if (preview) {
+        if (preview && !preview.isHidden()) {
             Ext.Animator.run({
                 element: preview.element,
                 easing: 'easeInOut',
@@ -184,12 +192,21 @@ Ext.define('App.controller.Query', {
                 },
                 listeners: {
                     animationend: function() {
-                        preview.getParent().remove(preview);
-                        this.setResultsPreview(null);
+                        if (this.getLoading()) {
+                            preview.removeAll();
+                        }
+                        preview.hide();
+                        if (callback) {
+                            callback.call();
+                        }
                     },
                     scope: this
                 }
             });
+        } else {
+            if (callback) {
+                callback.call();
+            }
         }
     },
 
@@ -203,6 +220,7 @@ Ext.define('App.controller.Query', {
                 feature
             ]);
         }, this);
+        App.map.getLayersByName('Overlays')[0].setOpacity(0.4);
     },
 
     showQueryResults: function() {
