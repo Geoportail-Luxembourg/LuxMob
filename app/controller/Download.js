@@ -13,7 +13,6 @@ Ext.define('App.controller.Download', {
         extent: null,
         nbZoomLevels: 3,
         maskControl: null,
-        usageHelp: null,
         refs: {
             mainView: '#mainView',
             mapSettingsView: '#mapSettingsView'
@@ -85,7 +84,6 @@ Ext.define('App.controller.Download', {
                     item.hide();
                 }
             });
-            this.showUsageHelp();
         } else {
             // application is just launched, don't show the download view
             // directly even if '#download' is in the url
@@ -106,36 +104,12 @@ Ext.define('App.controller.Download', {
             var control = this.getMaskControl();
             control.destroy();
         }
-        this.getUsageHelp() && this.getUsageHelp().hide();
         this.getMainView().items.get(0).items.each(function(item) {
             if (item.isXType('button')) {
                 item.show();
             }
         });
         this.getMainView().down('#downloadbar').destroy();
-    },
-
-    showUsageHelp: function() {
-        var overlay = Ext.Viewport.add({
-            xtype: 'panel',
-            cls: 'usagehelp',
-            modal: false,
-            padding: 10,
-            hidden: true,
-            showAnimation: {
-                type: 'popIn'
-            },
-            hideAnimation: {
-                type: 'popOut'
-            },
-            html: i18n.message('download.usagehelp')
-        });
-        Ext.defer(overlay.showBy, 200, overlay, [this.getMainView().down('#downloadbar')]);
-        this.setUsageHelp(overlay);
-
-        Ext.Function.defer(function() {
-            overlay.hide();
-        }, 4000);
     },
 
     promptForName: function() {
