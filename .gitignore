@@ -11,6 +11,7 @@ build/cordova-ios/www/resources/
 build/cordova-ios/www/app/
 build/cordova-ios/www/lib/
 build/cordova-ios/www/touch/
+build/cordova-ios/www/proj4js-compressed.js
 build/cordova-ios/CordovaLib/CordovaLib.xcodeproj/xcuserdata/
 build/cordova-ios/LuxMob.xcodeproj/project.pbxproj
 build/cordova-ios/LuxMob.xcodeproj/project.xcworkspace/
