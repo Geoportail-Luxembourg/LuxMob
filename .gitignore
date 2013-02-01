@@ -18,6 +18,7 @@ build/cordova-ios/LuxMob.xcodeproj/project.xcworkspace/
 build/cordova-ios/LuxMob.xcodeproj/xcuserdata/
 build/cordova-ios/CordovaLib/build/
 build/cordova-ios/build/
+build/cordova-ios/.DS_Store
 build/cordova-android/local.properties
 build/cordova-android/assets/www/app.js
 build/cordova-android/assets/www/GeolocateControl.js
