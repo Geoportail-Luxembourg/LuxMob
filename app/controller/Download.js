@@ -49,20 +49,13 @@ Ext.define('App.controller.Download', {
             this.getMainView().add({
                 xtype: 'panel',
                 id: 'downloadbar',
-                height: 70,
+                height: 50,
                 items: [{
                     layout: {
                         type: 'hbox',
                         pack: 'center'
                     },
-                    items: [{
-                        html: i18n.message('download.size', {size: 12})
-                    }]
-                }, {
-                    layout: {
-                        type: 'hbox',
-                        pack: 'end'
-                    },
+                    padding: 10,
                     defaults: {
                         style: 'margin-right: 10px;'
                     },
@@ -74,7 +67,7 @@ Ext.define('App.controller.Download', {
                         xtype: 'button',
                         action: 'dodownload',
                         ui: 'confirm',
-                        text: i18n.message('button.OK')
+                        text: i18n.message('button.download_short')
                     }]
                 }]
             });
