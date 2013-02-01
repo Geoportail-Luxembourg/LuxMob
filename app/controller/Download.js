@@ -80,7 +80,7 @@ Ext.define('App.controller.Download', {
             });
 
             this.getMainView().items.get(0).items.each(function(item) {
-                if (item.isXType('button')) {
+                if (item.isXType('button') || item.isXType('searchfield')) {
                     item.hide();
                 }
             });
@@ -105,7 +105,7 @@ Ext.define('App.controller.Download', {
             control.destroy();
         }
         this.getMainView().items.get(0).items.each(function(item) {
-            if (item.isXType('button')) {
+            if (item.isXType('button') || item.isXType('searchfield')) {
                 item.show();
             }
         });
