@@ -42,6 +42,11 @@ Ext.define('App.controller.Download', {
 
     showDownload: function() {
 
+        if (!window.device) {
+            Ext.Msg.alert("", i18n.message('savedmaps.html'));
+            return;
+        }
+
         // initial rendering
         var map = this.getMap();
         if (map) {
