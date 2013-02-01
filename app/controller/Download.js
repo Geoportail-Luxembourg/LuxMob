@@ -113,8 +113,17 @@ Ext.define('App.controller.Download', {
                 if (buttonId == 'ok') {
                     this.initDownload(value);
                 }
-            }, this)
+            }, this),
+            null,
+            false,
+            null,
+            {
+                autoCapitalize: true,
+                autoCorrect: false,
+                id: 'mapname'
+            }
         );
+        Ext.getCmp('mapname').focus();
     },
 
     initDownload: function(value) {
