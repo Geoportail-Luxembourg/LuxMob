@@ -132,6 +132,8 @@ Ext.define('App.controller.Download', {
     },
 
     initDownload: function(value) {
+        // hide the mask
+        this.cancel();
         this.setValue(value);
         this.setExtent(this.getMap().getExtent());
         if (!window.requestFileSystem) {
