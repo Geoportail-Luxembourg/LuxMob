@@ -22,7 +22,7 @@ Ext.define('App.view.layers.MapSettings', {
                 iconCls: 'cloud_download',
                 iconMask: true,
                 title: i18n.message('mapsettings.title.savedmaps'),
-                xclass: device ?
+                xclass: window.device ?
                      "App.view.layers.SavedMaps" : "App.view.layers.SavedMapsNotAvailable"
             }
         ]
