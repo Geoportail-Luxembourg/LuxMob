@@ -184,7 +184,8 @@ Ext.define('App.controller.Layers', {
         this.getBaseLayerButton().setText(this.getMap().baseLayer.name);
         this.loadOverlays(map);
 
-        var cache = localStorage.getItem('overlays');
+        var queryParams = OpenLayers.Util.getParameters();
+        var cache = queryParams.layers || localStorage.getItem('overlays');
         App.map.addLayer(
             new OpenLayers.Layer.WMS(
                 "Overlays",
