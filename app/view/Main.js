@@ -68,9 +68,10 @@ Ext.define('App.view.Main', {
 
     setCenterZoomFromQueryParams: function() {
         var queryParams = OpenLayers.Util.getParameters();
-        if (queryParams.x && queryParams.y && queryParams.zoom) {
+        if (queryParams.X && queryParams.Y && queryParams.zoom) {
+            // Note: Y -> lon, X -> lat
             this.setCenter(
-                new OpenLayers.LonLat(queryParams.x, queryParams.y));
+                new OpenLayers.LonLat(queryParams.Y, queryParams.X));
             this.setZoom(queryParams.zoom);
         }
     },
