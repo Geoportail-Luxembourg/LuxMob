@@ -47,15 +47,16 @@ var tilecache_url =  [
 ];
 
 function getBaseLayers() {
-    var pixelmapsColor = new OpenLayers.Layer.TileCache(
-        "pixelmaps-color",
+    var topo_mobile = new OpenLayers.Layer.TileCache(
+        "topo_mobile",
         tilecache_url,
-        'topo',
+        'topo_mobile',
         {
-            format: 'image/png',
+            format: 'image/jpeg',
             buffer: 1,
             transitionEffect: 'resize',
-            tileLoadingDelay: 125
+            tileLoadingDelay: 125,
+            exclusion: [11, 12]
         }
     );
     var tourisme =  new OpenLayers.Layer.TileCache(
@@ -69,18 +70,6 @@ function getBaseLayers() {
             tileLoadingDelay: 125
         }
     );
-
-    var topo_mobile = new OpenLayers.Layer.TileCache(
-        "topo_mobile",
-        tilecache_url,
-        'topo_mobile',
-        {
-            format: 'image/jpeg',
-            buffer: 1,
-            transitionEffect: 'resize',
-            tileLoadingDelay: 125
-        }
-    );
     var pixelmapsGray = new OpenLayers.Layer.TileCache(
         "pixelmaps-gray",
         tilecache_url,
@@ -89,29 +78,20 @@ function getBaseLayers() {
             format: 'image/png',
             buffer: 1,
             transitionEffect: 'resize',
-            tileLoadingDelay: 125
+            tileLoadingDelay: 125,
+            exclusion: [21, 22]
         }
     );
     var aerial = new OpenLayers.Layer.TileCache(
         "aerial",
         tilecache_url,
-        'ortho',
+        'ortho_gr',
         {
             format: 'image/jpeg',
             buffer: 0,
             transitionEffect: 'resize',
-            tileLoadingDelay: 125
-        }
-    );
-    var parcels = new OpenLayers.Layer.TileCache(
-        "parcels",
-        tilecache_url,
-        'cadastre',
-        {
-            format: 'image/png',
-            buffer: 0,
-            transitionEffect: 'resize',
-            tileLoadingDelay: 125
+            tileLoadingDelay: 125,
+            exclusion: [1, 2]
         }
     );
 
@@ -123,11 +103,12 @@ function getBaseLayers() {
             format: 'image/jpeg',
             buffer: 0,
             transitionEffect: 'resize',
-            tileLoadingDelay: 125
+            tileLoadingDelay: 125,
+            exclusion: [1, 2]
         }
     );
 
-    return [topo_mobile, pixelmapsGray, tourisme, aerial, parcels, streets];
+    return [topo_mobile, aerial, pixelmapsGray, tourisme, streets];
 }
 var tileManager = new OpenLayers.TileManager();
 App.map = new OpenLayers.Map({
