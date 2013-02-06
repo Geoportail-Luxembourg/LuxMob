@@ -1,4 +1,4 @@
-Ext.define('App.model.Overlays', {
+Ext.define('App.model.SelectedOverlays', {
     extend: 'Ext.data.Model',
 
     config: {
@@ -7,6 +7,9 @@ Ext.define('App.model.Overlays', {
         }, {
             name: 'exclusion'
         }, {
+            name: 'visible',
+            type: 'boolean'
+        }, {
             name: 'fr'
         }, {
             name: 'en'
@@ -14,6 +17,11 @@ Ext.define('App.model.Overlays', {
             name: 'de'
         }, {
             name: 'lu'
-        }]
+        }],
+        identifier: 'uuid',
+        proxy: {
+            type: 'localstorage',
+            id: 'selectedOverlays'
+        }
     }
 });

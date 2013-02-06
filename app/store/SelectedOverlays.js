@@ -1,7 +1,7 @@
 Ext.define('App.store.SelectedOverlays', {
     extend: 'Ext.data.Store',
-    requires: 'App.model.Overlays',
+    requires: 'App.model.SelectedOverlays',
     config: {
-        model: 'App.model.Overlays'
+        model: 'App.model.SelectedOverlays'
     }
 });
