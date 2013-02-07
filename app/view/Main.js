@@ -41,8 +41,10 @@ Ext.define('App.view.Main', {
                         }
                     }, {
                         xtype: "searchfield",
-                        width: 100,
+                        width: 150,
                         action: "search",
+                        id: 'fakeSearch',
+                        clearIcon: false,
                         top: 0,
                         left: 3
                     }, {

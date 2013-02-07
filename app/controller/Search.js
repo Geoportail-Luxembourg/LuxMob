@@ -6,7 +6,8 @@ Ext.define('App.controller.Search', {
     config: {
         refs: {
             searchView: '#searchView',
-            searchField: '#searchField'
+            searchField: '#searchField',
+            fakeSearch: '#fakeSearch'
         },
         control: {
             searchField: {
@@ -21,8 +22,11 @@ Ext.define('App.controller.Search', {
             },
             searchView: {
                 select: function(list, record) {
+                    this.getSearchField().setValue(record.get('label'));
+                    this.getFakeSearch().setValue(record.get('label'));
                     App.map.zoomToExtent(OpenLayers.Bounds.fromArray(record.get('bbox')));
                     this.redirectTo('');
+                    list.deselectAll();
                 }
             }
         }
