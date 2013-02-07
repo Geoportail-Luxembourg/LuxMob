@@ -77,9 +77,7 @@ Ext.define('App.controller.Layers', {
                 }
             },
             savedMapsList: {
-                select: function(list, record) {
-                    alert(record.get('name'));
-                }
+                select: 'onSavedMapsSelected'
             },
             overlaysList: {
                 select: function(list, record) {
@@ -438,6 +436,23 @@ Ext.define('App.controller.Layers', {
             return false;
         }
         return true;
+    },
+
+    onSavedMapsSelected: function(list, record) {
+        var layer = this.getMap().getLayersByName('SavedMap');
+        layer = layer && layer[0];
+
+        if (!layer) {
+            layer = new SavedMapLayer(
+                record.get('name'),
+                {
+                    isBaseLayer: true
+                }
+            );
+        }
+        this.getMap().addLayer(layer);
+        this.getMap().setBaseLayer(layer);
+        this.getOverlaysOLLayer().setVisibility(false);
     },
 
     /**
