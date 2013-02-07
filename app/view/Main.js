@@ -118,6 +118,16 @@ Ext.define('App.view.Main', {
             rendererOptions: {zIndexing: true},
             styleMap: new OpenLayers.StyleMap({
                 'default': OpenLayers.Util.applyDefaults({
+                    externalGraphic: 'resources/images/marker.png',
+                    graphicWidth: 22,
+                    graphicHeight: 30,
+                    graphicYOffset: -11,
+                    graphicOpacity: 1,
+                    backgroundGraphic: 'resources/images/shadow-marker.png',
+                    backgroundWidth: 38,
+                    backgroundHeight: 30,
+                    backgroundYOffset: -11,
+                    backgroundXOffset: -10,
                     strokeWidth: 3,
                     strokeColor: 'red',
                     graphicZIndex: 0
