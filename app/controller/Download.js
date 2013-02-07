@@ -238,10 +238,10 @@ Ext.define('App.controller.Download', {
             var min = getTileCoordForCoordAndResolution(
                 layer,
                 new OpenLayers.LonLat(extent.left, extent.bottom), resolution);
-                var max = getTileCoordForCoordAndResolution(
-                    layer,
-                    new OpenLayers.LonLat(extent.right, extent.top), resolution);
-                    return min.concat(max);
+            var max = getTileCoordForCoordAndResolution(
+                layer,
+                new OpenLayers.LonLat(extent.right, extent.top), resolution);
+            return min.concat(max);
         }
 
         function getTileCoordForCoordAndResolution(layer, lonlat, resolution) {
