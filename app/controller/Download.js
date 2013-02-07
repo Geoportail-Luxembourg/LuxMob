@@ -221,9 +221,9 @@ Ext.define('App.controller.Download', {
                 resolution = layer.map.getResolutionForZoom(tileZ);
 
             left = ( tileX * resolution * OpenLayers.Map.TILE_WIDTH ) + layer.maxExtent.left;
-            bottom = ( tileY * resolution * OpenLayers.Map.TILE_HEIGHT ) + layer.maxExtent.bottom;
+            top = layer.maxExtent.top - ( tileY * resolution * OpenLayers.Map.TILE_HEIGHT );
             right = left + resolution * OpenLayers.Map.TILE_WIDTH;
-            top = bottom + resolution * OpenLayers.Map.TILE_HEIGHT;
+            bottom = top - resolution * OpenLayers.Map.TILE_HEIGHT;
 
             // FIXME: goret des cimes, baselayer en dur
             // return layer.getURL(
@@ -238,10 +238,10 @@ Ext.define('App.controller.Download', {
             var min = getTileCoordForCoordAndResolution(
                 layer,
                 new OpenLayers.LonLat(extent.left, extent.bottom), resolution);
-                var max = getTileCoordForCoordAndResolution(
-                    layer,
-                    new OpenLayers.LonLat(extent.right, extent.top), resolution);
-                    return min.concat(max);
+            var max = getTileCoordForCoordAndResolution(
+                layer,
+                new OpenLayers.LonLat(extent.right, extent.top), resolution);
+            return min.concat(max);
         }
 
         function getTileCoordForCoordAndResolution(layer, lonlat, resolution) {

@@ -77,9 +77,7 @@ Ext.define('App.controller.Layers', {
                 }
             },
             savedMapsList: {
-                select: function(list, record) {
-                    alert(record.get('name'));
-                }
+                select: 'onSavedMapsSelected'
             },
             overlaysList: {
                 select: function(list, record) {
@@ -198,7 +196,8 @@ Ext.define('App.controller.Layers', {
         App.map.addLayer(
             new OpenLayers.Layer.WMS(
                 "Overlays",
-                "http://demo.geoportail.lu/mapproxy/service",
+    //            "http://demo.geoportail.lu/mapproxy/service",
+                "http://geoportail-luxembourg.demo-camptocamp.com/~sbrga/mapproxy/service",
                 {
                     layers: overlays || [],
                     transparent: true
@@ -438,6 +437,27 @@ Ext.define('App.controller.Layers', {
             return false;
         }
         return true;
+    },
+
+    onSavedMapsSelected: function(list, record) {
+        var map = this.getMap();
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
+            Ext.bind(function(fs) {
+                var layer = new SavedMapLayer(
+                    record.get('name'),
+                    {
+                        isBaseLayer: true,
+                        fs: fs
+                    }
+                );
+                map.addLayer(layer);
+                map.setBaseLayer(layer);
+                //this.getOverlaysOLLayer().setVisibility(false);
+            }, this),
+            function() {
+                console.log('fail requestFileSystem');
+            }
+        );
     },
 
     /**

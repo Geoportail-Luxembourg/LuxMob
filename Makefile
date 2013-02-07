@@ -1,4 +1,4 @@
-SRC = app.js app.json index.html openlayers-mobile.js GeolocateControl.js
+SRC = app.js app.json index.html openlayers-mobile.js GeolocateControl.js SavedMapLayer.js
 SRC_APP = $(shell find app -name \*.js)
 
 .PHONY: all

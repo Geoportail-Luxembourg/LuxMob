@@ -31,6 +31,10 @@ $base-color: #B58F69;
 @include pictos-iconmask('search');
 @include pictos-iconmask('more');
 
+.olTileImage {
+    outline: 1px solid red;
+}
+
 .x-panel.x-floating.maintoolbar {
     background: none;
     padding: 0;
