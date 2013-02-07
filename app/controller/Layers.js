@@ -440,20 +440,24 @@ Ext.define('App.controller.Layers', {
     },
 
     onSavedMapsSelected: function(list, record) {
-        var layer = this.getMap().getLayersByName('SavedMap');
-        layer = layer && layer[0];
-
-        if (!layer) {
-            layer = new SavedMapLayer(
-                record.get('name'),
-                {
-                    isBaseLayer: true
-                }
-            );
-        }
-        this.getMap().addLayer(layer);
-        this.getMap().setBaseLayer(layer);
-        this.getOverlaysOLLayer().setVisibility(false);
+        var map = this.getMap();
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
+            Ext.bind(function(fs) {
+                var layer = new SavedMapLayer(
+                    record.get('name'),
+                    {
+                        isBaseLayer: true,
+                        fs: fs
+                    }
+                );
+                map.addLayer(layer);
+                map.setBaseLayer(layer);
+                //this.getOverlaysOLLayer().setVisibility(false);
+            }, this),
+            function() {
+                console.log('fail requestFileSystem');
+            }
+        );
     },
 
     /**

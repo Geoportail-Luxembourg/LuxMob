@@ -1,5 +1,6 @@
 var SavedMapLayer = OpenLayers.Class(OpenLayers.Layer.XYZ, {
     async: true,
+    fs: null,
 
     initialize: function(name, options) {
         var url = '${x}/${y}/${z}.png';
@@ -11,22 +12,14 @@ var SavedMapLayer = OpenLayers.Class(OpenLayers.Layer.XYZ, {
         var url = this.getURL(bounds);
         var fileName = this.name + '_' + url.replace(/\//g,'_');
 
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
-            Ext.bind(function(fs) {
-                fs.root.getFile(
-                    fileName,
-                    null,
-                    function(fileEntry) {
-                        console.log('******', fileEntry);
-                        callback.call(scope, fileEntry.toURL());
-                    },
-                    function(error) {
-                        console.log("error getting file : " + fileName);
-                    }
-                );
-            }, this),
-            function() {
-                console.log('fail requestFileSystem');
+        this.fs.root.getFile(
+            fileName,
+            null,
+            function(fileEntry) {
+                callback.call(scope, fileEntry.toURL());
+            },
+            function(error) {
+                console.log("error getting file : " + fileName);
             }
         );
     }
