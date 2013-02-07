@@ -22,10 +22,8 @@ Ext.define('App.view.layers.MapSettings', {
                 iconCls: 'cloud_download',
                 iconMask: true,
                 title: i18n.message('mapsettings.title.savedmaps'),
-                xclass: "App.view.layers.SavedMaps"
-                // FIXME @pierre
-                // xclass: Ext.browser.is.PhoneGap ?
-                //     "App.view.layers.SavedMaps" : "App.view.layers.SavedMapsNotAvailable"
+                xclass: window.device ?
+                     "App.view.layers.SavedMaps" : "App.view.layers.SavedMapsNotAvailable"
             }
         ]
     }

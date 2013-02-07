@@ -13,7 +13,6 @@ Ext.define('App.controller.Download', {
         extent: null,
         nbZoomLevels: 3,
         maskControl: null,
-        usageHelp: null,
         refs: {
             mainView: '#mainView',
             mapSettingsView: '#mapSettingsView'
@@ -43,6 +42,11 @@ Ext.define('App.controller.Download', {
 
     showDownload: function() {
 
+        if (!window.device) {
+            Ext.Msg.alert("", i18n.message('savedmaps.html'));
+            return;
+        }
+
         // initial rendering
         var map = this.getMap();
         if (map) {
@@ -50,20 +54,13 @@ Ext.define('App.controller.Download', {
             this.getMainView().add({
                 xtype: 'panel',
                 id: 'downloadbar',
-                height: 70,
+                height: 50,
                 items: [{
                     layout: {
                         type: 'hbox',
                         pack: 'center'
                     },
-                    items: [{
-                        html: i18n.message('download.size', {size: 12})
-                    }]
-                }, {
-                    layout: {
-                        type: 'hbox',
-                        pack: 'end'
-                    },
+                    padding: 10,
                     defaults: {
                         style: 'margin-right: 10px;'
                     },
@@ -75,17 +72,16 @@ Ext.define('App.controller.Download', {
                         xtype: 'button',
                         action: 'dodownload',
                         ui: 'confirm',
-                        text: i18n.message('button.OK')
+                        text: i18n.message('button.download_short')
                     }]
                 }]
             });
 
             this.getMainView().items.get(0).items.each(function(item) {
-                if (item.isXType('button')) {
+                if (item.isXType('button') || item.isXType('searchfield')) {
                     item.hide();
                 }
             });
-            this.showUsageHelp();
         } else {
             // application is just launched, don't show the download view
             // directly even if '#download' is in the url
@@ -106,36 +102,12 @@ Ext.define('App.controller.Download', {
             var control = this.getMaskControl();
             control.destroy();
         }
-        this.getUsageHelp() && this.getUsageHelp().hide();
         this.getMainView().items.get(0).items.each(function(item) {
-            if (item.isXType('button')) {
+            if (item.isXType('button') || item.isXType('searchfield')) {
                 item.show();
             }
         });
         this.getMainView().down('#downloadbar').destroy();
-    },
-
-    showUsageHelp: function() {
-        var overlay = Ext.Viewport.add({
-            xtype: 'panel',
-            cls: 'usagehelp',
-            modal: false,
-            padding: 10,
-            hidden: true,
-            showAnimation: {
-                type: 'popIn'
-            },
-            hideAnimation: {
-                type: 'popOut'
-            },
-            html: i18n.message('download.usagehelp')
-        });
-        Ext.defer(overlay.showBy, 200, overlay, [this.getMainView().down('#downloadbar')]);
-        this.setUsageHelp(overlay);
-
-        Ext.Function.defer(function() {
-            overlay.hide();
-        }, 4000);
     },
 
     promptForName: function() {
@@ -146,11 +118,22 @@ Ext.define('App.controller.Download', {
                 if (buttonId == 'ok') {
                     this.initDownload(value);
                 }
-            }, this)
+            }, this),
+            null,
+            false,
+            null,
+            {
+                autoCapitalize: true,
+                autoCorrect: false,
+                id: 'mapname'
+            }
         );
+        Ext.getCmp('mapname').focus();
     },
 
     initDownload: function(value) {
+        // hide the mask
+        this.cancel();
         this.setValue(value);
         this.setExtent(this.getMap().getExtent());
         if (!window.requestFileSystem) {

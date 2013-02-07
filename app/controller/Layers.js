@@ -57,10 +57,14 @@ Ext.define('App.controller.Layers', {
             },
             overlaysView: {
                 ready: function() {
-                    var cache = localStorage.getItem('overlays');
+                    var store = Ext.getStore('SelectedOverlays');
+                    var cache = [];
+                    store.each(function(record) {
+                        cache.push(record.get('name'));
+                    });
                     var selected = Ext.getStore('Overlays').queryBy(function(record) {
                         return Ext.Array.contains(
-                            cache.split(','),
+                            cache,
                             record.get('name')
                         );
                     });
@@ -79,9 +83,9 @@ Ext.define('App.controller.Layers', {
             },
             overlaysList: {
                 select: function(list, record) {
-                    this.onOverlayAdd(record.get('name'));
+                    this.onOverlayAdd(record);
                 },
-                deselect: 'onOverlayRemove'
+                deselect: 'onOverlayDeselect'
             },
             overlaysSearch: {
                 clearicontap: 'onSearchClearIconTap',
@@ -127,13 +131,11 @@ Ext.define('App.controller.Layers', {
     },
 
     loadOverlaysFromCache: function() {
-        var overlays = localStorage.getItem('overlays');
-        if (overlays) {
-            overlays = overlays.split(',');
-            for (var i = 0; i < overlays.length; i++) {
-                this.onOverlayAdd(overlays[i], true);
-            }
-        }
+        var store = Ext.getStore('SelectedOverlays');
+        store.load();
+        store.each(function(record) {
+            this.onOverlayAdd(record, true);
+        }, this);
     },
 
     showLayers: function() {
@@ -184,17 +186,25 @@ Ext.define('App.controller.Layers', {
         this.getBaseLayerButton().setText(this.getMap().baseLayer.name);
         this.loadOverlays(map);
 
-        var cache = localStorage.getItem('overlays');
+        var queryParams = OpenLayers.Util.getParameters();
+        store = Ext.getStore('SelectedOverlays');
+        var cache = [];
+        store.each(function(record) {
+            if (record.get('visible')) {
+                cache.push(record.get('name'));
+            }
+        });
+        var overlays = queryParams.layers || cache;
         App.map.addLayer(
             new OpenLayers.Layer.WMS(
                 "Overlays",
                 "http://demo.geoportail.lu/mapproxy/service",
                 {
-                    layers: cache || [],
+                    layers: overlays || [],
                     transparent: true
                 },
                 {
-                    visibility: !!cache,
+                    visibility: !!overlays,
                     buffer: 0
                 }
             )
@@ -210,17 +220,18 @@ Ext.define('App.controller.Layers', {
             url: "http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/theme/" + theme + "/layers",
             success: function(response) {
                 var text = response.responseText;
-                var l = Ext.JSON.decode(text);
+                var layers = Ext.JSON.decode(text);
 
                 var store = Ext.getStore('Overlays');
                 store.removeAll();
-                for (var i= 0; i < l.length; i++) {
+                for (l in layers) {
                     store.add({
-                        fr: OpenLayers.Lang.fr[l[i]] || l[i],
-                        en: OpenLayers.Lang.en[l[i]] || l[i],
-                        de: OpenLayers.Lang.de[l[i]] || l[i],
-                        lu: OpenLayers.Lang.lu[l[i]] || l[i],
-                        name: l[i]
+                        fr: OpenLayers.Lang.fr[l] || l,
+                        en: OpenLayers.Lang.en[l] || l,
+                        de: OpenLayers.Lang.de[l] || l,
+                        lu: OpenLayers.Lang.lu[l] || l,
+                        name: l,
+                        exclusion: layers[l].exclusion
                     });
                 }
 
@@ -265,15 +276,45 @@ Ext.define('App.controller.Layers', {
         }, 2000);
     },
 
-    onOverlayAdd: function(name, silent) {
+    onOverlayAdd: function(record, silent) {
+        var store = Ext.getStore('SelectedOverlays'),
+            name,
+            visible = true;
+        if (record.get && record.get('visible') === false) {
+            visible = record.get('visible');
+        }
+        if (!silent) {
+            if (!record.data) {
+                name = record.name;
+                record = store.add({
+                    fr: OpenLayers.Lang.fr[name] || name,
+                    en: OpenLayers.Lang.en[name] || name,
+                    de: OpenLayers.Lang.de[name] || name,
+                    lu: OpenLayers.Lang.lu[name] || name,
+                    name: name,
+                    exclusion: record.exclusion,
+                    visible: true
+                })[0];
+            } else {
+                record = store.add(record.raw)[0];
+                record.set('visible', true);
+            }
+            store.sync();
+        }
+        name = record.get('name');
+        if (!this.checkForLayersExclusion(record)) {
+            visible = false;
+            record.set('visible', false);
+            store.sync();
+        }
         var field = this.getSelectedOverlaysList().insert(0, {
             label: OpenLayers.i18n(name),
             name: name,
             value: name,
-            checked: true,
+            checked: visible,
             listeners: {
-                check: this.onOverlayChange,
-                uncheck: this.onOverlayChange,
+                check: this.onOverlayCheck,
+                uncheck: this.onOverlayUncheck,
                 scope: this
             }
         });
@@ -285,16 +326,42 @@ Ext.define('App.controller.Layers', {
                 field.setChecked(!field.isChecked());
             }
         });
-        if (!silent) {
-            this.onOverlayChange();
-        }
         this.redirectTo('main');
     },
 
-    onOverlayRemove: function(list, record) {
+    onOverlayDeselect: function(list, record) {
         var selList = this.getSelectedOverlaysList();
         selList.remove(selList.down('field[name=' + record.get('name') + ']'));
         this.showMessage(i18n.message("overlays.layerremoved"));
+        this.onOverlayRemove(record.get('name'));
+    },
+
+    onOverlayRemove: function(name) {
+        var store = Ext.getStore("SelectedOverlays");
+        var index = store.findExact('name', name);
+        store.removeAt(index);
+        store.sync();
+        this.onOverlayChange();
+    },
+
+    onOverlayCheck: function(field) {
+        console.log(field.getValue());
+        var store = Ext.getStore("SelectedOverlays");
+        var record = store.getAt(store.findExact('name', field.getValue()));
+        record.set('visible', true);
+        if (!this.checkForLayersExclusion(record)) {
+            field.uncheck();
+        } else {
+            store.sync();
+            this.onOverlayChange();
+        }
+    },
+
+    onOverlayUncheck: function(field) {
+        var store = Ext.getStore('SelectedOverlays');
+        var record = store.getAt(store.findExact('name', field.getValue()));
+        record.set('visible', false);
+        store.sync();
         this.onOverlayChange();
     },
 
@@ -303,14 +370,15 @@ Ext.define('App.controller.Layers', {
         var layer = this.getOverlaysOLLayer(),
             layersParam = [];
         selList.items.each(function(item) {
+            if (!item.getValue) {
+                return;
+            }
             if (item.isChecked && item.isChecked()) {
                 layersParam.push(item.getValue());
             }
-        });
+        }, this);
         layer.setVisibility(layersParam.length);
         layer.mergeNewParams({'LAYERS': layersParam.reverse()});
-
-        localStorage.setItem('overlays', layersParam.join(','));
     },
 
     onOverlaySwipe: function(field) {
@@ -322,10 +390,12 @@ Ext.define('App.controller.Layers', {
                     ui: 'decline',
                     handler: function() {
                         field.getParent().remove(field);
-                        this.onOverlayChange();
+                        this.onOverlayRemove(field.getValue());
                         var list = this.getOverlaysList();
-                        list && list.deselect(Ext.getStore('Overlays')
-                            .findRecord('name', field.getValue()));
+                        var store = Ext.getStore('Overlays');
+                        list && list.deselect(store.getAt(store.findExact(
+                            'name', field.getValue()
+                        )));
                         actions.hide();
                     },
                     scope: this
@@ -338,6 +408,36 @@ Ext.define('App.controller.Layers', {
             ]
         });
         actions.show();
+    },
+
+    /**
+     * Checks for exclusion.
+     * Returns false if layer cannot be displayed.
+     */
+    checkForLayersExclusion: function(layer, isBaseLayer) {
+        var exclusion = layer.get('exclusion') || [];
+        var layersToExclude = [];
+
+        if (layer.get('visible') === false) {
+            return true;
+        }
+        var store = Ext.getStore('SelectedOverlays');
+        store.each(function(record) {
+            if (record == layer || !record.get('exclusion') || !record.get('visible')) {
+                return;
+            }
+            if (Ext.Array.intersect(record.get('exclusion'), exclusion).length) {
+                layersToExclude.push(OpenLayers.i18n(record.get('name')));
+            }
+        });
+        if (layersToExclude.length) {
+            Ext.Msg.alert('', i18n.message("layers.exclusion_msg", {
+                layer: OpenLayers.i18n(layer.get('name')),
+                layers: layersToExclude.join(', ')
+            }));
+            return false;
+        }
+        return true;
     },
 
     /**
