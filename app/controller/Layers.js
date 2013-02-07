@@ -196,7 +196,8 @@ Ext.define('App.controller.Layers', {
         App.map.addLayer(
             new OpenLayers.Layer.WMS(
                 "Overlays",
-                "http://demo.geoportail.lu/mapproxy/service",
+    //            "http://demo.geoportail.lu/mapproxy/service",
+                "http://geoportail-luxembourg.demo-camptocamp.com/~sbrga/mapproxy/service",
                 {
                     layers: overlays || [],
                     transparent: true
