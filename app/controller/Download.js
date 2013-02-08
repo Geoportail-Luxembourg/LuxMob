@@ -11,7 +11,7 @@ Ext.define('App.controller.Download', {
         total: 0,
         value: null,
         extent: null,
-        nbZoomLevels: 3,
+        nbZoomLevels: 4,
         maskControl: null,
         refs: {
             mainView: '#mainView',
@@ -136,10 +136,6 @@ Ext.define('App.controller.Download', {
         this.cancel();
         this.setValue(value);
         this.setExtent(this.getMap().getExtent());
-        if (!window.requestFileSystem) {
-            this.increaseAndCheck(true);
-            return;
-        }
 
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
             Ext.bind(function(fs) {
@@ -188,7 +184,9 @@ Ext.define('App.controller.Download', {
             name: value,
             key: value,
             extent: this.getExtent(),
-            done: 0
+            done: 0,
+            size: 0,
+            date: new Date(Date.now())
         });
         store.sync();
 
@@ -267,7 +265,7 @@ Ext.define('App.controller.Download', {
             url,
             basePath + fileName,
             Ext.bind(function(file) {
-                this.increaseAndCheck();
+                this.increaseAndCheck(file);
             }, this),
             Ext.bind(function(error) {
                 this.increaseAndCheck();
@@ -283,14 +281,26 @@ Ext.define('App.controller.Download', {
             value = this.getValue(),
             store = Ext.getStore('SavedMaps'),
             percent,
+            file,
             record;
         this.setCount(this.getCount()+1);
         // update download indicator size
         percent =  Math.round(( this.getCount() * 100 ) / this.getTotal());
         record = store.findRecord('name', value);
         record.set('done', percent);
+        if (arguments.length>0) {
+            fileEntry = arguments[0];
+            if (fileEntry) {
+                fileEntry.file(function(file) {
+                    record.set(
+                        'size',
+                        record.get('size') + parseInt(file.size,10)
+                    );
+                });
+            }
+        }
         record.save();
-        if (this.getTotal()!=this.getCount() && arguments.length==0) {
+        if (this.getTotal()!=this.getCount()) {
             return;
         }
         this.setCount(0);
