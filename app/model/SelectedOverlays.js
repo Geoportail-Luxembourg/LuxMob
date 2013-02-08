@@ -1,5 +1,6 @@
 Ext.define('App.model.SelectedOverlays', {
     extend: 'Ext.data.Model',
+    requires: ['Ext.data.identifier.Uuid'],
 
     config: {
         fields: [{
