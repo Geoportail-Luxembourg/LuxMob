@@ -11,7 +11,7 @@ Ext.define('App.store.Search', {
         },
         proxy: {
             type: 'ajax',
-            url: "http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/locationsearch",
+            url: "http://maps.geoportail.lu/locationsearch",
             reader: {
                 type: 'json',
                 rootProperty: 'results'

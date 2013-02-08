@@ -10,6 +10,8 @@ Ext.define('App.model.Search', {
             name: 'type'
         }, {
             name: 'bbox'
+        }, {
+            name: 'id'
         }]
     }
 });

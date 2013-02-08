@@ -299,6 +299,7 @@ Ext.define('App.controller.Layers', {
                 record.set('visible', true);
             }
             store.sync();
+            this.onOverlayChange();
         }
         name = record.get('name');
         if (!this.checkForLayersExclusion(record)) {
@@ -344,7 +345,6 @@ Ext.define('App.controller.Layers', {
     },
 
     onOverlayCheck: function(field) {
-        console.log(field.getValue());
         var store = Ext.getStore("SelectedOverlays");
         var record = store.getAt(store.findExact('name', field.getValue()));
         record.set('visible', true);
@@ -365,19 +365,16 @@ Ext.define('App.controller.Layers', {
     },
 
     onOverlayChange: function() {
-        var selList = this.getSelectedOverlaysList();
+        var store = Ext.getStore('SelectedOverlays');
         var layer = this.getOverlaysOLLayer(),
             layersParam = [];
-        selList.items.each(function(item) {
-            if (!item.getValue) {
-                return;
-            }
-            if (item.isChecked && item.isChecked()) {
-                layersParam.push(item.getValue());
+        store.each(function(record) {
+            if (record.get('visible')) {
+                layersParam.push(record.get('name'));
             }
         }, this);
         layer.setVisibility(layersParam.length);
-        layer.mergeNewParams({'LAYERS': layersParam.reverse()});
+        layer.mergeNewParams({'LAYERS': layersParam});
     },
 
     onOverlaySwipe: function(field) {
@@ -440,20 +437,24 @@ Ext.define('App.controller.Layers', {
     },
 
     onSavedMapsSelected: function(list, record) {
-        var layer = this.getMap().getLayersByName('SavedMap');
-        layer = layer && layer[0];
-
-        if (!layer) {
-            layer = new SavedMapLayer(
-                record.get('name'),
-                {
-                    isBaseLayer: true
-                }
-            );
-        }
-        this.getMap().addLayer(layer);
-        this.getMap().setBaseLayer(layer);
-        this.getOverlaysOLLayer().setVisibility(false);
+        var map = this.getMap();
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
+            Ext.bind(function(fs) {
+                var layer = new SavedMapLayer(
+                    record.get('name'),
+                    {
+                        isBaseLayer: true,
+                        fs: fs
+                    }
+                );
+                map.addLayer(layer);
+                map.setBaseLayer(layer);
+                //this.getOverlaysOLLayer().setVisibility(false);
+            }, this),
+            function() {
+                console.log('fail requestFileSystem');
+            }
+        );
     },
 
     /**

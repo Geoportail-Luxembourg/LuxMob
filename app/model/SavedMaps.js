@@ -1,5 +1,6 @@
 Ext.define('App.model.SavedMaps', {
     extend: 'Ext.data.Model',
+    requires: ['Ext.data.identifier.Uuid'],
     config: {
         fields: [
             {
