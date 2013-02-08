@@ -22,7 +22,10 @@ Ext.define('App.view.layers.SavedMaps', {
             xtype: 'list',
             id: 'savedmapsList',
             itemTpl: new Ext.XTemplate(
-                '<div><h4>{name}</h4>',
+                '<div>',
+                '<h4>{name} ',
+                '<small class="map_weight">{[(values.size/1024/1024).toFixed(1)]}Mb</small>',
+                '</h4>',
                 '{[this.getProgress(values)]}',
                 '</div>',
                 {
