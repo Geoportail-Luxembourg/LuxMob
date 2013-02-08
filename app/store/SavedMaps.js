@@ -3,12 +3,12 @@ Ext.define('App.store.SavedMaps', {
     requires: 'App.model.SavedMaps',
     id: 'savedMapsStore',
     config: {
-        model: 'App.model.SavedMaps'
-    },
-    sorters: [
-        {
-            property: 'date',
-            direction: 'DESC'
-        }
-    ]
+        model: 'App.model.SavedMaps',
+        sorters: [
+            {
+                property: 'date',
+                direction: 'DESC'
+            }
+        ]
+    }
 });
