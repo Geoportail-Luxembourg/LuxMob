@@ -151,7 +151,7 @@ Ext.define('App.view.Main', {
                     backgroundXOffset: -10,
                     strokeWidth: 3,
                     strokeColor: 'red'
-                }, OpenLayers.Feature.Vector.style['default']),
+                }, OpenLayers.Feature.Vector.style['default'])
             })
         }));
         map.addLayer(this.getVectorLayer());
