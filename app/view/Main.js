@@ -115,18 +115,22 @@ Ext.define('App.view.Main', {
 
         // highlight layer
         this.setVectorLayer(new OpenLayers.Layer.Vector('Vector', {
-            rendererOptions: {zIndexing: true},
+            rendererOptions: {
+                yOrdering: true,
+                zIndexing: true
+            },
             styleMap: new OpenLayers.StyleMap({
                 'default': OpenLayers.Util.applyDefaults({
                     externalGraphic: 'resources/images/marker.png',
+                    graphicZIndex: 200,
                     graphicWidth: 22,
                     graphicHeight: 30,
-                    graphicYOffset: -11,
+                    graphicYOffset: -30,
                     graphicOpacity: 1,
                     backgroundGraphic: 'resources/images/shadow-marker.png',
                     backgroundWidth: 38,
                     backgroundHeight: 30,
-                    backgroundYOffset: -11,
+                    backgroundYOffset: -30,
                     backgroundXOffset: -10,
                     strokeWidth: 3,
                     strokeColor: 'red',
