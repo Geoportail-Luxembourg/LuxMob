@@ -24,6 +24,8 @@ Ext.define('App.controller.Settings', {
                     });
                     themes.updateOptions(options);
                     themes.setValue(value);
+
+                    Ext.getStore('Overlays').setSorters(newValue);
                 }
             },
             themeSelect: {

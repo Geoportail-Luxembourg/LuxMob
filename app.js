@@ -68,6 +68,8 @@ Ext.application({
 
         this.configurePicker();
         this.configureMessageBox();
+
+        Ext.getStore('Overlays').setSorters(App.util.Config.getLanguage());
     },
 
     onUpdated: function() {
