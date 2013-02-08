@@ -45,7 +45,7 @@ build/cordova-android/local.properties:
 app: build/App/production/app.js
 
 build/App/production/app.js: $(SRC) $(SRC_APP)
-	sencha app build production || rm $@
+	sencha app build production || rm -f $@
 
 .PHONY:
 clean:
