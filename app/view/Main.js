@@ -122,10 +122,9 @@ Ext.define('App.view.Main', {
             styleMap: new OpenLayers.StyleMap({
                 'default': OpenLayers.Util.applyDefaults({
                     externalGraphic: 'resources/images/marker.png',
-                    graphicZIndex: 200,
-                    graphicWidth: 22,
-                    graphicHeight: 30,
-                    graphicYOffset: -30,
+                    graphicWidth: 17.6,
+                    graphicHeight: 24,
+                    graphicYOffset: -24,
                     graphicOpacity: 1,
                     backgroundGraphic: 'resources/images/shadow-marker.png',
                     backgroundWidth: 38,
@@ -134,8 +133,25 @@ Ext.define('App.view.Main', {
                     backgroundXOffset: -10,
                     strokeWidth: 3,
                     strokeColor: 'red',
-                    graphicZIndex: 0
-                }, OpenLayers.Feature.Vector.style['default'])
+                    graphicZIndex: 1,
+                    backgroundGraphicZIndex: 0
+                }, OpenLayers.Feature.Vector.style['default']),
+                'select': OpenLayers.Util.applyDefaults({
+                    externalGraphic: 'resources/images/marker_selected.png',
+                    graphicZIndex: 3,
+                    graphicWidth: 22,
+                    graphicHeight: 30,
+                    graphicYOffset: -30,
+                    graphicOpacity: 1,
+                    backgroundGraphic: 'resources/images/shadow-marker.png',
+                    backgroundGraphicZIndex: 2,
+                    backgroundWidth: 38,
+                    backgroundHeight: 30,
+                    backgroundYOffset: -30,
+                    backgroundXOffset: -10,
+                    strokeWidth: 3,
+                    strokeColor: 'red'
+                }, OpenLayers.Feature.Vector.style['default']),
             })
         }));
         map.addLayer(this.getVectorLayer());
