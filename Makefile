@@ -42,10 +42,13 @@ build/cordova-android/local.properties:
 	android update project -p build/cordova-android/
 
 .PHONY: app
-app: build/App/production/app.js
+app: external/openlayers build/App/production/app.js
 
 build/App/production/app.js: $(SRC) $(SRC_APP)
 	sencha app build production || rm -f $@
+
+external/openlayers:
+	git submodule update --init
 
 .PHONY:
 clean:

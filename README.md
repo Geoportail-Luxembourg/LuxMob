@@ -82,10 +82,6 @@ To persist that adjust the setting of the `PATH` in your `.bashrc`.
 
 ## Build
 
-Get submodules
-
-    $ git submodule update --init
-
 To build the web app run this command:
 
     $ make
