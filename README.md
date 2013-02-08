@@ -7,22 +7,22 @@ Cmd 3.0.0.250 and the Android SDK Tools installed.
 
 ### Sencha Cmd
 
-Download Sencha Cmd for your OS from
+Download Sencha Cmd 3.0.2.288 for your OS from
 http://www.sencha.com/products/sencha-cmd/download.
 
 Unzip the downloaded zip file:
         
-    $ unzip SenchaCmd-3.0.0.250-linux.run.zip
+    $ unzip SenchaCmd-3.0.2.288-linux.run.zip
 
 Run the installer:
 
-    $ ./SenchaCmd-3.0.0.250-linux.run --prefix ~/local/opt/ --mode unattended
+    $ ./SenchaCmd-3.0.2.288-linux.run --prefix ~/local/opt/ --mode unattended
 
 Using the `unattended` mode the installer does not prompt the user for
 questions.
 
 The above command installs Sencha Cmd under
-`~/local/opt/Sencha/Cmd/3.0.0.250/`.  The installer also modifies your
+`~/local/opt/Sencha/Cmd/3.0.2.288/`.  The installer also modifies your
 `.bashrc` file to extend `PATH` and set `SENCHA_CMD_3_0_0`. So sourcing
 `.bashrc` should make the `sencha` command available in the shell.
 
