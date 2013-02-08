@@ -203,7 +203,7 @@ Ext.define('App.controller.Layers', {
                     transparent: true
                 },
                 {
-                    visibility: !!overlays,
+                    visibility: overlays.length,
                     buffer: 0
                 }
             )
