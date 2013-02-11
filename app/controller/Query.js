@@ -109,19 +109,25 @@ Ext.define('App.controller.Query', {
                         this.redirectTo, this, ['detail/' + id]
                     );
                 }
-                preview.add({
+                var button = {
                     xtype: 'button',
                     ui: 'plain',
                     cls: 'x-textalign-left',
-                    iconCls: "code3",
-                    iconMask: true,
-                    iconAlign: "right",
-                    text: text,
-                    listeners: {
-                        tap: cb,
-                        scope: this
-                    }
-                });
+                    text: text
+                };
+                if (count > 0) {
+                    Ext.apply(button, {
+                        iconCls: "code3",
+                        iconMask: true,
+                        iconAlign: "right",
+                        listeners: {
+                            tap: cb,
+                            scope: this
+                        }
+                    });
+                }
+
+                preview.add(button);
                 this.showFeatures(store.getData().items);
             },
             scope: this
