@@ -28,6 +28,12 @@ Ext.define('App.view.MoreMenu', {
             iconCls: "cloud_download",
             text: i18n.message("button.download"),
             iconMask: true
+        }, {
+            xtype: 'button',
+            action: 'sendbymail',
+            iconCls: "mail2",
+            text: i18n.message("button.sendbymail"),
+            iconMask: true
         }]
     }
 });

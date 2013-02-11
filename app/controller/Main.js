@@ -5,7 +5,8 @@ Ext.define('App.controller.Main', {
         'App.view.layers.MapSettings',
         'App.view.Settings',
         'App.view.MoreMenu',
-        'App.view.Search'
+        'App.view.Search',
+        'Ext.field.Email'
     ],
     config: {
         refs: {
@@ -53,6 +54,9 @@ Ext.define('App.controller.Main', {
                 tap: function() {
                     this.redirectTo('settings');
                 }
+            },
+            'button[action=sendbymail]': {
+                tap: "sendByMail"
             },
             searchField: {
                 focus: function() {
@@ -143,5 +147,41 @@ Ext.define('App.controller.Main', {
             joinedParams = encodeURIComponent(joinedParams);
             this.redirectTo('query/' + joinedParams);
         }
+    },
+
+    sendByMail: function() {
+        Ext.Msg.prompt(
+            i18n.message('button.sendbymail'),
+            'E-mail',
+            function(buttonId, value) {
+                if (buttonId != 'ok') {
+                    return;
+                }
+                var map = App.map;
+                // FIXME: goret des cimes, baselayer en dur
+                var layers = 'topo,';
+                layers += map.getLayersByName('Overlays')[0].params.LAYERS.join(',');
+                Ext.Ajax.request({
+                    url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/sendbymail',
+                    params: {
+                        layers: layers,
+                        bbox: map.getExtent().toBBOX(),
+                        width: map.getSize().w,
+                        height: map.getSize().h,
+                        mail: value
+                    },
+                    success: function(response) {
+                        var json = Ext.JSON.decode(response.responseText);
+                        console.log(json);
+                    }
+                });
+            },
+            null,
+            false,
+            null,
+            {
+                xtype: 'emailfield'
+            }
+        );
     }
 });

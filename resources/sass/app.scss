@@ -30,6 +30,7 @@ $base-color: #B58F69;
 @include pictos-iconmask('cloud_download');
 @include pictos-iconmask('search');
 @include pictos-iconmask('more');
+@include pictos-iconmask('mail2');
 
 .olTileImage {
     outline: 1px solid red;
