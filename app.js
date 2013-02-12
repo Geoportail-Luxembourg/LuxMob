@@ -49,8 +49,7 @@ Ext.application({
     },
 
     launch: function() {
-
-         this.prepareI18n();
+        this.prepareI18n();
 
         // create the main view and set the map into it
         var mainView = Ext.create('App.view.Main');

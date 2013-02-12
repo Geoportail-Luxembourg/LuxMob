@@ -12,7 +12,11 @@ Ext.define('App.view.layers.MapSettings', {
     config: {
         fullScreen: true,
         tabBarPosition: 'bottom',
-        items: [
+        items: []
+    },
+
+    applyItems: function(items, collection) {
+        items = [
             {
                 iconCls: 'layers',
                 iconMask: true,
@@ -25,6 +29,7 @@ Ext.define('App.view.layers.MapSettings', {
                 xclass: window.device ?
                      "App.view.layers.SavedMaps" : "App.view.layers.SavedMapsNotAvailable"
             }
-        ]
+        ];
+        return this.callParent([items, collection]);
     }
 });

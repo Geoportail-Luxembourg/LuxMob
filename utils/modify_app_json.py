@@ -1,16 +1,18 @@
 import json
 import re
 import sys
+import shutil
 
 
-if len(sys.argv) < 3:
+if len(sys.argv) < 2:
     print >> sys.stderr, 'Usage error'
     sys.exit(1)
 
-input_file = sys.argv[1]
-output_file = sys.argv[2]
+cordova = sys.argv[1]
 
-f = open(input_file, 'r')
+f = shutil.copyfile('app.json', 'app.json.bak')
+
+f = open('app.json', 'r')
 json_str = f.read()
 f.close()
 
@@ -22,8 +24,8 @@ json_str = re.sub(r'\n', '', json_str)
 json_str = json_str.encode('string-escape')
 
 obj = json.loads(json_str)
-obj['js'].append({'path': 'cordova-2.3.0.js', 'type': 'js'})
+obj['js'].insert(1, {'path': cordova, 'type': 'js'})
 
-f = open(output_file, 'w')
+f = open('app.json', 'w')
 f.write(json.dumps(obj))
 f.close()

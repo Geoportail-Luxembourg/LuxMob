@@ -16,16 +16,22 @@ ios-debug: $(SRC) $(SRC_APP)
 	cp -r resources build/cordova-ios/www/
 	cp -r touch build/cordova-ios/www/
 	cp -r lib build/cordova-ios/www/
+	python utils/modify_app_json.py cordova-2.3.0.ios.js
 	cp $(SRC) build/cordova-ios/www/
-	python utils/modify_app_json.py app.json build/cordova-ios/www/app.json
+	cp cordova-2.3.0.ios.js build/cordova-ios/www
+	mv app.json.bak app.json
 
 .PHONY: android
-android: build/cordova-android/local.properties app
+android: android-json build/cordova-android/local.properties app
 	cp -r build/App/production/* build/cordova-android/assets/www/
-	python utils/modify_app_json.py build/App/production/app.json build/cordova-android/assets/www/app.json
 	./build/cordova-android/cordova/build
 	adb uninstall com.c2c.LuxMob
 	./build/cordova-android/cordova/run
+	rm -rf app.json
+	mv app.json.bak app.json
+
+android-json:
+	python utils/modify_app_json.py cordova-2.3.0.android.js
 
 # !! The app doesn't currently work in debug mode in the Android emulator !!
 .PHONY: ios-debug
