@@ -200,7 +200,7 @@ Ext.define('App.controller.Download', {
             for (col = range[0]; col <= range[2]; col++) {
                 for (row = range[1]; row <= range[3]; row++) {
                     this.downloadFile(
-                        [ this.getValue(), col, row, z ].join('_'),
+                        [ this.getValue(), z, col, row ].join('_'),
                         getURL(map.getLayersByName('Overlays')[0], col, row, z),
                         basePath,
                         fileTransfer
