@@ -171,8 +171,12 @@ Ext.define('App.controller.Main', {
                         mail: value
                     },
                     success: function(response) {
-                        var json = Ext.JSON.decode(response.responseText);
-                        console.log(json);
+                        var resp = Ext.JSON.decode(response.responseText);
+                        if (resp.success === true) {
+                            Ext.Msg.alert('', i18n.message('sendbymail.done'));
+                        } else {
+                            Ext.Msg.alert('', i18n.message('sendbymail.wrong'));
+                        }
                     }
                 });
             },
