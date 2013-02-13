@@ -1,6 +1,7 @@
 var SavedMapLayer = OpenLayers.Class(OpenLayers.Layer.XYZ, {
     async: true,
     fs: null,
+    uuid: null,
 
     initialize: function(name, options) {
         var url = '${z}/${x}/${y}.png';
@@ -26,7 +27,7 @@ var SavedMapLayer = OpenLayers.Class(OpenLayers.Layer.XYZ, {
 
     getURLasync: function(bounds, callback, scope) {
         var url = this.getURL(bounds);
-        var fileName = this.name + '_' + url.replace(/\//g,'_');
+        var fileName = this.uuid + '_' + url.replace(/\//g,'_');
 
         this.fs.root.getFile(
             fileName,

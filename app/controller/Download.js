@@ -11,7 +11,7 @@ Ext.define('App.controller.Download', {
         total: 0,
         value: null,
         extent: null,
-        nbZoomLevels: 4,
+        nbZoomLevels: 3,
         maskControl: null,
         refs: {
             mainView: '#mainView',
@@ -168,10 +168,14 @@ Ext.define('App.controller.Download', {
             range,
             cols,
             rows,
-            loaded = 0;
+            loaded = 0,
+            resolution,
+            resolutions = [];
         while (i < this.getNbZoomLevels()) {
+            resolution =  map.getResolutionForZoom(z);
+            resolutions.push(resolution);
             range = getTileRangeForExtentAndResolution(
-                map.layers[0], bounds, map.getResolutionForZoom(z));
+                map.layers[0], bounds, resolution);
             cols = range[2] - range[0] + 1;
             rows = range[3] - range[1] + 1;
             total += cols * rows;
@@ -180,15 +184,17 @@ Ext.define('App.controller.Download', {
         }
         this.setTotal(total);
 
-        store.add({
+        var records = store.add({
             name: value,
             key: value,
             extent: this.getExtent(),
+            resolutions: resolutions,
             done: 0,
             size: 0,
             date: new Date(Date.now())
         });
         store.sync();
+        var uuid = records[0].getId();
 
         i = 0;
         z = zoom;
@@ -200,7 +206,7 @@ Ext.define('App.controller.Download', {
             for (col = range[0]; col <= range[2]; col++) {
                 for (row = range[1]; row <= range[3]; row++) {
                     this.downloadFile(
-                        [ this.getValue(), z, col, row ].join('_'),
+                        [ uuid, i, col, row ].join('_'), // don't use real zoom here since we want to use clientZoom
                         getURL(map.getLayersByName('Overlays')[0], col, row, z),
                         basePath,
                         fileTransfer

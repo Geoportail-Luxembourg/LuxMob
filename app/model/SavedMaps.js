@@ -12,6 +12,9 @@ Ext.define('App.model.SavedMaps', {
             }, {
                 name: 'extent',
                 type: 'string'
+            }, {
+                name: 'resolutions',
+                type: 'string'
             }, 'done',
             {
                 name: 'size',

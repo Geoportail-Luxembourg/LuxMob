@@ -74,7 +74,8 @@ Ext.define('App.controller.Layers', {
             savedMapsView: {
                 ready: function() {
                     Ext.getStore('SavedMaps').load();
-                }
+                },
+                deactivate: 'deactivateSavedMap'
             },
             savedMapsList: {
                 select: 'onSavedMapsSelected'
@@ -441,20 +442,40 @@ Ext.define('App.controller.Layers', {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
             Ext.bind(function(fs) {
                 var layer = new SavedMapLayer(
-                    record.get('name'),
+                    'savedmap',
                     {
                         isBaseLayer: true,
-                        fs: fs
+                        fs: fs,
+                        resolutions: map.resolutions,
+                        serverResolutions: record.get('resolutions').split(','),
+                        uuid: record.getId()
                     }
                 );
                 map.addLayer(layer);
                 map.setBaseLayer(layer);
+                var extent = OpenLayers.Bounds.fromArray(record.get('extent').split(','));
+                if (!extent.containsLonLat(map.getCenter())) {
+                    map.zoomToExtent(extent);
+                }
                 this.getOverlaysOLLayer().setVisibility(false);
+                this.redirectTo('');
             }, this),
             function() {
                 console.log('fail requestFileSystem');
             }
         );
+    },
+
+    deactivateSavedMap: function() {
+        var map = this.getMap();
+        map.setBaseLayer(map.layers[0]);
+        var overlays = this.getOverlaysOLLayer();
+        overlays.setVisibility(overlays.params.LAYERS.length);
+        var savedmap = map.getLayersByName('savedmap')[0];
+        if (savedmap) {
+            map.removeLayer(savedmap);
+        }
+        this.getSavedMapsList().deselectAll();
     },
 
     /**
