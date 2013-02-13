@@ -449,7 +449,7 @@ Ext.define('App.controller.Layers', {
                 );
                 map.addLayer(layer);
                 map.setBaseLayer(layer);
-                //this.getOverlaysOLLayer().setVisibility(false);
+                this.getOverlaysOLLayer().setVisibility(false);
             }, this),
             function() {
                 console.log('fail requestFileSystem');
