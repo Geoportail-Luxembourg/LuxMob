@@ -32,10 +32,6 @@ $base-color: #B58F69;
 @include pictos-iconmask('more');
 @include pictos-iconmask('mail2');
 
-.olTileImage {
-    outline: 1px solid red;
-}
-
 .x-panel.x-floating.maintoolbar {
     background: none;
     padding: 0;
