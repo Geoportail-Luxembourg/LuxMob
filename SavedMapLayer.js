@@ -2,6 +2,7 @@ var SavedMapLayer = OpenLayers.Class(OpenLayers.Layer.XYZ, {
     async: true,
     fs: null,
     uuid: null,
+    transitionEffect: 'resize',
 
     initialize: function(name, options) {
         var url = '${z}/${x}/${y}.png';
