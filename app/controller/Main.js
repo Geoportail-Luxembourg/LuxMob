@@ -1,3 +1,4 @@
+window.i18n = Ext.i18n.Bundle;
 Ext.define('App.controller.Main', {
     extend: 'Ext.app.Controller',
 
@@ -168,6 +169,10 @@ Ext.define('App.controller.Main', {
                         bbox: map.getExtent().toBBOX(),
                         width: map.getSize().w,
                         height: map.getSize().h,
+                        x: map.getCenter().lon,
+                        y: map.getCenter().lat,
+                        zoom: map.getZoom(),
+                        lang: i18n.getLanguage(),
                         mail: value
                     },
                     success: function(response) {
