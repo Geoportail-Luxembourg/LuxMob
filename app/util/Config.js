@@ -110,7 +110,6 @@ function getBaseLayers() {
 
     return [topo_mobile, aerial, pixelmapsGray, tourisme, streets];
 }
-var tileManager = new OpenLayers.TileManager();
 App.map = new OpenLayers.Map({
     theme: null,
     projection: new OpenLayers.Projection("EPSG:2169"),
@@ -129,7 +128,6 @@ App.map = new OpenLayers.Map({
         new OpenLayers.Control.ScaleLine()
     ],
     layers: getBaseLayers(),
-    tileManager: tileManager,
     fallThrough: true
 });
 
