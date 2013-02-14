@@ -447,7 +447,7 @@ Ext.define('App.controller.Layers', {
                         isBaseLayer: true,
                         fs: fs,
                         resolutions: map.resolutions,
-                        serverResolutions: record.get('resolutions').split(','),
+                        serverResolutions: record.get('resolutions'),
                         uuid: record.getId()
                     }
                 );
