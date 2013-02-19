@@ -101,6 +101,37 @@ Ext.define('App.controller.Layers', {
     },
 
     init: function() {
+        // load the map (with its baselayers)
+        Ext.getStore('BaseLayers').load({
+            callback: function(records) {
+                Ext.each(records, function(record) {
+                    App.map.layers.push(new OpenLayers.Layer.TileCache(
+                        record.get('name'),
+                        App.tilecache_url,
+                        record.get('layername'),
+                        {
+                            maxExtent: OpenLayers.Bounds.fromArray(record.get('bbox')),
+                            format: record.get('format'),
+                            buffer: 0,
+                            transitionEffect: 'resize',
+                            tileLoadingDelay: 125,
+                            exclusion: record.get('exclusion')
+                        }
+                    ));
+                });
+                // App.map should be set in config.js
+                App.map = new OpenLayers.Map(App.map);
+                this.getMainView().setMap(App.map);
+
+                // destroy the #appLoadingIndicator element
+                Ext.fly('appLoadingIndicator').destroy();
+
+                // now add the main view to the viewport
+                Ext.Viewport.add(this.getMainView());
+            },
+            scope: this
+        });
+
         // support language change for some widgets
         this.getApplication().getController('Settings').on({
             languagechange: function(code) {
@@ -182,7 +213,7 @@ Ext.define('App.controller.Layers', {
             }
         }, this);
 
-        this.getBaseLayerButton().setText(this.getMap().baseLayer.name);
+        this.getBaseLayerButton().setText(OpenLayers.i18n(this.getMap().baseLayer.name));
         this.loadOverlays(map);
 
         var queryParams = OpenLayers.Util.getParameters();

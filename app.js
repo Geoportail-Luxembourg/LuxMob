@@ -56,15 +56,6 @@ Ext.application({
 
         Ext.create('App.view.layers.MapSettings');
 
-        // App.map should be set in config.js
-        mainView.setMap(App.map);
-
-        // destroy the #appLoadingIndicator element
-        Ext.fly('appLoadingIndicator').destroy();
-
-        // now add the main view to the viewport
-        Ext.Viewport.add(mainView);
-
         this.configurePicker();
         this.configureMessageBox();
 

@@ -39,78 +39,14 @@ Ext.define('App.util.Config', {
 });
 
 // define the map and layers
-var tilecache_url =  [
+App.tilecache_url =  [
     'http://tile2.geoportail.lu',
     'http://tile1.geoportail.lu',
     'http://tile3.geoportail.lu',
     'http://tile4.geoportail.lu'
 ];
 
-function getBaseLayers() {
-    var topo_mobile = new OpenLayers.Layer.TileCache(
-        "topo_mobile",
-        tilecache_url,
-        'topo_mobile',
-        {
-            format: 'image/jpeg',
-            buffer: 1,
-            transitionEffect: 'resize',
-            tileLoadingDelay: 125,
-            exclusion: [11, 12]
-        }
-    );
-    var tourisme =  new OpenLayers.Layer.TileCache(
-        "topo_tour_20k",
-        tilecache_url,
-        'topo_tour_20k',
-        {
-            format: 'image/png',
-            buffer: 1,
-            transitionEffect: 'resize',
-            tileLoadingDelay: 125
-        }
-    );
-    var pixelmapsGray = new OpenLayers.Layer.TileCache(
-        "pixelmaps-gray",
-        tilecache_url,
-        'topo_bw',
-        {
-            format: 'image/png',
-            buffer: 1,
-            transitionEffect: 'resize',
-            tileLoadingDelay: 125,
-            exclusion: [21, 22]
-        }
-    );
-    var aerial = new OpenLayers.Layer.TileCache(
-        "aerial",
-        tilecache_url,
-        'ortho_gr',
-        {
-            format: 'image/jpeg',
-            buffer: 0,
-            transitionEffect: 'resize',
-            tileLoadingDelay: 125,
-            exclusion: [1, 2]
-        }
-    );
-
-    var streets = new OpenLayers.Layer.TileCache(
-        "streets",
-        tilecache_url,
-        'streets_jpeg',
-        {
-            format: 'image/jpeg',
-            buffer: 0,
-            transitionEffect: 'resize',
-            tileLoadingDelay: 125,
-            exclusion: [1, 2]
-        }
-    );
-
-    return [topo_mobile, aerial, pixelmapsGray, tourisme, streets];
-}
-App.map = new OpenLayers.Map({
+App.map = {
     theme: null,
     projection: new OpenLayers.Projection("EPSG:2169"),
     displayProjection: new OpenLayers.Projection("EPSG:2169"),
@@ -127,7 +63,6 @@ App.map = new OpenLayers.Map({
         }),
         new OpenLayers.Control.ScaleLine()
     ],
-    layers: getBaseLayers(),
+    layers: [],
     fallThrough: true
-});
-
+};

@@ -5,6 +5,14 @@ Ext.define('App.model.BaseLayers', {
         fields: [{
             name: 'name'
         }, {
+            name: 'layername'
+        }, {
+            name: 'format'
+        }, {
+            name: 'bbox'
+        }, {
+            name: 'exclusion'
+        }, {
             name: 'fr'
         }, {
             name: 'en'
