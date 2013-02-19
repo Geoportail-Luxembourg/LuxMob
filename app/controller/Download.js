@@ -229,13 +229,9 @@ Ext.define('App.controller.Download', {
             right = left + resolution * OpenLayers.Map.TILE_WIDTH;
             top = bottom + resolution * OpenLayers.Map.TILE_HEIGHT;
 
-            // FIXME: goret des cimes, baselayer en dur
-            // return layer.getURL(
-            //     new OpenLayers.Bounds(left, bottom, right, top)
-            // ).replace(/LAYERS=/, 'LAYERS=' + layer.map.baseLayer.name + ',');
-            return layer.getURL(
-                new OpenLayers.Bounds(left, bottom, right, top)
-            ).replace(/LAYERS=/, 'LAYERS=topo,');
+             return layer.getURL(
+                 new OpenLayers.Bounds(left, bottom, right, top)
+             ).replace(/LAYERS=/, 'LAYERS=' + layer.map.baseLayer.layername + ',');
         }
 
         function getTileRangeForExtentAndResolution(layer, extent, resolution) {
