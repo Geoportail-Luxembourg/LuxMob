@@ -119,6 +119,16 @@ Ext.define('App.controller.Layers', {
                         }
                     ));
                 });
+
+                var name = 'blank';
+                App.map.layers.push(new OpenLayers.Layer(name, {
+                    isBaseLayer: true
+                }));
+                Ext.getStore('BaseLayers').add({
+                    name: name,
+                    exclusion: []
+                });
+
                 // App.map should be set in config.js
                 App.map = new OpenLayers.Map(App.map);
                 this.getMainView().setMap(App.map);
@@ -192,7 +202,6 @@ Ext.define('App.controller.Layers', {
         var store = this.getBaseLayersStore();
         Ext.each(map.layers, function(layer) {
             if (layer.isBaseLayer) {
-                store.add(layer);
                 var radio = this.getBaseLayersView().add({
                     name: "baselayer",
                     label: OpenLayers.i18n(layer.name),
@@ -207,7 +216,12 @@ Ext.define('App.controller.Layers', {
                 });
                 radio.on({
                     check: Ext.bind(function(layer) {
-                        this.onBaseLayerChange(layer);
+                        if (!this.onBaseLayerChange(layer)) {
+                            var name = App.map.baseLayer.name;
+                            this.getBaseLayersView()
+                                .query('radiofield[value=' + name + ']')[0]
+                                .setChecked(true);
+                        }
                     }, this, [layer])
                 });
             }
@@ -288,9 +302,14 @@ Ext.define('App.controller.Layers', {
     },
 
     onBaseLayerChange: function(layer) {
-        this.getMap().setBaseLayer(layer);
-        this.getBaseLayerButton().setText(OpenLayers.i18n(layer.name));
-        this.redirectTo('main');
+        var store = Ext.getStore('BaseLayers');
+        record = store.getAt(store.findExact('name', layer.name));
+        if (this.checkForLayersExclusion(record, true)) {
+            this.getMap().setBaseLayer(layer);
+            this.getBaseLayerButton().setText(OpenLayers.i18n(layer.name));
+            this.redirectTo('main');
+            return true;
+        }
     },
 
     showMessage: function(msg) {
@@ -338,6 +357,7 @@ Ext.define('App.controller.Layers', {
             visible = false;
             record.set('visible', false);
             store.sync();
+            this.onOverlayChange();
         }
         var field = this.getSelectedOverlaysList().insert(0, {
             label: OpenLayers.i18n(name),
@@ -444,12 +464,28 @@ Ext.define('App.controller.Layers', {
      */
     checkForLayersExclusion: function(layer, isBaseLayer) {
         var exclusion = layer.get('exclusion') || [];
-        var layersToExclude = [];
+        var layersToExclude = [],
+            store;
 
         if (layer.get('visible') === false) {
             return true;
         }
-        var store = Ext.getStore('SelectedOverlays');
+
+        // check exclusion with current baselayer
+        var curBaseLayer;
+        if (this.getMap() && !isBaseLayer) {
+            curBaseLayer = this.getMap().baseLayer.name;
+            store = Ext.getStore('BaseLayers');
+            curBaseLayer = store.getAt(
+                store.findExact('name', curBaseLayer)
+            );
+            if (Ext.Array.intersect(curBaseLayer.get('exclusion'), exclusion).length) {
+                layersToExclude.push(OpenLayers.i18n(curBaseLayer.get('name')));
+            }
+        }
+
+        // check exclusion with the other overlays
+        store = Ext.getStore('SelectedOverlays');
         store.each(function(record) {
             if (record == layer || !record.get('exclusion') || !record.get('visible')) {
                 return;
