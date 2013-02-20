@@ -11,7 +11,7 @@ Ext.define('App.controller.Download', {
         total: 0,
         value: null,
         extent: null,
-        nbZoomLevels: 3,
+        nbZoomLevels: 4,
         maskControl: null,
         refs: {
             mainView: '#mainView',
@@ -196,8 +196,12 @@ Ext.define('App.controller.Download', {
         store.sync();
         var uuid = records[0].getId();
 
+        Ext.Viewport.setActiveItem(this.getMapSettingsView());
+        this.getMapSettingsView().setActiveItem(1);
+
         i = 0;
         z = zoom;
+        var delay = 0;
         while (i < this.getNbZoomLevels()) {
             range = getTileRangeForExtentAndResolution(
                 map.layers[0], bounds, map.getResolutionForZoom(z));
@@ -205,20 +209,23 @@ Ext.define('App.controller.Download', {
             rows = range[3] - range[1] + 1;
             for (col = range[0]; col <= range[2]; col++) {
                 for (row = range[1]; row <= range[3]; row++) {
-                    this.downloadFile(
-                        [ uuid, i, col, row ].join('_'), // don't use real zoom here since we want to use clientZoom
-                        getURL(map.getLayersByName('Overlays')[0], col, row, z),
-                        basePath,
-                        fileTransfer
+                    Ext.Function.defer(
+                        this.downloadFile,
+                        delay,
+                        this,
+                        [
+                            [ uuid, i, col, row ].join('_'), // don't use real zoom here since we want to use clientZoom
+                            getURL(map.getLayersByName('Overlays')[0], col, row, z),
+                            basePath,
+                            fileTransfer
+                        ]
                     );
+                    delay += 5;
                 }
             }
             z++;
             i++;
         }
-
-        Ext.Viewport.setActiveItem(this.getMapSettingsView());
-        this.getMapSettingsView().setActiveItem(1);
 
         function getURL(layer, tileX, tileY, tileZ) {
             var top, right, bottom, left,
