@@ -22,6 +22,8 @@ Ext.define('App.model.SavedMaps', {
             }, {
                 name: 'date',
                 type: 'date'
+            },{
+                name: 'tiles'
             }
         ],
         identifier: 'uuid',

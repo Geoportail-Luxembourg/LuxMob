@@ -191,7 +191,8 @@ Ext.define('App.controller.Download', {
             resolutions: resolutions,
             done: 0,
             size: 0,
-            date: new Date(Date.now())
+            date: new Date(Date.now()),
+            tiles: {}
         });
         store.sync();
         var uuid = records[0].getId();
@@ -274,10 +275,12 @@ Ext.define('App.controller.Download', {
             url,
             basePath + fileName,
             Ext.bind(function(file) {
-                this.increaseAndCheck(file);
+                this.increaseAndCheck(url, file);
             }, this),
             Ext.bind(function(error) {
-                this.increaseAndCheck();
+                // this.increaseAndCheck(url);
+                var record = Ext.getStore('SavedMaps').findRecord('name', this.getValue());
+                record.get('tiles')[url] = false;
                 console.log("download error source: " + error.source);
                 console.log("download error target: " + error.target);
                 console.log("upload error code: " + error.code);
@@ -285,7 +288,7 @@ Ext.define('App.controller.Download', {
         );
     },
 
-    increaseAndCheck: function() {
+    increaseAndCheck: function(url, fileEntry) {
         var ls = localStorage,
             value = this.getValue(),
             store = Ext.getStore('SavedMaps'),
@@ -293,22 +296,20 @@ Ext.define('App.controller.Download', {
             file,
             record;
         this.setCount(this.getCount()+1);
-        // update download indicator size
-        percent =  Math.round(( this.getCount() * 100 ) / this.getTotal());
+
         record = store.findRecord('name', value);
+        percent =  Math.round(( this.getCount() * 100 ) / this.getTotal());
+        record.get('tiles')[url] = true;
         record.set('done', percent);
-        if (arguments.length>0) {
-            fileEntry = arguments[0];
-            if (fileEntry) {
-                fileEntry.file(function(file) {
-                    record.set(
-                        'size',
-                        record.get('size') + parseInt(file.size,10)
-                    );
-                });
-            }
-        }
-        record.save();
+
+        fileEntry.file(function(file) {
+            record.set(
+                'size',
+                record.get('size') + parseInt(file.size,10)
+            );
+            record.save();
+        });
+
         if (this.getTotal()!=this.getCount()) {
             return;
         }
