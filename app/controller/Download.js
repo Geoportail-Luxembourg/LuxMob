@@ -192,7 +192,8 @@ Ext.define('App.controller.Download', {
             done: 0,
             size: 0,
             date: new Date(Date.now()),
-            tiles: {}
+            tiles: {},
+            downloading: true
         });
         store.sync();
         var uuid = records[0].getId();
@@ -301,6 +302,9 @@ Ext.define('App.controller.Download', {
         percent =  Math.round(( this.getCount() * 100 ) / this.getTotal());
         record.get('tiles')[url] = true;
         record.set('done', percent);
+        if (percent === 100) {
+            record.set('downloading', false);
+        }
 
         fileEntry.file(function(file) {
             record.set(

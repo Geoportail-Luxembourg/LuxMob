@@ -22,7 +22,7 @@ Ext.define('App.view.layers.SavedMaps', {
             xtype: 'list',
             id: 'savedmapsList',
             itemTpl: new Ext.XTemplate(
-                '<div>',
+                '<div class="savedmap">',
                 '<h4>{name} ',
                 '<small class="map_weight">{[(values.size/1024/1024).toFixed(1)]}Mb</small>',
                 '</h4>',
@@ -40,6 +40,10 @@ Ext.define('App.view.layers.SavedMaps', {
                 }
             ),
             emptyText: i18n.message('savedmaps.nomaps'),
+            disclosureProperty: 'downloading',
+            onItemDisclosure: function(record, btn, index) {
+                alert('truite');
+            },
             store: null
         }]
     },
