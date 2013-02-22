@@ -18,6 +18,7 @@ Ext.define('App.controller.Search', {
             searchField: {
                 keyup: function(field) {
                     var store = this.getSearchView().getStore();
+                    store.getProxy().abort();
                     store.load({
                         params: {
                             query: field.getValue()
