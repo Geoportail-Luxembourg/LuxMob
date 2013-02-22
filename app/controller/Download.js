@@ -15,7 +15,8 @@ Ext.define('App.controller.Download', {
         maskControl: null,
         refs: {
             mainView: '#mainView',
-            mapSettingsView: '#mapSettingsView'
+            mapSettingsView: '#mapSettingsView',
+            savedMapsList: '#savedmapsList'
         },
         control: {
             'button[action=download]': {
@@ -33,6 +34,9 @@ Ext.define('App.controller.Download', {
                 mapready: function(map) {
                     this.setMap(map);
                 }
+            },
+            savedMapsList: {
+                resume: 'initResumeDownload'
             }
         },
         routes: {
@@ -137,6 +141,16 @@ Ext.define('App.controller.Download', {
         this.setValue(value);
         this.setExtent(this.getMap().getExtent());
 
+        this._setup(this.download);
+    },
+
+    initResumeDownload: function(record, btn, index) {
+        this.setValue(record.get('name'));
+        this.setCount(0);
+        this._setup(this.resumeDownload, record);
+    },
+
+    _setup: function(callback, arg) {
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
             Ext.bind(function(fs) {
                 fs.root.getFile(
@@ -144,11 +158,14 @@ Ext.define('App.controller.Download', {
                     {create: true, exclusive: false},
                     Ext.bind(function (fileEntry) {
                         var basePath = fileEntry.fullPath.replace("dummy.html","");
-                        this.download(fs, basePath, new FileTransfer());
+                        var args = [fs, basePath, new FileTransfer()];
+                        if (arg) { args.push(arg); }
+                        callback.apply(this, args);
                     }, this),
                     function() {
                         console.log('fail root.getFile("dummy.html")');
-                });
+                    }
+                );
             }, this),
             function() {
                 console.log('fail requestFileSystem');
@@ -196,14 +213,15 @@ Ext.define('App.controller.Download', {
             downloading: true
         });
         store.sync();
-        var uuid = records[0].getId();
+        var record = records[0],
+            uuid = record.getId();
 
         Ext.Viewport.setActiveItem(this.getMapSettingsView());
         this.getMapSettingsView().setActiveItem(1);
 
         i = 0;
         z = zoom;
-        var delay = 0;
+        var delay = 0, url, name;
         while (i < this.getNbZoomLevels()) {
             range = getTileRangeForExtentAndResolution(
                 map.layers[0], bounds, map.getResolutionForZoom(z));
@@ -211,16 +229,14 @@ Ext.define('App.controller.Download', {
             rows = range[3] - range[1] + 1;
             for (col = range[0]; col <= range[2]; col++) {
                 for (row = range[1]; row <= range[3]; row++) {
+                    url = getURL(map.getLayersByName('Overlays')[0], col, row, z);
+                    name = [ uuid, i, col, row ].join('_');
+                    record.get('tiles')[url] = { dwl: false, name: name };
                     Ext.Function.defer(
                         this.downloadFile,
                         delay,
                         this,
-                        [
-                            [ uuid, i, col, row ].join('_'), // don't use real zoom here since we want to use clientZoom
-                            getURL(map.getLayersByName('Overlays')[0], col, row, z),
-                            basePath,
-                            fileTransfer
-                        ]
+                        [ name, url, basePath, fileTransfer ]
                     );
                     delay += 5;
                 }
@@ -270,8 +286,7 @@ Ext.define('App.controller.Download', {
     },
 
     downloadFile: function(name, url, basePath, fileTransfer) {
-        var fileName = url.split('://')[1].substr(2).replace(/\//g,'_');
-        fileName = name + '.png';
+        var fileName = name + '.png';
         fileTransfer.download(
             url,
             basePath + fileName,
@@ -279,9 +294,6 @@ Ext.define('App.controller.Download', {
                 this.increaseAndCheck(url, file);
             }, this),
             Ext.bind(function(error) {
-                // this.increaseAndCheck(url);
-                var record = Ext.getStore('SavedMaps').findRecord('name', this.getValue());
-                record.get('tiles')[url] = false;
                 console.log("download error source: " + error.source);
                 console.log("download error target: " + error.target);
                 console.log("upload error code: " + error.code);
@@ -300,7 +312,7 @@ Ext.define('App.controller.Download', {
 
         record = store.findRecord('name', value);
         percent =  Math.round(( this.getCount() * 100 ) / this.getTotal());
-        record.get('tiles')[url] = true;
+        record.get('tiles')[url] = { dwl: true };
         record.set('done', percent);
         if (percent === 100) {
             record.set('downloading', false);
@@ -319,6 +331,23 @@ Ext.define('App.controller.Download', {
         }
         this.setCount(0);
         this.setTotal(0);
+    },
+
+    resumeDownload: function(fs, basePath, fileTransfer, record) {
+        var total = 0,
+            toResume = [];
+        Ext.iterate(record.get('tiles'), function(url, tile) {
+            total++;
+            if (tile.dwl) {
+                this.setCount(this.getCount()+1);
+                return;
+            }
+            toResume.push([tile.name, url, basePath, fileTransfer]);
+        }, this);
+        this.setTotal(total);
+        Ext.each(toResume, function(args) {
+            this.downloadFile.apply(this, args);
+        }, this);
     }
 
 });

@@ -42,7 +42,7 @@ Ext.define('App.view.layers.SavedMaps', {
             emptyText: i18n.message('savedmaps.nomaps'),
             disclosureProperty: 'downloading',
             onItemDisclosure: function(record, btn, index) {
-                alert('truite');
+                this.fireEvent('resume', record, btn, index);
             },
             store: null
         }]
