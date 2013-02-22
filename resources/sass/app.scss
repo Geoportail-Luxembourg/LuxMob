@@ -39,6 +39,11 @@ body.x-android.x-phone {
   font-size: 114%; // This accommodates most Android phones, at 180ppi.
 }
 
+.x-sheet-action-redirect {
+    background: #FFF2DA;
+    border: 1px solid orange;
+}
+
 .x-panel.x-floating.maintoolbar {
     background: none;
     padding: 0;

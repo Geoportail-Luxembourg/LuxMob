@@ -60,11 +60,44 @@ Ext.application({
         this.configureMessageBox();
 
         Ext.getStore('Overlays').setSorters(App.util.Config.getLanguage());
+
+        this.handleTablet();
     },
 
     onUpdated: function() {
         window.location.reload();
     },
+
+    handleTablet: function() {
+        if (Ext.os.is.Tablet) {
+            var msg = OpenLayers.String.format(
+                OpenLayers.i18n('mobile.redirect_msg'),
+                {
+                    url: 'http://maps.geoportail.lu'
+                }
+            );
+            msg += "<a href='#' class='close' style='float:right'>" +
+                   OpenLayers.i18n('mobile.close') + "</a>";
+            var actionSheet = Ext.create('Ext.ActionSheet', {
+                ui: 'redirect',
+                modal: false,
+                html: msg
+            });
+
+            Ext.Viewport.add(actionSheet);
+            actionSheet.show();
+            Ext.Function.defer(function() {
+                actionSheet.hide();
+            }, 15000);
+            actionSheet.element.on({
+                'tap': function(e) {
+                    if (Ext.get(e.target).hasCls('close')) {
+                        actionSheet.hide();
+                    }
+                }
+            });
+        }
+    },
 
     prepareI18n: function() {
         Ext.i18n.Bundle.configure({
