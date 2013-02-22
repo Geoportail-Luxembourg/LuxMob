@@ -79,12 +79,15 @@ Ext.define('App.controller.Search', {
             callback: function(records) {
                 var format = new OpenLayers.Format.GeoJSON();
                 var features = format.read(records[0].get('features'));
+                var layer = this.getVectorLayer();
                 Ext.each(features, function(feature) {
-                    this.getVectorLayer().addFeatures([
+                    layer.addFeatures([
                         feature
                     ]);
                 }, this);
-                console.log("toto");
+                var index = Math.max(this.getMap().Z_INDEX_BASE['Feature'] - 1,
+                    layer.getZIndex()) + 1;
+                layer.setZIndex(index);
             },
             scope: this
         });
