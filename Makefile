@@ -1,14 +1,14 @@
-SRC = app.js app.json index.html openlayers-mobile.js GeolocateControl.js SavedMapLayer.js
+SRC = app.js app.json index.html openlayers-mobile.js proj4js-compressed.js GeolocateControl.js SavedMapLayer.js
 SRC_APP = $(shell find app -name \*.js)
 
 .PHONY: all
 all: app
 
 .PHONY: ios
-ios: app
+ios: ios-json app
 	cp -r build/App/production/* build/cordova-ios/www/
-	python utils/modify_app_json.py build/App/production/app.json build/cordova-ios/www/app.json
 	./build/cordova-ios/cordova/build
+	mv app.json.bak app.json
 
 .PHONY: ios-debug
 ios-debug: $(SRC) $(SRC_APP)
@@ -20,6 +20,9 @@ ios-debug: $(SRC) $(SRC_APP)
 	cp $(SRC) build/cordova-ios/www/
 	cp cordova-2.3.0.ios.js build/cordova-ios/www
 	mv app.json.bak app.json
+
+ios-json:
+	python utils/modify_app_json.py cordova-2.3.0.ios.js
 
 .PHONY: android
 android: android-json build/cordova-android/local.properties app
