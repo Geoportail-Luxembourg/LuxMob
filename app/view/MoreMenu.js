@@ -15,7 +15,11 @@ Ext.define('App.view.MoreMenu', {
                 }
             }
         },
-        items: [{
+        items: []
+    },
+
+    applyItems: function(items, collection) {
+        items = [{
             xtype: "button",
             iconCls: "settings",
             iconMask: true,
@@ -34,6 +38,17 @@ Ext.define('App.view.MoreMenu', {
             iconCls: "mail2",
             text: i18n.message("button.sendbymail"),
             iconMask: true
-        }]
+        }];
+
+        //if (window.device) {
+            items.push({
+                xtype: 'button',
+                action: 'loginform',
+                iconCls: "power_on",
+                text: i18n.message("button.login"),
+                iconMask: true
+            });
+        //}
+        return this.callParent([items, collection]);
     }
 });

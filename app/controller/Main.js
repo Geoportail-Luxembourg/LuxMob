@@ -7,6 +7,7 @@ Ext.define('App.controller.Main', {
         'App.view.Settings',
         'App.view.MoreMenu',
         'App.view.Search',
+        'App.view.Login',
         'Ext.field.Email'
     ],
     config: {
@@ -26,6 +27,11 @@ Ext.define('App.controller.Main', {
             searchView: {
                 selector: '#searchView',
                 xtype: 'searchview',
+                autoCreate: true
+            },
+            loginView: {
+                selector: '#loginView',
+                xtype: 'loginview',
                 autoCreate: true
             },
             queryResultsView: '#queryResultsView',
@@ -59,6 +65,14 @@ Ext.define('App.controller.Main', {
             'button[action=sendbymail]': {
                 tap: "sendByMail"
             },
+            'button[action=loginform]': {
+                tap: function() {
+                    this.redirectTo('login');
+                }
+            },
+            'button[action=login]': {
+                tap: 'doLogin'
+            },
             searchField: {
                 focus: function() {
                     this.redirectTo('search');
@@ -75,7 +89,8 @@ Ext.define('App.controller.Main', {
             'main': 'showMain',
             'mapsettings': 'showMapSettings',
             'settings': 'showSettings',
-            'search': 'showSearch'
+            'search': 'showSearch',
+            'login': 'showLogin'
         }
     },
 
@@ -87,6 +102,8 @@ Ext.define('App.controller.Main', {
         } else if (Ext.Viewport.getActiveItem() == this.getQueryResultsView() ||
                    Ext.Viewport.getActiveItem() == this.getQueryDetailView()) {
             animation = {type: 'slide', direction: 'right'};
+        } else if (Ext.Viewport.getActiveItem() == this.getLoginView()) {
+            animation = {type: 'flip'};
         }
         // hide the search field to prevent intempestive focus
         var field = this.getSearchField();
@@ -192,5 +209,16 @@ Ext.define('App.controller.Main', {
                 xtype: 'emailfield'
             }
         );
+    },
+
+    showLogin: function() {
+        Ext.Viewport.animateActiveItem(
+            this.getLoginView(),
+            {type: 'flip'}
+        );
+    },
+
+    doLogin: function() {
+        this.getLoginView().submit();
     }
 });
