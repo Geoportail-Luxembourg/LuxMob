@@ -270,12 +270,14 @@ Ext.define('App.controller.Layers', {
                 var store = Ext.getStore('Overlays');
                 store.removeAll();
                 for (l in layers) {
+                    var label = layers[l].label;
                     store.add({
-                        fr: OpenLayers.Lang.fr[l] || l,
-                        en: OpenLayers.Lang.en[l] || l,
-                        de: OpenLayers.Lang.de[l] || l,
-                        lu: OpenLayers.Lang.lu[l] || l,
+                        fr: OpenLayers.Lang.fr[label] || label,
+                        en: OpenLayers.Lang.en[label] || label,
+                        de: OpenLayers.Lang.de[label] || label,
+                        lu: OpenLayers.Lang.lu[label] || label,
                         name: l,
+                        label: label,
                         exclusion: layers[l].exclusion
                     });
                 }
@@ -329,6 +331,7 @@ Ext.define('App.controller.Layers', {
     onOverlayAdd: function(record, silent) {
         var store = Ext.getStore('SelectedOverlays'),
             name,
+            label,
             visible = true;
         if (record.get && record.get('visible') === false) {
             visible = record.get('visible');
@@ -336,11 +339,13 @@ Ext.define('App.controller.Layers', {
         if (!silent) {
             if (!record.data) {
                 name = record.name;
+                label = record.label;
                 record = store.add({
-                    fr: OpenLayers.Lang.fr[name] || name,
-                    en: OpenLayers.Lang.en[name] || name,
-                    de: OpenLayers.Lang.de[name] || name,
-                    lu: OpenLayers.Lang.lu[name] || name,
+                    fr: OpenLayers.Lang.fr[label] || label,
+                    en: OpenLayers.Lang.en[label] || label,
+                    de: OpenLayers.Lang.de[label] || label,
+                    lu: OpenLayers.Lang.lu[label] || label,
+                    label: label,
                     name: name,
                     exclusion: record.exclusion,
                     visible: true
@@ -353,6 +358,7 @@ Ext.define('App.controller.Layers', {
             this.onOverlayChange();
         }
         name = record.get('name');
+        label = record.get('label');
         if (!this.checkForLayersExclusion(record)) {
             visible = false;
             record.set('visible', false);
@@ -360,7 +366,7 @@ Ext.define('App.controller.Layers', {
             this.onOverlayChange();
         }
         var field = this.getSelectedOverlaysList().insert(0, {
-            label: OpenLayers.i18n(name),
+            label: OpenLayers.i18n(label),
             name: name,
             value: name,
             checked: visible,

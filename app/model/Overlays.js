@@ -5,6 +5,8 @@ Ext.define('App.model.Overlays', {
         fields: [{
             name: 'name'
         }, {
+            name: 'label'
+        }, {
             name: 'exclusion'
         }, {
             name: 'fr'

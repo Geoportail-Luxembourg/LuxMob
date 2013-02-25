@@ -6,6 +6,8 @@ Ext.define('App.model.SelectedOverlays', {
         fields: [{
             name: 'name'
         }, {
+            name: 'label'
+        }, {
             name: 'exclusion'
         }, {
             name: 'visible',
