@@ -36,7 +36,8 @@ Ext.define('App.controller.Download', {
                 }
             },
             savedMapsList: {
-                resume: 'initResumeDownload'
+                resume: 'initResumeDownload',
+                itemswipe: 'removeMap'
             }
         },
         routes: {
@@ -348,6 +349,46 @@ Ext.define('App.controller.Download', {
         Ext.each(toResume, function(args) {
             this.downloadFile.apply(this, args);
         }, this);
+    },
+
+    removeMap: function(dataview, ix, target, record, event, options) {
+        var del = Ext.create("Ext.Button", {
+            ui: "decline",
+            text: i18n.message('button.map_remove'),
+            style: "position:absolute;right:0;",
+            handler: function(btn, event) {
+                event.preventDefault();
+                event.stopPropagation();
+                this.deleteTiles(record, function() {
+                    record.stores[0].remove(record);
+                    record.stores[0].sync();
+                });
+            },
+            scope: this
+        });
+        var removeDeleteButton = function() {
+            Ext.Anim.run(del, 'fade', {
+                after: function() {
+                    del.destroy();
+                },
+                out: true
+            });
+        };
+        del.renderTo(Ext.DomQuery.selectNode(".deleteplaceholder", target.bodyElement.dom));
+        dataview.on({
+            single: true,
+            buffer: 250,
+            itemtouchstart: removeDeleteButton
+        });
+        dataview.element.on({
+            single: true,
+            buffer: 250,
+            touchstart: removeDeleteButton
+        });
+    },
+
+    deleteTiles: function(record, callback) {
+        alert(record.get('name'));
     }
 
 });
