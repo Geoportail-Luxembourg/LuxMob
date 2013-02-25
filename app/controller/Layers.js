@@ -120,7 +120,7 @@ Ext.define('App.controller.Layers', {
                     ));
                 });
 
-                var name = 'blank';
+                var name = 'voidLayer';
                 App.map.layers.push(new OpenLayers.Layer(name, {
                     isBaseLayer: true
                 }));
