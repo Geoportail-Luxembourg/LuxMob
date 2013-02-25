@@ -14,14 +14,20 @@ Ext.define('App.model.SavedMaps', {
                 type: 'string'
             }, {
                 name: 'resolutions'
-            }, 'done',
-            {
+            },{
+                name: 'done'
+            },{
                 name: 'size',
                 type: 'int',
                 defaultValue: 0
             }, {
                 name: 'date',
                 type: 'date'
+            },{
+                name: 'tiles'
+            },{
+                name: 'downloading',
+                type: 'boolean'
             }
         ],
         identifier: 'uuid',
