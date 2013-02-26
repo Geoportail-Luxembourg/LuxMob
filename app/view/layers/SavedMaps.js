@@ -23,6 +23,7 @@ Ext.define('App.view.layers.SavedMaps', {
             id: 'savedmapsList',
             itemTpl: new Ext.XTemplate(
                 '<div class="savedmap">',
+                '<div class="deleteplaceholder"></div>',
                 '<h4>{name} ',
                 '<small class="map_weight">{[(values.size/1024/1024).toFixed(1)]}Mb</small>',
                 '</h4>',
