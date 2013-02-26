@@ -219,6 +219,17 @@ Ext.define('App.controller.Main', {
     },
 
     doLogin: function() {
-        this.getLoginView().submit();
+        this.getLoginView().submit({
+            success: function(form, result) {
+                if (result && result.success) {
+                    this.redirectTo('');
+                    Ext.getStore('MyMaps').load();
+                }
+            },
+            failure: function() {
+                Ext.Msg.alert('', i18n.message('login.error'));
+            },
+            scope: this
+        });
     }
 });

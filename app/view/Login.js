@@ -10,10 +10,15 @@ Ext.define('App.view.Login', {
         'Ext.Container',
         'Ext.Button'
     ],
-    fullscreen: true,
     config: {
         url: 'http://tourisme.geoportail.lu/checkLogin',
         method: 'POST',
+        scrollable: false,
+        layout: {
+            type: 'vbox',
+            pack: 'center',
+            align: 'center'
+        },
         //standardSubmit: true,
         items: [{
             xtype: 'fieldset',
@@ -25,7 +30,9 @@ Ext.define('App.view.Login', {
             items: [{
                 xtype: 'textfield',
                 name: 'login',
-                label: i18n.message('login.login')
+                label: i18n.message('login.login'),
+                autoCorrect: false,
+                autoCapitalize: false
             }, {
                 xtype: 'passwordfield',
                 name: 'password',
