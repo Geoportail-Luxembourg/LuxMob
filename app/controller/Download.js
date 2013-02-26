@@ -398,7 +398,7 @@ Ext.define('App.controller.Download', {
                         function success(entries) {
                             var toRemove = [], total = 0, count = 0;
                             Ext.each(entries, function(entry) {
-                                if (entry.name.indexOf(id) === -1) {
+                                if (entry.name.indexOf(id) == 0) {
                                     toRemove.push(entry);
                                 }
                             });
