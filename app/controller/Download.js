@@ -359,9 +359,10 @@ Ext.define('App.controller.Download', {
             handler: function(btn, event) {
                 event.preventDefault();
                 event.stopPropagation();
-                this.deleteTiles(record, function() {
-                    record.stores[0].remove(record);
-                    record.stores[0].sync();
+                this.deleteTiles(record, function(record) {
+                    var store = record.stores[0];
+                    store.remove(record);
+                    store.sync();
                 });
             },
             scope: this
@@ -388,7 +389,41 @@ Ext.define('App.controller.Download', {
     },
 
     deleteTiles: function(record, callback) {
-        alert(record.get('name'));
+        var id = record.get('id');
+        this._setup(function(fs, basePath, fileTransfer) {
+            fs.root.getDirectory(basePath, null,
+                function(dirEntry) {
+                    var directoryReader = dirEntry.createReader();
+                    directoryReader.readEntries(
+                        function success(entries) {
+                            var toRemove = [], total = 0, count = 0;
+                            Ext.each(entries, function(entry) {
+                                if (entry.name.indexOf(id) === -1) {
+                                    toRemove.push(entry);
+                                }
+                            });
+                            total = toRemove.length;
+                            Ext.each(toRemove, function(entry) {
+                                entry.remove(function(){
+                                    count++;
+                                    if (count == total) {
+                                        callback.apply(this, [record]);
+                                    }
+                                }, function(){
+                                    console.log('fail to delete file');
+                                });
+                            });
+                        },
+                        function() {
+                            console.log('fail to get directory reader');
+                        }
+                    );
+                },
+                function() {
+                    console.log('fail to get directory');
+                }
+            );
+        });
     }
 
 });
