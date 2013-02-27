@@ -32,6 +32,7 @@ $base-color: #B58F69;
 @include pictos-iconmask('more');
 @include pictos-iconmask('mail2');
 @include pictos-iconmask('power_on');
+@include pictos-iconmask('locate1');
 
 body.x-ios.x-phone {
   font-size: 100%; // This accommodates the iPhone, at 163ppi

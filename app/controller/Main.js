@@ -34,7 +34,8 @@ Ext.define('App.controller.Main', {
             queryDetailView: '#queryDetailView',
             searchField: 'searchfield[action=search]',
             loginButton: 'button[action=loginform]',
-            logoutButton: 'button[action=logout]'
+            logoutButton: 'button[action=logout]',
+            myMapsButton: 'button[action=mymaps]'
         },
         control: {
             'button[action=more]': {
@@ -257,10 +258,12 @@ Ext.define('App.controller.Main', {
             success: function(response) {
                 this.getLoginButton().hide();
                 this.getLogoutButton().show();
+                this.getMyMapsButton().show();
             },
             failure: function(response) {
                 this.getLoginButton().show();
                 this.getLogoutButton().hide();
+                this.getMyMapsButton().hide();
             },
             scope: this
         });
