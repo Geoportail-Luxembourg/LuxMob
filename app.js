@@ -22,7 +22,7 @@ Ext.application({
         'App.util.Config'
     ],
 
-    views: ['Main', 'layers.MapSettings'],
+    views: ['Main', 'layers.MapSettings', 'MoreMenu'],
     controllers: ["Download",'Main', 'Layers', 'Settings', 'Search', 'Query'],
     stores: ['BaseLayers', 'Overlays', 'SelectedOverlays', 'Search', 'Query', 'SavedMaps', 'MyMaps'],
 
@@ -55,6 +55,7 @@ Ext.application({
         var mainView = Ext.create('App.view.Main');
 
         Ext.create('App.view.layers.MapSettings');
+        Ext.create('App.view.MoreMenu');
 
         this.configurePicker();
         this.configureMessageBox();

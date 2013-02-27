@@ -11,7 +11,7 @@ Ext.define('App.view.Login', {
         'Ext.Button'
     ],
     config: {
-        url: 'http://tourisme.geoportail.lu/checkLogin',
+        url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/checkLogin',
         method: 'POST',
         scrollable: false,
         layout: {

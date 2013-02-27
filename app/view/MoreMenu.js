@@ -48,6 +48,15 @@ Ext.define('App.view.MoreMenu', {
                 text: i18n.message("button.login"),
                 iconMask: true
             });
+
+            items.push({
+                xtype: 'button',
+                action: 'logout',
+                iconCls: "power_on",
+                text: i18n.message("button.logout"),
+                hidden: true,
+                iconMask: true
+            });
         //}
         return this.callParent([items, collection]);
     }

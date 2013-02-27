@@ -13,11 +13,7 @@ Ext.define('App.controller.Main', {
     config: {
         refs: {
             mainView: '#mainView',
-            moreMenu: {
-                selector: '#moreMenu',
-                xtype: 'moremenu',
-                autoCreate: true
-            },
+            moreMenu: '#moreMenu',
             mapSettingsView: '#mapSettingsView',
             settingsView: {
                 selector: '#settingsView',
@@ -36,7 +32,9 @@ Ext.define('App.controller.Main', {
             },
             queryResultsView: '#queryResultsView',
             queryDetailView: '#queryDetailView',
-            searchField: 'searchfield[action=search]'
+            searchField: 'searchfield[action=search]',
+            loginButton: 'button[action=loginform]',
+            logoutButton: 'button[action=logout]'
         },
         control: {
             'button[action=more]': {
@@ -65,10 +63,13 @@ Ext.define('App.controller.Main', {
             'button[action=sendbymail]': {
                 tap: "sendByMail"
             },
-            'button[action=loginform]': {
+            loginButton: {
                 tap: function() {
                     this.redirectTo('login');
                 }
+            },
+            logoutButton: {
+                tap: "logout"
             },
             'button[action=login]': {
                 tap: 'doLogin'
@@ -118,6 +119,8 @@ Ext.define('App.controller.Main', {
             });
             Ext.defer(field.enable, 1000, field);
         }
+
+        this.checkUser();
     },
 
     showMapSettings: function() {
@@ -222,12 +225,42 @@ Ext.define('App.controller.Main', {
         this.getLoginView().submit({
             success: function(form, result) {
                 if (result && result.success) {
+                    this.getLoginView().setUrl('http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/login_handler');
+                    this.getLoginView().submit({});
                     this.redirectTo('');
-                    Ext.getStore('MyMaps').load();
+                    // the login_handler service is supposed to answer with 302
+                    // redirect. Thus, we cannot rely on it to use success
+                    // callback for the submit
+                    Ext.defer(this.checkUser, 500, this);
                 }
             },
             failure: function() {
                 Ext.Msg.alert('', i18n.message('login.error'));
+            },
+            scope: this
+        });
+    },
+
+    logout: function() {
+        Ext.Ajax.request({
+            url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/logout_handler'
+        });
+        // the login_handler service is supposed to answer with 302
+        // redirect. Thus, we cannot rely on it to use success
+        // callback for the submit
+        Ext.defer(this.checkUser, 500, this);
+    },
+
+    checkUser: function() {
+        Ext.Ajax.request({
+            url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/user',
+            success: function(response) {
+                this.getLoginButton().hide();
+                this.getLogoutButton().show();
+            },
+            failure: function(response) {
+                this.getLoginButton().show();
+                this.getLogoutButton().hide();
             },
             scope: this
         });
