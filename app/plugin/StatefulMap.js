@@ -32,20 +32,10 @@ Ext.define('App.plugin.StatefulMap', {
     },
 
     getState: function() {
-        var state = localStorage.getItem(this.getMap().id + '-position');
-        if (state) {
-            var items = state.split(',');
-            return {
-                lonlat: items.slice(0, 2),
-                zoom: items[2]
-            };
-        }
+        return JSON.parse(localStorage.getItem(this.getMap().id+'-state'));
     },
 
     applyState: function(state) {
-        var key = this.getMap().id + '-position',
-            value = [state.lonlat.lon, state.lonlat.lat, state.zoom].join(',');
-
-        localStorage.setItem(key, value);
+        localStorage.setItem(this.getMap().id+'-state', JSON.stringify(state));
     }
 });

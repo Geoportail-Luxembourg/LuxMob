@@ -63,5 +63,5 @@ external/openlayers:
 clean:
 	rm -rf build/App/production/*
 	rm -rf $(filter-out build/cordova-ios/www/cordova-2.3.0.js, $(shell find build/cordova-ios/www -mindepth 1 -maxdepth 1))
-	rm -rf $(filter-out build/cordova-android/assets/www/cordova-2.3.0.js, $(shell find build/cordova-android/assets/www -mindepth 1 -maxdepth 1))
+	rm -rf $(filter-out build/cordova-android/assets/www/cordova-2.3.0.js, $(shell find build/cordova-android/assets/www -mindepth 1 -maxdepth 1|grep -v .empty_folder))
 	rm -f build/cordova-android/local.properties
