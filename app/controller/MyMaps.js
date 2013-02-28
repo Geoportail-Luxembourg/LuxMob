@@ -6,6 +6,8 @@ Ext.define('App.controller.MyMaps', {
 
     config: {
         myMapPreview: null,
+        map: null,
+        vectorLayer: null,
         refs: {
             mainView: '#mainView',
             myMapsView: {
@@ -23,6 +25,12 @@ Ext.define('App.controller.MyMaps', {
             },
             'button[action=backtomymaps]': {
                 tap: 'showMyMaps'
+            },
+            mainView: {
+                mapready: function(map) {
+                    this.setMap(map);
+                    this.setVectorLayer(this.getMap().getLayersByName('Vector')[0]);
+                }
             }
         },
         routes: {
@@ -99,19 +107,25 @@ Ext.define('App.controller.MyMaps', {
             '</small>'
         );
 
+        var mymaps = this;
         function loadFeatures(mymap) {
             Ext.Ajax.request({
                 url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/mymaps/' + mymap.uuid + '/features',
                 success: function(response) {
-                    var format = new OpenLayers.Format.GeoJSON();
-                    var features = format.read(response.responseText);
+                    var vector = this.getVectorLayer(),
+                        format = new OpenLayers.Format.GeoJSON(),
+                        features = format.read(response.responseText);
+
+                    vector.addFeatures(features);
+                    this.getMap().zoomToExtent(vector.getDataExtent());
 
                     preview.getAt(0).setText(tpl.apply({
                         title: mymap.title + ' ...',
                         nb_features: features.length
                     }));
                     preview.unmask();
-                }
+                },
+                scope: mymaps
             });
         }
 
