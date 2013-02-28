@@ -108,7 +108,8 @@ Ext.define('App.controller.Main', {
             animation = {type: 'fade', out: true, duration: 500};
             this.getSearchView().down('searchfield').blur();
         } else if (Ext.Viewport.getActiveItem() == this.getQueryResultsView() ||
-                   Ext.Viewport.getActiveItem() == this.getQueryDetailView()) {
+            Ext.Viewport.getActiveItem() == this.getQueryDetailView() ||
+            Ext.Viewport.getActiveItem().id == 'myMapDetailView') {
             animation = {type: 'slide', direction: 'right'};
         } else if (Ext.Viewport.getActiveItem() == this.getLoginView()) {
             animation = {type: 'flip'};

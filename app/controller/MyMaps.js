@@ -1,7 +1,8 @@
 Ext.define('App.controller.MyMaps', {
     extend: 'Ext.app.Controller',
     requires: [
-        'App.view.MyMaps'
+        'App.view.MyMaps',
+        'App.view.MyMapDetail'
     ],
 
     config: {
@@ -13,6 +14,11 @@ Ext.define('App.controller.MyMaps', {
             myMapsView: {
                 selector: '#myMapsView',
                 xtype: 'mymapsview',
+                autoCreate: true
+            },
+            myMapDetailView: {
+                selector: '#myMapDetailView',
+                xtype: 'mymapdetailview',
                 autoCreate: true
             },
             myMapsList: '#myMapsList'
@@ -127,6 +133,8 @@ Ext.define('App.controller.MyMaps', {
                         tap: function(button, e) {
                             if (Ext.get(e.target).hasCls('delete')) {
                                 this.closeMyMap();
+                            } else {
+                                this.showMyMapDetail();
                             }
                         },
                         scope: this
@@ -159,7 +167,6 @@ Ext.define('App.controller.MyMaps', {
             '</small>'
         );
 
-        var mymaps = this;
         function loadFeatures(mymap) {
             Ext.Ajax.request({
                 url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/mymaps/' + mymap.uuid + '/features',
@@ -178,8 +185,10 @@ Ext.define('App.controller.MyMaps', {
                         nb_features: features.length
                     }));
                     preview.unmask();
+                    var view = this.getMyMapDetailView();
+                    view.setFeatures(features);
                 },
-                scope: mymaps
+                scope: this
             });
         }
 
@@ -187,8 +196,11 @@ Ext.define('App.controller.MyMaps', {
             url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/mymaps/' + id,
             success: function(response) {
                 var mymap = Ext.JSON.decode(response.responseText);
-                loadFeatures(mymap);
-            }
+                loadFeatures.apply(this, [mymap]);
+                var view = this.getMyMapDetailView();
+                view.setMyMap(mymap);
+            },
+            scope: this
         });
     },
 
@@ -216,5 +228,14 @@ Ext.define('App.controller.MyMaps', {
                 }
             });
         }
+    },
+
+    showMyMapDetail: function() {
+        var animation = {type: 'slide', direction: 'left'};
+        var view = this.getMyMapDetailView();
+        Ext.Viewport.animateActiveItem(
+            view,
+            animation
+        );
     }
 });
