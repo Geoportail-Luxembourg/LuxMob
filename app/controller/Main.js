@@ -313,9 +313,7 @@ Ext.define('App.controller.Main', {
             });
             this.setMyMapPreview(preview);
         } else {
-            if (this.getLoading()) {
-                preview.mask();
-            }
+            preview.mask();
             preview.show();
         }
         Ext.Animator.run({
