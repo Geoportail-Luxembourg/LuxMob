@@ -23,7 +23,7 @@ Ext.application({
     ],
 
     views: ['Main', 'layers.MapSettings', 'MoreMenu'],
-    controllers: ["Download",'Main', 'Layers', 'Settings', 'Search', 'Query'],
+    controllers: ["Download",'Main', 'Layers', 'Settings', 'Search', 'Query', 'MyMaps'],
     stores: ['BaseLayers', 'Overlays', 'SelectedOverlays', 'Search', 'Query', 'SavedMaps', 'MyMaps'],
 
     viewport: {

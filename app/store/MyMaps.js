@@ -5,7 +5,7 @@ Ext.define('App.store.MyMaps', {
         model: 'App.model.MyMaps',
         proxy: {
             type: 'ajax',
-            url: "http://maps.geoportail.lu/mymaps",
+            url: "http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/mymaps",
             reader: {
                 type: 'json'
             }
