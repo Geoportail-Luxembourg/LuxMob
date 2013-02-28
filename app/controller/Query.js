@@ -30,7 +30,49 @@ Ext.define('App.controller.Query', {
         control: {
             mainview: {
                 mapready: function(map) {
-                    Ext.get(App.map.viewPortDiv).on({
+                    var vector = new OpenLayers.Layer.Vector('Vector', {
+                        rendererOptions: {
+                            yOrdering: true,
+                            zIndexing: true
+                        },
+                        styleMap: new OpenLayers.StyleMap({
+                            'default': OpenLayers.Util.applyDefaults({
+                                externalGraphic: 'resources/images/marker.png',
+                                graphicWidth: 17.6,
+                                graphicHeight: 24,
+                                graphicYOffset: -24,
+                                graphicOpacity: 1,
+                                backgroundGraphic: 'resources/images/shadow-marker.png',
+                                backgroundWidth: 38,
+                                backgroundHeight: 30,
+                                backgroundYOffset: -30,
+                                backgroundXOffset: -10,
+                                strokeWidth: 3,
+                                strokeColor: 'red',
+                                graphicZIndex: 1,
+                                backgroundGraphicZIndex: 0
+                            }, OpenLayers.Feature.Vector.style['default']),
+                            'select': OpenLayers.Util.applyDefaults({
+                                externalGraphic: 'resources/images/marker_selected.png',
+                                graphicZIndex: 3,
+                                graphicWidth: 22,
+                                graphicHeight: 30,
+                                graphicYOffset: -30,
+                                graphicOpacity: 1,
+                                backgroundGraphic: 'resources/images/shadow-marker.png',
+                                backgroundGraphicZIndex: 2,
+                                backgroundWidth: 38,
+                                backgroundHeight: 30,
+                                backgroundYOffset: -30,
+                                backgroundXOffset: -10,
+                                strokeWidth: 3,
+                                strokeColor: 'red'
+                            }, OpenLayers.Feature.Vector.style['default'])
+                        })
+                    });
+                    this.setMap(map);
+                    this.setVectorLayer(vector);
+                    Ext.get(this.getMap().viewPortDiv).on({
                         singletap: function() {
                             if (this.getSearching()) {
                                 this.setSearching(false);
@@ -40,8 +82,6 @@ Ext.define('App.controller.Query', {
                         },
                         scope: this
                     });
-                    this.setMap(map);
-                    this.setVectorLayer(this.getMap().getLayersByName('Vector')[0]);
                 }
             },
             queryResultsView: {
@@ -179,9 +219,14 @@ Ext.define('App.controller.Query', {
     },
 
     hidePreview: function(callback) {
-        var layer = this.getVectorLayer();
+        var layer = this.getVectorLayer(),
+            map = this.getMap(),
+            vector = this.getVectorLayer();
         layer.removeAllFeatures();
-        App.map.getLayersByName('Overlays')[0].setOpacity(1);
+        if (vector in map.layers) {
+            map.removeLayer(this.getVectorLayer());
+        }
+        map.getLayersByName('Overlays')[0].setOpacity(1);
         var preview = this.getResultsPreview();
         if (preview && !preview.isHidden()) {
             Ext.Animator.run({
@@ -222,11 +267,12 @@ Ext.define('App.controller.Query', {
             var geometry = format.read(record.get('geometry'), 'Geometry');
             var feature = new OpenLayers.Feature.Vector(geometry);
             feature.fid = record.get('id');
+            this.getMap().addLayer(this.getVectorLayer());
             this.getVectorLayer().addFeatures([
                 feature
             ]);
         }, this);
-        App.map.getLayersByName('Overlays')[0].setOpacity(0.4);
+        this.getMap().getLayersByName('Overlays')[0].setOpacity(0.4);
     },
 
     showQueryResults: function() {
