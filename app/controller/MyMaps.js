@@ -194,6 +194,7 @@ Ext.define('App.controller.MyMaps', {
 
     closeMyMap: function() {
         var preview = this.getMyMapPreview();
+        this.getMap().removeLayer(this.getVectorLayer());
         if (preview && !preview.isHidden()) {
             Ext.Animator.run({
                 element: preview.element,
