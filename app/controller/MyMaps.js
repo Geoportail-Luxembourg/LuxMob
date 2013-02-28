@@ -90,7 +90,8 @@ Ext.define('App.controller.MyMaps', {
         },
         routes: {
             'mymaps': 'showMyMaps',
-            'main/map/:id': 'showMyMap'
+            'main/map/:id': 'showMyMap',
+            'mymapdetail': 'showMyMapDetail'
         }
     },
 
@@ -134,7 +135,7 @@ Ext.define('App.controller.MyMaps', {
                             if (Ext.get(e.target).hasCls('delete')) {
                                 this.closeMyMap();
                             } else {
-                                this.showMyMapDetail();
+                                this.redirectTo('mymapdetail');
                             }
                         },
                         scope: this
