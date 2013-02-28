@@ -36,7 +36,8 @@ Ext.define('App.controller.Download', {
                 }
             },
             savedMapsList: {
-                resume: 'initResumeDownload'
+                resume: 'initResumeDownload',
+                itemswipe: 'removeMap'
             }
         },
         routes: {
@@ -348,6 +349,81 @@ Ext.define('App.controller.Download', {
         Ext.each(toResume, function(args) {
             this.downloadFile.apply(this, args);
         }, this);
+    },
+
+    removeMap: function(dataview, ix, target, record, event, options) {
+        var del = Ext.create("Ext.Button", {
+            ui: "decline",
+            text: i18n.message('button.map_remove'),
+            style: "position:absolute;right:0;",
+            handler: function(btn, event) {
+                event.preventDefault();
+                event.stopPropagation();
+                this.deleteTiles(record, function(record) {
+                    var store = record.stores[0];
+                    store.remove(record);
+                    store.sync();
+                });
+            },
+            scope: this
+        });
+        var removeDeleteButton = function() {
+            Ext.Anim.run(del, 'fade', {
+                after: function() {
+                    del.destroy();
+                },
+                out: true
+            });
+        };
+        del.renderTo(Ext.DomQuery.selectNode(".deleteplaceholder", target.bodyElement.dom));
+        dataview.on({
+            single: true,
+            buffer: 250,
+            itemtouchstart: removeDeleteButton
+        });
+        dataview.element.on({
+            single: true,
+            buffer: 250,
+            touchstart: removeDeleteButton
+        });
+    },
+
+    deleteTiles: function(record, callback) {
+        var id = record.get('id');
+        this._setup(function(fs, basePath, fileTransfer) {
+            fs.root.getDirectory(basePath, null,
+                function(dirEntry) {
+                    var directoryReader = dirEntry.createReader();
+                    directoryReader.readEntries(
+                        function success(entries) {
+                            var toRemove = [], total = 0, count = 0;
+                            Ext.each(entries, function(entry) {
+                                if (entry.name.indexOf(id) == 0) {
+                                    toRemove.push(entry);
+                                }
+                            });
+                            total = toRemove.length;
+                            Ext.each(toRemove, function(entry) {
+                                entry.remove(function(){
+                                    count++;
+                                    if (count == total) {
+                                        callback.apply(this, [record]);
+                                    }
+                                }, function(){
+                                    console.log('fail to delete file');
+                                });
+                            });
+                        },
+                        function() {
+                            console.log('fail to get directory reader');
+                        }
+                    );
+                },
+                function() {
+                    console.log('fail to get directory');
+                }
+            );
+        });
     }
 
 });
