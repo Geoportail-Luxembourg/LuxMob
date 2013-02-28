@@ -29,7 +29,56 @@ Ext.define('App.controller.MyMaps', {
             mainView: {
                 mapready: function(map) {
                     this.setMap(map);
-                    this.setVectorLayer(this.getMap().getLayersByName('Vector')[0]);
+                    var defaultStyleOptions = OpenLayers.Util.applyDefaults({
+                        pointRadius: "${getPointRadius}",
+                        fillOpacity: 0.5,
+                        strokeOpacity: 0.7,
+                        fillColor: "${getColor}",
+                        strokeColor: "${getColor}",
+                        strokeWidth: "${getStroke}",
+                        label: "${getLabel}",
+                        fontSize: "${getStroke}",
+                        fontColor: "${getColor}",
+                        cursor: 'pointer',
+                        labelOutlineWidth: 3,
+                        labelOutlineColor: 'white'
+                    });
+                    var context = {
+                        getColor: function(feature) {
+                            return feature.attributes.color || '#FF0000';
+                        },
+                        getLabel: function(feature) {
+                            return feature.attributes.isLabel ?
+                            feature.attributes.name : '';
+                        },
+                        getPointRadius: function(feature) {
+                            return feature.attributes.isLabel ?
+                            0 : 5;
+                        },
+                        getStroke: function(feature) {
+                            return feature.attributes.stroke || 3;
+                        }
+                    };
+                    var styleMap = new OpenLayers.StyleMap({
+                        'default': new OpenLayers.Style(
+                            defaultStyleOptions,
+                            { context: context }
+                        ),
+                        'vertices': new OpenLayers.Style({
+                            pointRadius: 5,
+                            graphicName: "square",
+                            fillColor: "white",
+                            fillOpacity: 0.6,
+                            strokeWidth: 1,
+                            strokeOpacity: 1,
+                            strokeColor: "#333333"
+                        })
+                    });
+                    var vector = new OpenLayers.Layer.Vector('mymaps', {
+                        styleMap: styleMap
+                    });
+
+                    this.setVectorLayer(vector);
                 }
             }
         },
@@ -113,11 +162,13 @@ Ext.define('App.controller.MyMaps', {
                 url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/mymaps/' + mymap.uuid + '/features',
                 success: function(response) {
                     var vector = this.getVectorLayer(),
+                        map = this.getMap(),
                         format = new OpenLayers.Format.GeoJSON(),
                         features = format.read(response.responseText);
 
+                    map.addLayer(vector);
                     vector.addFeatures(features);
-                    this.getMap().zoomToExtent(vector.getDataExtent());
+                    map.zoomToExtent(vector.getDataExtent());
 
                     preview.getAt(0).setText(tpl.apply({
                         title: mymap.title + ' ...',
