@@ -124,9 +124,12 @@ Ext.define('App.controller.MyMaps', {
                     iconMask: true,
                     iconAlign: 'right',
                     listeners: {
-                        element: 'element',
-                        tap: function() {
-                        }
+                        tap: function(button, e) {
+                            if (Ext.get(e.target).hasCls('delete')) {
+                                this.closeMyMap();
+                            }
+                        },
+                        scope: this
                     }
                 }]
             });
@@ -187,5 +190,30 @@ Ext.define('App.controller.MyMaps', {
                 loadFeatures(mymap);
             }
         });
+    },
+
+    closeMyMap: function() {
+        var preview = this.getMyMapPreview();
+        if (preview && !preview.isHidden()) {
+            Ext.Animator.run({
+                element: preview.element,
+                easing: 'easeInOut',
+                out: false,
+                autoClear: false,
+                preserveEndState: true,
+                from: {
+                    height: preview.getHeight()
+                },
+                to: {
+                    height: 0
+                },
+                listeners: {
+                    animationend: function() {
+                        preview.hide();
+                    },
+                    scope: this
+                }
+            });
+        }
     }
 });
