@@ -229,6 +229,7 @@ Ext.define('App.controller.MyMaps', {
                 }
             });
         }
+        this.redirectTo('main');
     },
 
     showMyMapDetail: function() {
