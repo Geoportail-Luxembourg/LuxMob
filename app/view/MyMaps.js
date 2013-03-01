@@ -28,6 +28,7 @@ Ext.define("App.view.MyMaps", {
                 '</tpl>',
                 '</div>'
             ),
+            disableSelection: true,
             flex: 2
         }]
     },

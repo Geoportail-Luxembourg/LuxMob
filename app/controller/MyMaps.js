@@ -25,7 +25,7 @@ Ext.define('App.controller.MyMaps', {
         },
         control: {
             myMapsList: {
-                select: function(list, record) {
+                itemtap: function(list, index, target, record) {
                     this.redirectTo('main/map/' + record.get('uuid'));
                 }
             },
