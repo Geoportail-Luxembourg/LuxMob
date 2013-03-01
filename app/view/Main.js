@@ -11,7 +11,6 @@ Ext.define('App.view.Main', {
         plugins: 'statefulmap',
         center: null,
         zoom: null,
-        vectorLayer: null,
         layout: 'vbox',
         items: [ ]
     },
@@ -112,49 +111,6 @@ Ext.define('App.view.Main', {
             var bounds = this.pixelToBounds(pixel);
             this.fireEvent('query', this, bounds, map, event);
         }, this);
-
-        // highlight layer
-        this.setVectorLayer(new OpenLayers.Layer.Vector('Vector', {
-            rendererOptions: {
-                yOrdering: true,
-                zIndexing: true
-            },
-            styleMap: new OpenLayers.StyleMap({
-                'default': OpenLayers.Util.applyDefaults({
-                    externalGraphic: 'resources/images/marker.png',
-                    graphicWidth: 17.6,
-                    graphicHeight: 24,
-                    graphicYOffset: -24,
-                    graphicOpacity: 1,
-                    backgroundGraphic: 'resources/images/shadow-marker.png',
-                    backgroundWidth: 38,
-                    backgroundHeight: 30,
-                    backgroundYOffset: -30,
-                    backgroundXOffset: -10,
-                    strokeWidth: 3,
-                    strokeColor: 'red',
-                    graphicZIndex: 1,
-                    backgroundGraphicZIndex: 0
-                }, OpenLayers.Feature.Vector.style['default']),
-                'select': OpenLayers.Util.applyDefaults({
-                    externalGraphic: 'resources/images/marker_selected.png',
-                    graphicZIndex: 3,
-                    graphicWidth: 22,
-                    graphicHeight: 30,
-                    graphicYOffset: -30,
-                    graphicOpacity: 1,
-                    backgroundGraphic: 'resources/images/shadow-marker.png',
-                    backgroundGraphicZIndex: 2,
-                    backgroundWidth: 38,
-                    backgroundHeight: 30,
-                    backgroundYOffset: -30,
-                    backgroundXOffset: -10,
-                    strokeWidth: 3,
-                    strokeColor: 'red'
-                }, OpenLayers.Feature.Vector.style['default'])
-            })
-        }));
-        map.addLayer(this.getVectorLayer());
 
         map.addControls([
             new GeolocateControl()

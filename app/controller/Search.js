@@ -31,20 +31,65 @@ Ext.define('App.controller.Search', {
             },
             mainView: {
                 mapready: function(map) {
+                    var vector = new OpenLayers.Layer.Vector('Vector', {
+                        rendererOptions: {
+                            yOrdering: true,
+                            zIndexing: true
+                        },
+                        styleMap: new OpenLayers.StyleMap({
+                            'default': OpenLayers.Util.applyDefaults({
+                                externalGraphic: 'resources/images/marker.png',
+                                graphicWidth: 17.6,
+                                graphicHeight: 24,
+                                graphicYOffset: -24,
+                                graphicOpacity: 1,
+                                backgroundGraphic: 'resources/images/shadow-marker.png',
+                                backgroundWidth: 38,
+                                backgroundHeight: 30,
+                                backgroundYOffset: -30,
+                                backgroundXOffset: -10,
+                                strokeWidth: 3,
+                                strokeColor: 'red',
+                                graphicZIndex: 1,
+                                backgroundGraphicZIndex: 0
+                            }, OpenLayers.Feature.Vector.style['default']),
+                            'select': OpenLayers.Util.applyDefaults({
+                                externalGraphic: 'resources/images/marker_selected.png',
+                                graphicZIndex: 3,
+                                graphicWidth: 22,
+                                graphicHeight: 30,
+                                graphicYOffset: -30,
+                                graphicOpacity: 1,
+                                backgroundGraphic: 'resources/images/shadow-marker.png',
+                                backgroundGraphicZIndex: 2,
+                                backgroundWidth: 38,
+                                backgroundHeight: 30,
+                                backgroundYOffset: -30,
+                                backgroundXOffset: -10,
+                                strokeWidth: 3,
+                                strokeColor: 'red'
+                            }, OpenLayers.Feature.Vector.style['default'])
+                        })
+                    });
                     this.setMap(map);
-                    this.setVectorLayer(this.getMap().getLayersByName('Vector')[0]);
+                    this.setVectorLayer(vector);
                 }
             }
         }
     },
 
     searchSelect: function(list, record) {
+        var map = this.getMap(),
+            vector = this.getVectorLayer();
         this.getSearchField().setValue(record.get('label'));
         this.getFakeSearch().setValue(record.get('label'));
-        App.map.zoomToExtent(OpenLayers.Bounds.fromArray(record.get('bbox')));
+        map.zoomToExtent(OpenLayers.Bounds.fromArray(record.get('bbox')));
         this.redirectTo('');
         list.deselectAll();
-        this.getVectorLayer().removeAllFeatures();
+        vector.removeAllFeatures();
+        if (vector in map.layers) {
+            map.removeLayer(vector);
+        }
 
         var type = record.get('type');
         if (type == 'Adresse' || type == 'Parcelle' || type == 'hydro'|| type == 'hydro_km' || type == 'FLIK') {
@@ -78,17 +123,16 @@ Ext.define('App.controller.Search', {
                 ref: 'geoadmin'
             },
             callback: function(records) {
-                var format = new OpenLayers.Format.GeoJSON();
-                var features = format.read(records[0].get('features'));
-                var layer = this.getVectorLayer();
-                Ext.each(features, function(feature) {
-                    layer.addFeatures([
-                        feature
-                    ]);
-                }, this);
+                var format = new OpenLayers.Format.GeoJSON(),
+                    features = format.read(records[0].get('features')),
+                    vector = this.getVectorLayer(),
+                    map = this.getMap();
+
+                map.addLayer(vector);
+                vector.addFeatures(features);
                 var index = Math.max(this.getMap().Z_INDEX_BASE['Feature'] - 1,
-                    layer.getZIndex()) + 1;
-                layer.setZIndex(index);
+                    vector.getZIndex()) + 1;
+                vector.setZIndex(index);
             },
             scope: this
         });
