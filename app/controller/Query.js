@@ -111,6 +111,8 @@ Ext.define('App.controller.Query', {
         this.setLoading(true);
         this.redirectTo('');
 
+        this.getApplication().getController('MyMaps').closeMyMap();
+
         params = decodeURIComponent(params);
         params = params.split('-');
 
@@ -220,11 +222,10 @@ Ext.define('App.controller.Query', {
 
     hidePreview: function(callback) {
         var layer = this.getVectorLayer(),
-            map = this.getMap(),
-            vector = this.getVectorLayer();
+            map = this.getMap();
         layer.removeAllFeatures();
-        if (vector in map.layers) {
-            map.removeLayer(this.getVectorLayer());
+        if (layer in map.layers) {
+            map.removeLayer(layer);
         }
         map.getLayersByName('Overlays')[0].setOpacity(1);
         var preview = this.getResultsPreview();

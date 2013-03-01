@@ -105,6 +105,7 @@ Ext.define('App.controller.MyMaps', {
 
     showMyMap: function(id) {
         this.getApplication().getController('Main').showMain();
+        this.getApplication().getController('Query').hidePreview();
 
         var preview = this.getMyMapPreview();
         if (!preview) {
@@ -206,8 +207,13 @@ Ext.define('App.controller.MyMaps', {
     },
 
     closeMyMap: function() {
-        var preview = this.getMyMapPreview();
-        this.getMap().removeLayer(this.getVectorLayer());
+        var preview = this.getMyMapPreview(),
+            layer = this.getVectorLayer(),
+            map = this.getMap();
+        layer.removeAllFeatures();
+        if (layer in map.layers) {
+            map.removeLayer(layer);
+        }
         if (preview && !preview.isHidden()) {
             Ext.Animator.run({
                 element: preview.element,
