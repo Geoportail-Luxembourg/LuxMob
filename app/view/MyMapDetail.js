@@ -21,7 +21,7 @@ Ext.define('App.view.MyMapDetail', {
                 xtype: "button",
                 text: i18n.message('button.back'),
                 ui: 'back',
-                action: "back"
+                action: "main"
             }]
         }, {
             id: 'description',
