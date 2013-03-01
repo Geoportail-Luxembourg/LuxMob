@@ -46,6 +46,7 @@ Ext.define('App.view.MyMapDetail', {
 
     updateFeatures: function(features) {
         var list = this.down('#featureslist');
+        list.getStore() && list.getStore().removeAll();
         list.setData(features);
     }
 });
