@@ -29,9 +29,6 @@ Ext.define('App.controller.MyMaps', {
                     this.redirectTo('main/map/' + record.get('uuid'));
                 }
             },
-            'button[action=backtomymaps]': {
-                tap: 'showMyMaps'
-            },
             mainView: {
                 mapready: function(map) {
                     this.setMap(map);
