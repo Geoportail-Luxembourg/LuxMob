@@ -40,7 +40,7 @@ Ext.define('App.view.MyMapDetail', {
     },
 
 
-    updateMyMap: function(mymap, features) {
+    updateMyMap: function(mymap) {
         this.down('#description').setData(mymap);
     },
 
