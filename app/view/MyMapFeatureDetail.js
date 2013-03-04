@@ -11,6 +11,7 @@ Ext.define("App.view.MyMapFeatureDetail", {
         items: [{
             xtype: 'toolbar',
             docked: 'top',
+            ui: 'light',
             items: [{
                 xtype: 'spacer'
             }, {
@@ -18,6 +19,7 @@ Ext.define("App.view.MyMapFeatureDetail", {
                 action: 'hidefeaturedetail',
                 iconCls: 'arrow_down',
                 iconMask: true,
+                ui: 'plain',
                 align: 'right'
             }]
         }, {
