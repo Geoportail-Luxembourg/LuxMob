@@ -12,6 +12,7 @@ Ext.define('App.controller.MyMaps', {
         featureDetailHeight: 120,
         map: null,
         vectorLayer: null,
+        selectControl: null,
         refs: {
             mainView: '#mainView',
             myMapsView: {
@@ -92,6 +93,25 @@ Ext.define('App.controller.MyMaps', {
                     });
 
                     this.setVectorLayer(vector);
+                    var select = new OpenLayers.Control.SelectFeature(
+                        vector,
+                        {
+                            multiple: false,
+                            hover: false,
+                            autoActivate: true
+                        }
+                    );
+                    this.setSelectControl(select);
+                    vector.events.on({
+                        'featureselected': function(e) {
+                            console.log(e.feature);
+                            this.showFeatureDetail(e.feature);
+                        },
+                        'featureunselected': function() {
+                            this.hideFeatureDetail();
+                        },
+                        scope: this
+                    });
                 }
             },
             'button[action=hidefeaturedetail]': {
@@ -191,6 +211,7 @@ Ext.define('App.controller.MyMaps', {
                         features = format.read(response.responseText);
 
                     map.addLayer(vector);
+                    map.addControl(this.getSelectControl());
                     vector.addFeatures(features);
                     map.zoomToExtent(vector.getDataExtent());
 
@@ -225,6 +246,7 @@ Ext.define('App.controller.MyMaps', {
         layer.removeAllFeatures();
         if (layer in map.layers) {
             map.removeLayer(layer);
+            map.removeControl(this.getSelectControl());
         }
         if (preview && !preview.isHidden()) {
             Ext.Animator.run({
