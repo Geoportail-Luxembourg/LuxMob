@@ -174,6 +174,7 @@ Ext.define('App.controller.MyMaps', {
                 tap: function(button, e) {
                     if (Ext.get(e.target).hasCls('delete')) {
                         this.closeMyMap();
+                        this.redirectTo('main');
                     } else {
                         this.redirectTo('mymapdetail');
                     }
@@ -276,7 +277,6 @@ Ext.define('App.controller.MyMaps', {
                 callback.call();
             }
         }
-        this.redirectTo('main');
     },
 
     showMyMapDetail: function() {
