@@ -32,9 +32,10 @@ Ext.define('App.view.MyMapDetail', {
             ],
             data: null
         }, {
-            id: 'featureslist',
+            id: 'myMapFeaturesList',
             xtype: 'list',
             itemTpl: '{attributes.name}',
+            disableSelection: true,
             flex: 2
         }]
     },
@@ -45,7 +46,7 @@ Ext.define('App.view.MyMapDetail', {
     },
 
     updateFeatures: function(features) {
-        var list = this.down('#featureslist');
+        var list = this.down('#myMapFeaturesList');
         list.getStore() && list.getStore().removeAll();
         list.setData(features);
     }

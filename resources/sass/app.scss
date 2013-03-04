@@ -34,6 +34,7 @@ $base-color: #B58F69;
 @include pictos-iconmask('power_on');
 @include pictos-iconmask('locate1');
 @include pictos-iconmask('delete');
+@include pictos-iconmask('arrow_down');
 
 body.x-ios.x-phone {
   font-size: 100%; // This accommodates the iPhone, at 163ppi
@@ -369,4 +370,20 @@ div.Mask {
 }
 #myMapDetailView .created_by {
     color: grey;
+}
+.my_map_feature_preview .x-toolbar-title {
+    text-align: left;
+}
+.my_map_feature_preview .x-center {
+    //* I know this is ugly */
+    right: auto;
+}
+.my_map_feature_preview .x-toolbar {
+    background-color: transparent;
+    background-image: none;
+    border: 0;
+}
+.my_map_feature_preview .x-toolbar .x-title {
+    color: #555;
+    text-shadow: none;
 }

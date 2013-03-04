@@ -2,11 +2,14 @@ Ext.define('App.controller.MyMaps', {
     extend: 'Ext.app.Controller',
     requires: [
         'App.view.MyMaps',
-        'App.view.MyMapDetail'
+        'App.view.MyMapDetail',
+        'App.view.MyMapFeatureDetail'
     ],
 
     config: {
         myMapPreview: null,
+        myMapPreviewHeight: 50,
+        featureDetailHeight: 120,
         map: null,
         vectorLayer: null,
         refs: {
@@ -21,12 +24,19 @@ Ext.define('App.controller.MyMaps', {
                 xtype: 'mymapdetailview',
                 autoCreate: true
             },
-            myMapsList: '#myMapsList'
+            myMapsList: '#myMapsList',
+            myMapFeaturesList: '#myMapFeaturesList'
+
         },
         control: {
             myMapsList: {
                 itemtap: function(list, index, target, record) {
                     this.redirectTo('main/map/' + record.get('uuid'));
+                }
+            },
+            myMapFeaturesList: {
+                itemtap: function(list, index, target, record) {
+                    this.showFeatureDetail(record.data);
                 }
             },
             mainView: {
@@ -83,6 +93,9 @@ Ext.define('App.controller.MyMaps', {
 
                     this.setVectorLayer(vector);
                 }
+            },
+            'button[action=hidefeaturedetail]': {
+                tap: 'hideFeatureDetail'
             }
         },
         routes: {
@@ -109,7 +122,6 @@ Ext.define('App.controller.MyMaps', {
             preview = this.getMainView().add({
                 xtype: 'container',
                 cls: 'results-preview',
-                height: 50,
                 padding: 5,
                 style: {
                     message: i18n.message('querying'),
@@ -149,13 +161,12 @@ Ext.define('App.controller.MyMaps', {
             element: preview.element,
             easing: 'easeInOut',
             out: false,
-            autoClear: false,
             preserveEndState: true,
             from: {
                 height: 0
             },
             to: {
-                height: preview.getHeight()
+                height: this.getMyMapPreviewHeight()
             }
         });
 
@@ -219,7 +230,7 @@ Ext.define('App.controller.MyMaps', {
                 autoClear: false,
                 preserveEndState: true,
                 from: {
-                    height: preview.getHeight()
+                    height: preview.element.getHeight()
                 },
                 to: {
                     height: 0
@@ -242,5 +253,48 @@ Ext.define('App.controller.MyMaps', {
             view,
             animation
         );
+    },
+
+    showFeatureDetail: function(feature) {
+        var preview = this.getMyMapPreview();
+
+        // temporarily hide the map title
+        preview.items.each(function(item) {
+            item.hide();
+        });
+        var detail = preview.add(new App.view.MyMapFeatureDetail());
+        detail.setFeature(feature);
+        this.redirectTo('main');
+        this.previewResize(this.getFeatureDetailHeight());
+    },
+
+    hideFeatureDetail: function() {
+        this.previewResize(this.getMyMapPreviewHeight());
+
+        var preview = this.getMyMapPreview();
+        // remove all the items for feature detail and show the map title again
+        preview.items.each(function(item, index) {
+            if (index === 0) {
+                item.show();
+            } else {
+                preview.remove(item);
+            }
+        });
+    },
+
+    previewResize: function(height) {
+        var preview = this.getMyMapPreview();
+        Ext.Animator.run({
+            element: preview.element,
+            easing: 'easeInOut',
+            autoClear: false,
+            preserveEndState: true,
+            from: {
+                height: preview.element.getHeight()
+            },
+            to: {
+                height: height
+            }
+        });
     }
 });
