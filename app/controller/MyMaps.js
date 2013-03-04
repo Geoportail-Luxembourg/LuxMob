@@ -116,7 +116,10 @@ Ext.define('App.controller.MyMaps', {
     showMyMap: function(id) {
         this.getApplication().getController('Main').showMain();
         this.getApplication().getController('Query').hidePreview();
+        this.closeMyMap(Ext.bind(this.showPreview, this, [id]));
+    },
 
+    showPreview: function(id) {
         var preview = this.getMyMapPreview();
         if (!preview) {
             preview = this.getMainView().add({
@@ -130,33 +133,34 @@ Ext.define('App.controller.MyMaps', {
                 masked: {
                     xtype: 'loadmask',
                     indicator: false
-                },
-                items: [{
-                    xtype: 'button',
-                    ui: 'plain',
-                    text: ' ',
-                    height: '2.2em',
-                    cls: 'x-textalign-left',
-                    iconCls: 'delete',
-                    iconMask: true,
-                    iconAlign: 'right',
-                    listeners: {
-                        tap: function(button, e) {
-                            if (Ext.get(e.target).hasCls('delete')) {
-                                this.closeMyMap();
-                            } else {
-                                this.redirectTo('mymapdetail');
-                            }
-                        },
-                        scope: this
-                    }
-                }]
+                }
             });
             this.setMyMapPreview(preview);
         } else {
+            preview.removeAll();
             preview.mask();
             preview.show();
         }
+        var button = preview.add({
+            xtype: 'button',
+            ui: 'plain',
+            text: ' ',
+            height: '2.2em',
+            cls: 'x-textalign-left',
+            iconCls: 'delete',
+            iconMask: true,
+            iconAlign: 'right',
+            listeners: {
+                tap: function(button, e) {
+                    if (Ext.get(e.target).hasCls('delete')) {
+                        this.closeMyMap();
+                    } else {
+                        this.redirectTo('mymapdetail');
+                    }
+                },
+                scope: this
+            }
+        });
         Ext.Animator.run({
             element: preview.element,
             easing: 'easeInOut',
@@ -190,7 +194,7 @@ Ext.define('App.controller.MyMaps', {
                     vector.addFeatures(features);
                     map.zoomToExtent(vector.getDataExtent());
 
-                    preview.getAt(0).setText(tpl.apply({
+                    button.setText(tpl.apply({
                         title: mymap.title + ' ...',
                         nb_features: features.length
                     }));
@@ -214,7 +218,7 @@ Ext.define('App.controller.MyMaps', {
         });
     },
 
-    closeMyMap: function() {
+    closeMyMap: function(callback) {
         var preview = this.getMyMapPreview(),
             layer = this.getVectorLayer(),
             map = this.getMap();
@@ -238,10 +242,17 @@ Ext.define('App.controller.MyMaps', {
                 listeners: {
                     animationend: function() {
                         preview.hide();
+                        if (callback) {
+                            callback.call();
+                        }
                     },
                     scope: this
                 }
             });
+        } else {
+            if (callback) {
+                callback.call();
+            }
         }
         this.redirectTo('main');
     },
@@ -272,29 +283,35 @@ Ext.define('App.controller.MyMaps', {
         this.previewResize(this.getMyMapPreviewHeight());
 
         var preview = this.getMyMapPreview();
-        // remove all the items for feature detail and show the map title again
-        preview.items.each(function(item, index) {
-            if (index === 0) {
-                item.show();
-            } else {
-                preview.remove(item);
-            }
-        });
+        if (preview) {
+            // remove all the items for feature detail and show the map title again
+            preview.items.each(function(item, index) {
+                if (index === 0) {
+                    // mask
+                } else if (index === 1) {
+                    item.show();
+                } else {
+                    preview.remove(item);
+                }
+            });
+        }
     },
 
     previewResize: function(height) {
         var preview = this.getMyMapPreview();
-        Ext.Animator.run({
-            element: preview.element,
-            easing: 'easeInOut',
-            autoClear: false,
-            preserveEndState: true,
-            from: {
-                height: preview.element.getHeight()
-            },
-            to: {
-                height: height
-            }
-        });
+        if (preview) {
+            Ext.Animator.run({
+                element: preview.element,
+                easing: 'easeInOut',
+                autoClear: false,
+                preserveEndState: true,
+                from: {
+                    height: preview.element.getHeight()
+                },
+                to: {
+                    height: height
+                }
+            });
+        }
     }
 });
