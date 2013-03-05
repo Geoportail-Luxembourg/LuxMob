@@ -11,7 +11,7 @@ Ext.define('App.store.Search', {
         },
         proxy: {
             type: 'jsonp',
-            url: "http://maps.geoportail.lu/locationsearch",
+            url: "http://app.geoportail.lu/locationsearch",
             callbackKey: 'cb',
             reader: {
                 type: 'json',
