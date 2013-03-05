@@ -66,3 +66,4 @@ App.map = {
     layers: [],
     fallThrough: true
 };
+App.main_url = 'http://demo.geoportail.lu/';

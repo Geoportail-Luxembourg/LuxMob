@@ -49,7 +49,6 @@ Ext.application({
     },
 
     launch: function() {
-        App.main_url = 'http://demo.geoportail.lu/';
         this.prepareI18n();
 
         // create the main view and set the map into it
