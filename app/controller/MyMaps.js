@@ -236,6 +236,12 @@ Ext.define('App.controller.MyMaps', {
                 var view = this.getMyMapDetailView();
                 view.setMyMap(mymap);
             },
+            failure: function(response) {
+                this.closeMyMap();
+                if (response.status == 404) {
+                    Ext.Msg.alert('', i18n.message('mymaps.notfound'));
+                }
+            },
             scope: this
         });
     },
