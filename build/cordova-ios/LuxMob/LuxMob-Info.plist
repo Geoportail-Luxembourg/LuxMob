@@ -35,6 +35,21 @@
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLIconFile</key>
+			<string>Default-568h@2x~iphone</string>
+			<key>CFBundleURLName</key>
+			<string>com.c2c.LuxMob</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>luxmob</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>LSRequiresIPhoneOS</key>

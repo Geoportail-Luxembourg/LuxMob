@@ -117,3 +117,29 @@ To see (filtered) logs in a console:
 ## Install and run app in iOS emulator
 
 Open `build/LuxMob/ios/LuxMob.xcodeproj` in `Xcode` and press `Run`.
+
+## Create .ipa for Ad-Hoc deployment
+
+### Add test devices
+
+ - Go to `https://developer.apple.com/ios/manage/devices/index.action` , and add
+devices UUID.
+
+ - Then you have to add them to the Provisioning Profile: Go to `https://developer.apple.com/ios/manage/provisioningprofiles/index.action`
+`Edit`->`Modify` «Luxembourg mobile» profile, then check the devices.
+
+ - You can now download it, and send it to testers with the «.ipa».
+(You may have to download it & open with xcode, or update it with XCode
+Organizer).
+
+### Create .ipa
+
+ - Make a production build : `make ios`. (as of now, there’s a bug on first launch
+that doesn’t exist in `ios-debug` mode).
+ - Select `iOS Device`, in the test device combo. In the menu, select
+   `Product`->`Archive`. The `Organizer` windows show up; select the latest archive
+   and click on `Distribute` button.
+ - Choose `Save for Entreprise or Ad-Hoc Deployment`, then sign with your
+   identity.
+ - Then you can save your «.ipa», without checking `Save for Entreprise
+   Distribution`.
