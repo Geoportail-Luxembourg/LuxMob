@@ -104,7 +104,6 @@ Ext.define('App.controller.MyMaps', {
                     this.setSelectControl(select);
                     vector.events.on({
                         'featureselected': function(e) {
-                            console.log(e.feature);
                             this.showFeatureDetail(e.feature);
                         },
                         'featureunselected': function() {
