@@ -204,7 +204,7 @@ Ext.define('App.controller.MyMaps', {
 
         function loadFeatures(mymap) {
             Ext.Ajax.request({
-                url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/mymaps/' + mymap.uuid + '/features',
+                url: App.main_url + 'mymaps/' + mymap.uuid + '/features',
                 success: function(response) {
                     var vector = this.getVectorLayer(),
                         map = this.getMap(),
@@ -229,7 +229,7 @@ Ext.define('App.controller.MyMaps', {
         }
 
         Ext.Ajax.request({
-            url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/mymaps/' + id,
+            url: App.main_url + 'mymaps/' + id,
             success: function(response) {
                 var mymap = Ext.JSON.decode(response.responseText);
                 loadFeatures.apply(this, [mymap]);
