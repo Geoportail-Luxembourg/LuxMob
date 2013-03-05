@@ -303,7 +303,7 @@ Ext.define('App.controller.MyMaps', {
         var detail = preview.add(new App.view.MyMapFeatureDetail());
         detail.setFeature(feature);
         this.redirectTo('main');
-        this.previewResize(this.getFeatureDetailHeight());
+        Ext.defer(this.previewResize, 10, this, [this.getFeatureDetailHeight()]);
     },
 
     hideFeatureDetail: function() {
