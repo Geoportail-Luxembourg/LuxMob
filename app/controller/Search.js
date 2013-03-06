@@ -108,7 +108,7 @@ Ext.define('App.controller.Search', {
             model: 'SearchHighlight',
             proxy: {
                 type: 'jsonp',
-                url: "http://maps.geoportail.lu/bodfeature/geometry",
+                url: "http://app.geoportail.lu/bodfeature/geometry",
                 callbackKey: 'cb',
                 reader: {
                     rootProperty: 'rows'

@@ -5,7 +5,7 @@ Ext.define('App.store.Query', {
         model: 'App.model.Query',
         proxy: {
             type: 'jsonp',
-            url : "http://tourisme.geoportail.lu/bodfeature/search",
+            url : "http://app.geoportail.lu/bodfeature/search",
             callbackKey: 'cb',
             reader: {
                 type: 'json',

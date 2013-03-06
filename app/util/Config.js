@@ -40,10 +40,10 @@ Ext.define('App.util.Config', {
 
 // define the map and layers
 App.tilecache_url =  [
-    'http://tile2.geoportail.lu',
-    'http://tile1.geoportail.lu',
-    'http://tile3.geoportail.lu',
-    'http://tile4.geoportail.lu'
+    'http://apptile1.geoportail.lu',
+    'http://apptile2.geoportail.lu',
+    'http://apptile3.geoportail.lu',
+    'http://apptile4.geoportail.lu'
 ];
 
 App.map = {
