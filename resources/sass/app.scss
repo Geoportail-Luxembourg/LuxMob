@@ -371,6 +371,12 @@ div.Mask {
 #myMapDetailView .created_by {
     color: grey;
 }
+#myMapDetailView .export-links {
+    font-size: 80%;
+}
+#myMapDetailView .export-links a {
+    padding-right: 4px;
+}
 .my_map_feature_preview .x-toolbar-title {
     text-align: left;
 }

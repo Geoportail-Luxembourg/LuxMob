@@ -13,6 +13,8 @@ Ext.define('App.controller.MyMaps', {
         map: null,
         vectorLayer: null,
         selectControl: null,
+        dummyForm: null,
+        connection: null,
         refs: {
             mainView: '#mainView',
             myMapsView: {
@@ -26,8 +28,8 @@ Ext.define('App.controller.MyMaps', {
                 autoCreate: true
             },
             myMapsList: '#myMapsList',
-            myMapFeaturesList: '#myMapFeaturesList'
-
+            myMapFeaturesList: '#myMapFeaturesList',
+            myMapExport: '#myMapDetailView .export-links a'
         },
         control: {
             myMapsList: {
@@ -115,6 +117,9 @@ Ext.define('App.controller.MyMaps', {
             },
             'button[action=hidefeaturedetail]': {
                 tap: 'hideFeatureDetail'
+            },
+            myMapDetailView: {
+                'export': 'export'
             }
         },
         routes: {
@@ -122,6 +127,12 @@ Ext.define('App.controller.MyMaps', {
             'main/map/:id': 'showMyMap',
             'mymapdetail': 'showMyMapDetail'
         }
+    },
+
+    init: function() {
+        var form = Ext.DomHelper.append(document.body, {tag : 'form'}, true);
+        this.setDummyForm(form);
+        this.setConnection(new Ext.data.Connection());
     },
 
     showMyMaps: function() {
@@ -340,5 +351,39 @@ Ext.define('App.controller.MyMaps', {
                 }
             });
         }
+    },
+
+    'export': function(map, features, format) {
+        var metadata,
+            title = map.title,
+            description = map.description,
+            options = {
+                externalProjection: new OpenLayers.Projection('EPSG:4326'),
+                internalProjection: App.map.getProjectionObject()
+            };
+        if (format == 'KML') {
+            Ext.apply(options, {
+                foldersName: title,
+                foldersDesc: description
+            });
+        } else if (format == 'GPX') {
+            metadata = {
+                name: title,
+                desc: description
+            };
+        }
+
+        var f = new OpenLayers.Format[format](options);
+
+        this.getConnection().upload(
+            this.getDummyForm(),
+            App.main_url + 'mymaps/export',
+            Ext.Object.toQueryString({
+                content: f.write(features, metadata),
+                format: format.toLowerCase(),
+                name: title,
+                dc: Math.random()
+            })
+        );
     }
 });

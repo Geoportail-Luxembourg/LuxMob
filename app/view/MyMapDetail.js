@@ -32,6 +32,12 @@ Ext.define('App.view.MyMapDetail', {
             ],
             data: null
         }, {
+            cls: 'export-links',
+            html: [
+                '<a href="javascript:void(0);">GPX</a>',
+                '<a href="javascript:void(0);">KML</a>'
+            ].join(' ')
+        }, {
             id: 'myMapFeaturesList',
             xtype: 'list',
             itemTpl: '{attributes.name}',
@@ -40,6 +46,23 @@ Ext.define('App.view.MyMapDetail', {
         }]
     },
 
+    initialize: function() {
+        this.on({
+            tap: {
+                fn: function(e, node) {
+                    this.fireEvent(
+                        'export',
+                        this.getMyMap(),
+                        this.getFeatures(),
+                        e.target.innerHTML
+                    );
+                },
+                element: 'innerElement',
+                delegate: '.export-links a'
+            },
+            scope: this
+        });
+    },
 
     updateMyMap: function(mymap) {
         this.down('#description').setData(mymap);
