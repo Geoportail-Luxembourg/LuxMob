@@ -213,13 +213,13 @@ Ext.define('App.controller.MyMaps', {
         );
 
         function loadFeatures(mymap) {
-            Ext.Ajax.request({
+            Ext.data.JsonP.request({
                 url: App.main_url + 'mymaps/' + mymap.uuid + '/features',
                 success: function(response) {
                     var vector = this.getVectorLayer(),
                         map = this.getMap(),
                         format = new OpenLayers.Format.GeoJSON(),
-                        features = format.read(response.responseText);
+                        features = format.read(response.rows[0].features);
 
                     map.addLayer(vector);
                     map.addControl(this.getSelectControl());
@@ -234,17 +234,17 @@ Ext.define('App.controller.MyMaps', {
                     var view = this.getMyMapDetailView();
                     view.setFeatures(features);
                 },
+                callbackKey: 'cb',
                 scope: this
             });
         }
 
-        Ext.Ajax.request({
+        Ext.data.JsonP.request({
             url: App.main_url + 'mymaps/' + id,
             success: function(response) {
-                var mymap = Ext.JSON.decode(response.responseText);
-                loadFeatures.apply(this, [mymap]);
+                loadFeatures.apply(this, [response]);
                 var view = this.getMyMapDetailView();
-                view.setMyMap(mymap);
+                view.setMyMap(response);
             },
             failure: function(response) {
                 this.closeMyMap();
@@ -252,6 +252,7 @@ Ext.define('App.controller.MyMaps', {
                     Ext.Msg.alert('', i18n.message('mymaps.notfound'));
                 }
             },
+            callbackKey: 'cb',
             scope: this
         });
     },
