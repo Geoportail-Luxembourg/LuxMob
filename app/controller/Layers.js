@@ -216,12 +216,7 @@ Ext.define('App.controller.Layers', {
                 });
                 radio.on({
                     check: Ext.bind(function(layer) {
-                        if (!this.onBaseLayerChange(layer)) {
-                            var name = App.map.baseLayer.name;
-                            this.getBaseLayersView()
-                                .query('radiofield[value=' + name + ']')[0]
-                                .setChecked(true);
-                        }
+                        this.onBaseLayerChange(layer);
                     }, this, [layer])
                 });
             }
@@ -306,12 +301,10 @@ Ext.define('App.controller.Layers', {
     onBaseLayerChange: function(layer) {
         var store = Ext.getStore('BaseLayers');
         record = store.getAt(store.findExact('name', layer.name));
-        if (this.checkForLayersExclusion(record, true)) {
-            this.getMap().setBaseLayer(layer);
-            this.getBaseLayerButton().setText(OpenLayers.i18n(layer.name));
-            this.redirectTo('main');
-            return true;
-        }
+        this.checkForLayersExclusion(record, true);
+        this.getMap().setBaseLayer(layer);
+        this.getBaseLayerButton().setText(OpenLayers.i18n(layer.name));
+        this.redirectTo('main');
     },
 
     showMessage: function(msg) {
@@ -359,12 +352,7 @@ Ext.define('App.controller.Layers', {
         }
         name = record.get('name');
         label = record.get('label');
-        if (!this.checkForLayersExclusion(record)) {
-            visible = false;
-            record.set('visible', false);
-            store.sync();
-            this.onOverlayChange();
-        }
+        this.checkForLayersExclusion(record);
         var field = this.getSelectedOverlaysList().insert(0, {
             label: OpenLayers.i18n(label),
             name: name,
@@ -384,7 +372,6 @@ Ext.define('App.controller.Layers', {
                 field.setChecked(!field.isChecked());
             }
         });
-        this.redirectTo('main');
     },
 
     onOverlayDeselect: function(list, record) {
@@ -406,12 +393,7 @@ Ext.define('App.controller.Layers', {
         var store = Ext.getStore("SelectedOverlays");
         var record = store.getAt(store.findExact('name', field.getValue()));
         record.set('visible', true);
-        if (!this.checkForLayersExclusion(record)) {
-            field.uncheck();
-        } else {
-            store.sync();
-            this.onOverlayChange();
-        }
+        this.checkForLayersExclusion(record);
     },
 
     onOverlayUncheck: function(field) {
@@ -431,8 +413,11 @@ Ext.define('App.controller.Layers', {
                 layersParam.push(record.get('name'));
             }
         }, this);
-        layer.setVisibility(layersParam.length);
-        layer.mergeNewParams({'LAYERS': layersParam});
+        if (layer) {
+            layer.setVisibility(layersParam.length);
+            layer.mergeNewParams({'LAYERS': layersParam});
+        }
+        this.redirectTo('main');
     },
 
     onOverlaySwipe: function(field) {
@@ -486,6 +471,14 @@ Ext.define('App.controller.Layers', {
                 store.findExact('name', curBaseLayer)
             );
             if (Ext.Array.intersect(curBaseLayer.get('exclusion'), exclusion).length) {
+                var voidLayer = this.getMap().getLayersByName('voidLayer')[0];
+                this.getMap().setBaseLayer(voidLayer);
+                this.getBaseLayerButton().setText(OpenLayers.i18n(voidLayer.name));
+                this.getBaseLayersView().items.each(function(item) {
+                    if (item.isXType('field') && item.getValue() == voidLayer.name) {
+                        item.check();
+                    }
+                });
                 layersToExclude.push(OpenLayers.i18n(curBaseLayer.get('name')));
             }
         }
@@ -497,17 +490,25 @@ Ext.define('App.controller.Layers', {
                 return;
             }
             if (Ext.Array.intersect(record.get('exclusion'), exclusion).length) {
+                record.set('visible', false);
                 layersToExclude.push(OpenLayers.i18n(record.get('name')));
+                this.getSelectedOverlaysList().items.each(function(field) {
+                    if (field.isXType('field') &&
+                        field.getName() == record.get('name')) {
+                        field.uncheck();
+                    }
+                });
             }
-        });
+        }, this);
+        store.sync();
+        this.onOverlayChange();
+
         if (layersToExclude.length) {
             Ext.Msg.alert('', i18n.message("layers.exclusion_msg", {
                 layer: OpenLayers.i18n(layer.get('name')),
                 layers: layersToExclude.join(', ')
             }));
-            return false;
         }
-        return true;
     },
 
     onSavedMapsSelected: function(list, record) {
