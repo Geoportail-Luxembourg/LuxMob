@@ -233,7 +233,7 @@ Ext.define('App.controller.Main', {
         this.getLoginView().submit({
             success: function(form, result) {
                 if (result && result.success) {
-                    this.getLoginView().setUrl('http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/login_handler');
+                    this.getLoginView().setUrl(App.main_url + 'login_handler');
                     this.getLoginView().submit({});
                     this.redirectTo('');
                     // the login_handler service is supposed to answer with 302
@@ -251,7 +251,7 @@ Ext.define('App.controller.Main', {
 
     logout: function() {
         Ext.Ajax.request({
-            url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/logout_handler'
+            url: App.main_url + 'logout_handler'
         });
         // the login_handler service is supposed to answer with 302
         // redirect. Thus, we cannot rely on it to use success
@@ -261,7 +261,7 @@ Ext.define('App.controller.Main', {
 
     checkUser: function() {
         Ext.Ajax.request({
-            url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/user',
+            url: App.main_url + 'user',
             success: function(response) {
                 this.getLoginButton().hide();
                 this.getLogoutButton().show();

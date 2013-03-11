@@ -3,7 +3,10 @@ Ext.define('App.controller.MyMaps', {
     requires: [
         'App.view.MyMaps',
         'App.view.MyMapDetail',
-        'App.view.MyMapFeatureDetail'
+        'App.view.MyMapFeatureDetail',
+        'Ext.chart.CartesianChart',
+        'Ext.chart.series.Line',
+        'Ext.chart.axis.Numeric'
     ],
 
     config: {
@@ -13,6 +16,8 @@ Ext.define('App.controller.MyMaps', {
         map: null,
         vectorLayer: null,
         selectControl: null,
+        dummyForm: null,
+        connection: null,
         refs: {
             mainView: '#mainView',
             myMapsView: {
@@ -26,8 +31,8 @@ Ext.define('App.controller.MyMaps', {
                 autoCreate: true
             },
             myMapsList: '#myMapsList',
-            myMapFeaturesList: '#myMapFeaturesList'
-
+            myMapFeaturesList: '#myMapFeaturesList',
+            myMapFeatureDetailView: 'mymapfeaturedetailview'
         },
         control: {
             myMapsList: {
@@ -104,7 +109,6 @@ Ext.define('App.controller.MyMaps', {
                     this.setSelectControl(select);
                     vector.events.on({
                         'featureselected': function(e) {
-                            console.log(e.feature);
                             this.showFeatureDetail(e.feature);
                         },
                         'featureunselected': function() {
@@ -116,6 +120,13 @@ Ext.define('App.controller.MyMaps', {
             },
             'button[action=hidefeaturedetail]': {
                 tap: 'hideFeatureDetail'
+            },
+            myMapDetailView: {
+                'export': 'export'
+            },
+            myMapFeatureDetailView: {
+                'export': 'export',
+                profile: 'profile'
             }
         },
         routes: {
@@ -123,6 +134,12 @@ Ext.define('App.controller.MyMaps', {
             'main/map/:id': 'showMyMap',
             'mymapdetail': 'showMyMapDetail'
         }
+    },
+
+    init: function() {
+        var form = Ext.DomHelper.append(document.body, {tag : 'form'}, true);
+        this.setDummyForm(form);
+        this.setConnection(new Ext.data.Connection());
     },
 
     showMyMaps: function() {
@@ -146,6 +163,7 @@ Ext.define('App.controller.MyMaps', {
                 xtype: 'container',
                 cls: 'results-preview',
                 padding: 5,
+                height: 40,
                 style: {
                     message: i18n.message('querying'),
                     backgroundColor: 'white'
@@ -203,13 +221,13 @@ Ext.define('App.controller.MyMaps', {
         );
 
         function loadFeatures(mymap) {
-            Ext.Ajax.request({
-                url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/mymaps/' + mymap.uuid + '/features',
+            Ext.data.JsonP.request({
+                url: App.main_url + 'mymaps/' + mymap.uuid + '/features',
                 success: function(response) {
                     var vector = this.getVectorLayer(),
                         map = this.getMap(),
                         format = new OpenLayers.Format.GeoJSON(),
-                        features = format.read(response.responseText);
+                        features = format.read(response.rows[0].features);
 
                     map.addLayer(vector);
                     map.addControl(this.getSelectControl());
@@ -224,18 +242,25 @@ Ext.define('App.controller.MyMaps', {
                     var view = this.getMyMapDetailView();
                     view.setFeatures(features);
                 },
+                callbackKey: 'cb',
                 scope: this
             });
         }
 
-        Ext.Ajax.request({
-            url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/mymaps/' + id,
+        Ext.data.JsonP.request({
+            url: App.main_url + 'mymaps/' + id,
             success: function(response) {
-                var mymap = Ext.JSON.decode(response.responseText);
-                loadFeatures.apply(this, [mymap]);
+                loadFeatures.apply(this, [response]);
                 var view = this.getMyMapDetailView();
-                view.setMyMap(mymap);
+                view.setMyMap(response);
             },
+            failure: function(response) {
+                this.closeMyMap();
+                if (response.status == 404) {
+                    Ext.Msg.alert('', i18n.message('mymaps.notfound'));
+                }
+            },
+            callbackKey: 'cb',
             scope: this
         });
     },
@@ -298,7 +323,7 @@ Ext.define('App.controller.MyMaps', {
         var detail = preview.add(new App.view.MyMapFeatureDetail());
         detail.setFeature(feature);
         this.redirectTo('main');
-        this.previewResize(this.getFeatureDetailHeight());
+        Ext.defer(this.previewResize, 10, this, [this.getFeatureDetailHeight()]);
     },
 
     hideFeatureDetail: function() {
@@ -335,5 +360,100 @@ Ext.define('App.controller.MyMaps', {
                 }
             });
         }
+    },
+
+    'export': function(title, description, features, format) {
+        var metadata,
+            options = {
+                externalProjection: new OpenLayers.Projection('EPSG:4326'),
+                internalProjection: App.map.getProjectionObject()
+            };
+        if (format == 'KML') {
+            Ext.apply(options, {
+                foldersName: title,
+                foldersDesc: description
+            });
+        } else if (format == 'GPX') {
+            metadata = {
+                name: title,
+                desc: description
+            };
+        }
+
+        var f = new OpenLayers.Format[format](options);
+
+        this.getConnection().upload(
+            this.getDummyForm(),
+            App.main_url + 'mymaps/export',
+            Ext.Object.toQueryString({
+                content: f.write(features, metadata),
+                format: format.toLowerCase(),
+                name: title,
+                dc: Math.random()
+            })
+        );
+    },
+
+    profile: function(feature) {
+        var format = new OpenLayers.Format.GeoJSON();
+        var geojson = format.write(feature.geometry);
+
+        var paramsString = 'nbPoints=50&layers=MNT';
+
+        Ext.Ajax.request({
+            url: App.main_url + 'profile?' + paramsString,
+            method: 'POST',
+            jsonData: geojson,
+            success: function(response) {
+                var data = Ext.decode(response.responseText);
+                this.drawProfile(data.profile.points);
+            },
+            failure: function() {
+            },
+            scope: this
+        });
+    },
+
+    drawProfile: function(points) {
+        var chart = new Ext.chart.CartesianChart({
+            store: {
+                fields: ['dist', {name: 'z', mapping: 'alts.MNT'}],
+                data: points
+            },
+            axes: [{
+                type: 'numeric',
+                position: 'left',
+                fields: ['z']
+            }, {
+                type: 'numeric',
+                position: 'bottom',
+                fields: ['dist']
+            }],
+            series: [{
+                type: 'line',
+                style: {
+                    stroke: 'rgb(143,203,203)'
+                },
+                xField: 'dist',
+                yField: 'z'
+            }]
+        });
+        var profileView = new Ext.Panel({
+            layout: 'fit',
+            items: [{
+                docked: 'top',
+                xtype: 'toolbar',
+                items: [{
+                    xtype: 'button',
+                    text: i18n.message('button.close'),
+                    action: 'main'
+                }]
+            }, chart]
+        });
+        Ext.Viewport.add(profileView);
+        Ext.Viewport.animateActiveItem(
+            profileView,
+            {type: 'cover', direction: "up"}
+        );
     }
 });

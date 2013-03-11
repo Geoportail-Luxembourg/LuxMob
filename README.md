@@ -141,5 +141,5 @@ that doesn’t exist in `ios-debug` mode).
    and click on `Distribute` button.
  - Choose `Save for Entreprise or Ad-Hoc Deployment`, then sign with your
    identity.
- - Then you can save your «.ipa», without checking `Save for Entreprise
+ - Then you can save your «.ipa», **without** checking `Save for Entreprise
    Distribution`.

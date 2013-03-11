@@ -28,11 +28,56 @@ Ext.define("App.view.MyMapFeatureDetail", {
                 '<div class="description">{description}</div>'
             ],
             data: null
+        }, {
+            cls: 'export-links',
+            html: [
+                '<a class="export" href="javascript:void(0);">GPX</a>',
+                '<a class="export" href="javascript:void(0);">KML</a>'
+            ].join(' ')
         }]
     },
 
-    setFeature: function(feature) {
+    initialize: function() {
+        this.on({
+            tap: {
+                fn: function(e, node) {
+                    this.fireEvent(
+                        'export',
+                        this.getFeature().attributes.name,
+                        this.getFeature().attributes.description,
+                        [this.getFeature()],
+                        e.target.innerHTML
+                    );
+                },
+                element: 'innerElement',
+                delegate: '.export-links a.export'
+            },
+            scope: this
+        });
+        this.on({
+            tap: {
+                fn: function(e, node) {
+                    this.fireEvent(
+                        'profile',
+                        this.getFeature()
+                    );
+                },
+                element: 'innerElement',
+                delegate: '.export-links a.profile'
+            },
+            scope: this
+        });
+    },
+
+    updateFeature: function(feature) {
         this.getDockedItems()[0].setTitle(feature.attributes.name);
         this.down('#featuredescription').setData(feature.attributes);
+
+        if (feature.geometry instanceof OpenLayers.Geometry.LineString) {
+            Ext.DomHelper.append(
+                this.down('[cls=export-links]').innerHtmlElement,
+                '<a class="profile" href="javascript:void(0);">Profile</a>'
+            );
+        }
     }
 });
