@@ -24,6 +24,17 @@ Ext.define('App.view.MyMapDetail', {
                 action: "main"
             }]
         }, {
+            docked: 'bottom',
+            xtype: 'toolbar',
+            items: [{
+                xtype: 'spacer'
+            }, {
+                xtype: 'button',
+                iconCls: 'add',
+                iconMask: true,
+                action: "addpoi"
+            }]
+        }, {
             id: 'description',
             tpl: [
                 '<div class="title">{title}</div>',
@@ -60,6 +71,16 @@ Ext.define('App.view.MyMapDetail', {
                 },
                 element: 'innerElement',
                 delegate: '.export-links a'
+            },
+            scope: this
+        });
+        this.on({
+            painted: function() {
+                if (App.user == this.getMyMap().user_login) {
+                    this.getDockedItems()[1].show();
+                } else {
+                    this.getDockedItems()[1].hide();
+                }
             },
             scope: this
         });

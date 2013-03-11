@@ -127,6 +127,9 @@ Ext.define('App.controller.MyMaps', {
             myMapFeatureDetailView: {
                 'export': 'export',
                 profile: 'profile'
+            },
+            'button[action=addpoi]': {
+                tap: 'addPoi'
             }
         },
         routes: {
@@ -455,5 +458,51 @@ Ext.define('App.controller.MyMaps', {
             profileView,
             {type: 'cover', direction: "up"}
         );
+    },
+
+    addPoi: function() {
+        this.redirectTo('');
+        var addPoiView = this.getMainView().add({
+            xtype: 'formpanel',
+            cls: 'results-preview',
+            padding: 5,
+            height: 150,
+            style: {
+                backgroundColor: 'white'
+            },
+            items: [{
+                layout: 'hbox',
+                items: [{
+                    xtype: 'textfield',
+                    placeHolder: 'Nom',
+                    flex: 2,
+                    style: {
+                        margin: '5px'
+                    }
+                }, {
+                    xtype: 'button',
+                    iconCls: 'photo1',
+                    iconMask: true,
+                    style: {
+                        margin: '5px'
+                    }
+                }]
+            }, {
+                xtype: 'textareafield',
+                placeHolder: 'Description',
+                    style: {
+                        margin: '5px'
+                    }
+            }, {
+                xtype: 'toolbar',
+                docked: 'bottom',
+                items: [{
+                    text: 'cancel'
+                }, {
+                    text: 'OK',
+                    ui: 'confirm'
+                }]
+            }]
+        });
     }
 });

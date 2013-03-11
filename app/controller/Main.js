@@ -263,11 +263,13 @@ Ext.define('App.controller.Main', {
         Ext.Ajax.request({
             url: App.main_url + 'user',
             success: function(response) {
+                App.user = Ext.decode(response.responseText);
                 this.getLoginButton().hide();
                 this.getLogoutButton().show();
                 this.getMyMapsButton().show();
             },
             failure: function(response) {
+                App.user = null;
                 this.getLoginButton().show();
                 this.getLogoutButton().hide();
                 this.getMyMapsButton().hide();
