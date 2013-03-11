@@ -5,7 +5,7 @@ Ext.define('App.store.BaseLayers', {
         model: 'App.model.BaseLayers',
         proxy: {
             type: 'ajax',
-            url: "http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/bglayers",
+            url: "http://geoportail-luxembourg.demo-camptocamp.com/~elemoine-mobileevo/bglayers",
             reader: {
                 type: 'json'
             }
