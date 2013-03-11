@@ -28,10 +28,35 @@ Ext.define("App.view.MyMapFeatureDetail", {
                 '<div class="description">{description}</div>'
             ],
             data: null
+        }, {
+            cls: 'export-links',
+            html: [
+                '<a href="javascript:void(0);">GPX</a>',
+                '<a href="javascript:void(0);">KML</a>'
+            ].join(' ')
         }]
     },
 
-    setFeature: function(feature) {
+    initialize: function() {
+        this.on({
+            tap: {
+                fn: function(e, node) {
+                    this.fireEvent(
+                        'export',
+                        this.getFeature().attributes.name,
+                        this.getFeature().attributes.description,
+                        [this.getFeature()],
+                        e.target.innerHTML
+                    );
+                },
+                element: 'innerElement',
+                delegate: '.export-links a'
+            },
+            scope: this
+        });
+    },
+
+    updateFeature: function(feature) {
         this.getDockedItems()[0].setTitle(feature.attributes.name);
         this.down('#featuredescription').setData(feature.attributes);
     }

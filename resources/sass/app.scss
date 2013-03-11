@@ -95,6 +95,12 @@ body.x-android.x-phone {
 .results-preview small {
     color: grey;
 }
+.results-preview .export-links {
+    font-size: 80%;
+}
+.results-preview .export-links a {
+    padding-right: 4px;
+}
 
 // cards
 .card {

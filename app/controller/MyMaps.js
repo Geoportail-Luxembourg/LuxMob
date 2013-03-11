@@ -29,7 +29,7 @@ Ext.define('App.controller.MyMaps', {
             },
             myMapsList: '#myMapsList',
             myMapFeaturesList: '#myMapFeaturesList',
-            myMapExport: '#myMapDetailView .export-links a'
+            myMapFeatureDetailView: 'mymapfeaturedetailview'
         },
         control: {
             myMapsList: {
@@ -119,6 +119,9 @@ Ext.define('App.controller.MyMaps', {
                 tap: 'hideFeatureDetail'
             },
             myMapDetailView: {
+                'export': 'export'
+            },
+            myMapFeatureDetailView: {
                 'export': 'export'
             }
         },
@@ -355,10 +358,8 @@ Ext.define('App.controller.MyMaps', {
         }
     },
 
-    'export': function(map, features, format) {
+    'export': function(title, description, features, format) {
         var metadata,
-            title = map.title,
-            description = map.description,
             options = {
                 externalProjection: new OpenLayers.Projection('EPSG:4326'),
                 internalProjection: App.map.getProjectionObject()

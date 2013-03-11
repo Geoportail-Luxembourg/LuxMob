@@ -52,7 +52,8 @@ Ext.define('App.view.MyMapDetail', {
                 fn: function(e, node) {
                     this.fireEvent(
                         'export',
-                        this.getMyMap(),
+                        this.getMyMap().title,
+                        this.getMyMap().description,
                         this.getFeatures(),
                         e.target.innerHTML
                     );
