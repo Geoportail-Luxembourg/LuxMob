@@ -13,7 +13,7 @@ build/cordova-ios/www/lib/
 build/cordova-ios/www/touch/
 build/cordova-ios/www/proj4js-compressed.js
 build/cordova-ios/www/SavedMapLayer.js
-build/cordova-ios/www/cordova-2.3.0.ios.js
+build/cordova-ios/www/cordova-2.5.0.ios.js
 build/cordova-ios/CordovaLib/CordovaLib.xcodeproj/xcuserdata/
 build/cordova-ios/LuxMob.xcodeproj/project.pbxproj
 build/cordova-ios/LuxMob.xcodeproj/project.xcworkspace/
@@ -32,7 +32,7 @@ build/cordova-android/assets/www/index.html
 build/cordova-android/assets/www/resources/
 build/cordova-android/assets/www/app/
 build/cordova-android/assets/www/SavedMapLayer.js
-build/cordova-android/assets/www/cordova-2.3.0.android.js
+build/cordova-android/assets/www/cordova-2.5.0.android.js
 build/cordova-android/assets/www/deltas/
 build/cordova-android/assets/www/proj4js-compressed.js
 build/cordova-android/bin/
