@@ -156,6 +156,7 @@ Ext.define('App.controller.MyMaps', {
                 xtype: 'container',
                 cls: 'results-preview',
                 padding: 5,
+                height: 40,
                 style: {
                     message: i18n.message('querying'),
                     backgroundColor: 'white'
