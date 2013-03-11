@@ -31,8 +31,8 @@ Ext.define("App.view.MyMapFeatureDetail", {
         }, {
             cls: 'export-links',
             html: [
-                '<a href="javascript:void(0);">GPX</a>',
-                '<a href="javascript:void(0);">KML</a>'
+                '<a class="export" href="javascript:void(0);">GPX</a>',
+                '<a class="export" href="javascript:void(0);">KML</a>'
             ].join(' ')
         }]
     },
@@ -50,7 +50,20 @@ Ext.define("App.view.MyMapFeatureDetail", {
                     );
                 },
                 element: 'innerElement',
-                delegate: '.export-links a'
+                delegate: '.export-links a.export'
+            },
+            scope: this
+        });
+        this.on({
+            tap: {
+                fn: function(e, node) {
+                    this.fireEvent(
+                        'profile',
+                        this.getFeature()
+                    );
+                },
+                element: 'innerElement',
+                delegate: '.export-links a.profile'
             },
             scope: this
         });
@@ -59,5 +72,12 @@ Ext.define("App.view.MyMapFeatureDetail", {
     updateFeature: function(feature) {
         this.getDockedItems()[0].setTitle(feature.attributes.name);
         this.down('#featuredescription').setData(feature.attributes);
+
+        if (feature.geometry instanceof OpenLayers.Geometry.LineString) {
+            Ext.DomHelper.append(
+                this.down('[cls=export-links]').innerHtmlElement,
+                '<a class="profile" href="javascript:void(0);">Profile</a>'
+            );
+        }
     }
 });

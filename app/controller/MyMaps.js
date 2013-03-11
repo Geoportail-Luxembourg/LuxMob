@@ -3,7 +3,10 @@ Ext.define('App.controller.MyMaps', {
     requires: [
         'App.view.MyMaps',
         'App.view.MyMapDetail',
-        'App.view.MyMapFeatureDetail'
+        'App.view.MyMapFeatureDetail',
+        'Ext.chart.CartesianChart',
+        'Ext.chart.series.Line',
+        'Ext.chart.axis.Numeric'
     ],
 
     config: {
@@ -122,7 +125,8 @@ Ext.define('App.controller.MyMaps', {
                 'export': 'export'
             },
             myMapFeatureDetailView: {
-                'export': 'export'
+                'export': 'export',
+                profile: 'profile'
             }
         },
         routes: {
@@ -387,6 +391,69 @@ Ext.define('App.controller.MyMaps', {
                 name: title,
                 dc: Math.random()
             })
+        );
+    },
+
+    profile: function(feature) {
+        var format = new OpenLayers.Format.GeoJSON();
+        var geojson = format.write(feature.geometry);
+
+        var paramsString = 'nbPoints=50&layers=MNT';
+
+        Ext.Ajax.request({
+            url: App.main_url + 'profile?' + paramsString,
+            method: 'POST',
+            jsonData: geojson,
+            success: function(response) {
+                var data = Ext.decode(response.responseText);
+                this.drawProfile(data.profile.points);
+            },
+            failure: function() {
+            },
+            scope: this
+        });
+    },
+
+    drawProfile: function(points) {
+        var chart = new Ext.chart.CartesianChart({
+            store: {
+                fields: ['dist', {name: 'z', mapping: 'alts.MNT'}],
+                data: points
+            },
+            axes: [{
+                type: 'numeric',
+                position: 'left',
+                fields: ['z']
+            }, {
+                type: 'numeric',
+                position: 'bottom',
+                fields: ['dist']
+            }],
+            series: [{
+                type: 'line',
+                style: {
+                    stroke: 'rgb(143,203,203)'
+                },
+                xField: 'dist',
+                yField: 'z'
+            }]
+        });
+        var profileView = new Ext.Panel({
+            layout: 'fit',
+            items: [{
+                docked: 'top',
+                xtype: 'toolbar',
+                items: [{
+                    xtype: 'button',
+                    text: i18n.message('button.close'),
+                    action: 'main'
+                }]
+            }, chart]
+        });
+        Ext.Viewport.add(profileView);
+        Ext.Viewport.animateActiveItem(
+            profileView,
+            {type: 'cover', direction: "up"}
         );
     }
 });
