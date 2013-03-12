@@ -19,6 +19,7 @@ Ext.define('App.controller.MyMaps', {
         selectControl: null,
         dummyForm: null,
         connection: null,
+        addPoiView: null,
         refs: {
             mainView: '#mainView',
             myMapsView: {
@@ -465,62 +466,121 @@ Ext.define('App.controller.MyMaps', {
 
     addPoi: function() {
         this.redirectTo('');
-        this.getMyMapPreview().items.each(function(item) {
-            item.hide();
-        });
-        var addPoiView = this.getMyMapPreview().add({
-            xtype: 'formpanel',
-            height: 144,
-            style: {
-                backgroundColor: 'white'
-            },
-            items: [{
-                layout: 'hbox',
+
+        function onLocationUpdated(e) {
+            // event to be fired only once
+            control.events.unregister('locationupdated', this, onLocationUpdated);
+
+            this.getMyMapPreview().items.each(function(item) {
+                item.hide();
+            });
+            this.setAddPoiView(this.getMyMapPreview().add({
+                xtype: 'formpanel',
+                height: 144,
+                padding: 0,
+                style: {
+                    backgroundColor: 'white'
+                },
                 items: [{
-                    xtype: 'textfield',
-                    placeHolder: 'Nom',
-                    flex: 2,
+                    layout: 'hbox',
+                    items: [{
+                        xtype: 'textfield',
+                        name: 'name',
+                        placeHolder: 'Nom',
+                        flex: 2,
+                        margin: 2
+                    }, {
+                        xtype: 'button',
+                        iconCls: 'photo1',
+                        iconMask: true,
+                        margin: 2
+                    }]
+                }, {
+                    xtype: 'textareafield',
+                    name: 'description',
+                    placeHolder: 'Description',
+                    height: 60,
                     margin: 2
                 }, {
-                    xtype: 'button',
-                    iconCls: 'photo1',
-                    iconMask: true,
-                    margin: 2
-                }]
-            }, {
-                xtype: 'textareafield',
-                placeHolder: 'Description',
-                height: 60,
-                margin: 2
-            }, {
-                layout: {
-                    type: 'hbox',
-                    pack: 'end'
-                },
-                defaults: {
-                    margin: 2
-                },
-                items: [{
-                    xtype: 'button',
-                    text: i18n.message('button.cancel'),
-                    action: 'cancel',
-                    handler: function() {
-                        addPoiView.getParent().remove(addPoiView);
-                        this.getMyMapPreview().items.each(function(item, index) {
-                            if (index !== 0) { // all but mask
-                                item.show();
-                            }
-                        });
-                        this.previewResize(this.getMyMapPreviewHeight());
+                    layout: {
+                        type: 'hbox',
+                        pack: 'end'
                     },
-                    scope: this
-                }, {
-                    xtype: 'button',
-                    text: i18n.message('button.OK'),
-                    ui: 'confirm'
+                    defaults: {
+                        margin: 2
+                    },
+                    items: [{
+                        xtype: 'button',
+                        text: i18n.message('button.cancel'),
+                        action: 'cancel',
+                        handler: this.closeAddPoi,
+                        scope: this
+                    }, {
+                        xtype: 'button',
+                        text: i18n.message('button.OK'),
+                        ui: 'confirm',
+                        handler: this.saveMap,
+                        scope: this
+                    }]
                 }]
-            }]
+            }));
+            this.previewResize(144);
+
+            var accuracy = new OpenLayers.Geometry.Polygon.createRegularPolygon(
+                e.point,
+                e.position.coords.accuracy/2,
+                40,
+                0
+            );
+            Ext.defer(function() {
+                this.getMap().updateSize();
+                this.getMap().zoomToExtent(accuracy.getBounds());
+            }, 250, this);
+            this.getVectorLayer().addFeatures([
+                new OpenLayers.Feature.Vector(
+                    new OpenLayers.Geometry.Point(e.point.x, e.point.y)
+                )
+            ]);
+        }
+
+        var control = this.getMap().getControlsByClass('Geolocate')[0].geolocateControl;
+        this.getMap().addControl(control);
+        control.events.on({
+            "locationupdated": onLocationUpdated,
+            scope: this
         });
-        this.previewResize(144);
+        control.activate();
+    },
+
+    closeAddPoi: function() {
+        this.getAddPoiView().getParent().remove(this.getAddPoiView());
+        this.getMyMapPreview().items.each(function(item, index) {
+            if (index !== 0) { // all but mask
+                item.show();
+            }
+        });
+        this.previewResize(this.getMyMapPreviewHeight());
+    },
+
+    saveMap: function() {
+        var features = this.getVectorLayer().features;
+        var form = this.getAddPoiView();
+        Ext.apply(features[features.length - 1].attributes, form.getValues());
+
+        var format = new OpenLayers.Format.GeoJSON();
+        var id = this.getMyMapDetailView().getMyMap().uuid;
+        var params = {
+            features: format.write(features),
+            map_id: id
+        };
+        Ext.Ajax.request({
+            url: App.util.Config.getWsgiUrl() + 'mymaps/' + id,
+            method: 'PUT',
+            params: params,
+            success: function(reponse) {
+                this.closeAddPoi();
+            },
+            scope: this
+        });
     }
 });
