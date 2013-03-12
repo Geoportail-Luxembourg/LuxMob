@@ -5,8 +5,32 @@ Ext.define('App.util.Config', {
     singleton: true,
 
     config: {
+        /**
+         * The languages supported by the application.
+         */
         supportedLanguages: ['en', 'de', 'fr'],
-        defaultLanguage: 'fr'
+
+        /**
+         * The default language to use if there's no language detected.
+         */
+        defaultLanguage: 'fr',
+
+        /**
+         * The URLs to the background tile service.
+         */
+        tileUrl: [
+            'http://apptile1.geoportail.lu',
+            'http://apptile2.geoportail.lu',
+            'http://apptile3.geoportail.lu',
+            'http://apptile4.geoportail.lu'
+        ],
+
+        /**
+         * The OpenLayers.Map configuration.
+         * Set in the constructor, otherwise an infinite recursion occurs
+         * when Sencha Touch tried to shallow-copy the object.
+         */
+        mapConfig: null
     },
 
     /**
@@ -15,6 +39,28 @@ Ext.define('App.util.Config', {
      */
     constructor: function(config) {
         this.initConfig(config);
+        this.setMapConfig({
+            theme: null,
+            projection: new OpenLayers.Projection("EPSG:2169"),
+            displayProjection: new OpenLayers.Projection("EPSG:2169"),
+            units: "m",
+            maxExtent: OpenLayers.Bounds.fromArray([48000,57000,107000,139000]),
+            restrictedExtent: OpenLayers.Bounds.fromArray(
+                    [40000,50000,120000,150000]),
+            resolutions: [500.0, 250.0, 150.0, 100.0, 50.0,
+                          20.0, 10.0, 5.0, 2.0, 1.0, 0.5],
+            controls: [
+                new OpenLayers.Control.TouchNavigation({
+                    dragPanOptions: {
+                        interval: 1,
+                        enableKinetic: true
+                    }
+                }),
+                new OpenLayers.Control.ScaleLine()
+            ],
+            layers: [],
+            fallThrough: true
+        });
         return this;
     },
 
@@ -38,32 +84,4 @@ Ext.define('App.util.Config', {
     }
 });
 
-// define the map and layers
-App.tileUrl =  [
-    'http://apptile1.geoportail.lu',
-    'http://apptile2.geoportail.lu',
-    'http://apptile3.geoportail.lu',
-    'http://apptile4.geoportail.lu'
-];
-
-App.map = {
-    theme: null,
-    projection: new OpenLayers.Projection("EPSG:2169"),
-    displayProjection: new OpenLayers.Projection("EPSG:2169"),
-    units: "m",
-    maxExtent: OpenLayers.Bounds.fromArray([48000,57000,107000,139000]),
-    restrictedExtent: OpenLayers.Bounds.fromArray([40000,50000,120000,150000]),
-    resolutions: [500.0, 250.0, 150.0, 100.0, 50.0, 20.0, 10.0, 5.0, 2.0, 1.0, 0.5],
-    controls: [
-        new OpenLayers.Control.TouchNavigation({
-            dragPanOptions: {
-                interval: 1,
-                enableKinetic: true
-            }
-        }),
-        new OpenLayers.Control.ScaleLine()
-    ],
-    layers: [],
-    fallThrough: true
-};
 App.main_url = 'http://demo.geoportail.lu/';

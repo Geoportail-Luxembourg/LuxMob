@@ -8,6 +8,7 @@ Ext.define('App.controller.Layers', {
         'App.view.layers.Overlays',
         'App.store.Overlays',
         'App.store.SavedMaps',
+        'App.util.Config',
         'Ext.ActionSheet'
     ],
     config: {
@@ -104,10 +105,14 @@ Ext.define('App.controller.Layers', {
         // load the map (with its baselayers)
         Ext.getStore('BaseLayers').load({
             callback: function(records) {
+                var configObject = App.util.Config;
+
+                // The map config object will be modified but that's ok.
+                var mapConfig = configObject.getMapConfig();
                 Ext.each(records, function(record) {
-                    App.map.layers.push(new OpenLayers.Layer.TileCache(
+                    mapConfig.layers.push(new OpenLayers.Layer.TileCache(
                         record.get('name'),
-                        App.tileUrl,
+                        configObject.getTileUrl(),
                         record.get('layername'),
                         {
                             maxExtent: OpenLayers.Bounds.fromArray(record.get('bbox')),
@@ -121,7 +126,7 @@ Ext.define('App.controller.Layers', {
                 });
 
                 var name = 'voidLayer';
-                App.map.layers.push(new OpenLayers.Layer(name, {
+                mapConfig.layers.push(new OpenLayers.Layer(name, {
                     isBaseLayer: true
                 }));
                 Ext.getStore('BaseLayers').add({
@@ -129,9 +134,8 @@ Ext.define('App.controller.Layers', {
                     exclusion: []
                 });
 
-                // App.map should be set in config.js
-                App.map = new OpenLayers.Map(App.map);
-                this.getMainView().setMap(App.map);
+                var map = new OpenLayers.Map(mapConfig);
+                this.getMainView().setMap(map);
 
                 // destroy the #appLoadingIndicator element
                 Ext.fly('appLoadingIndicator').destroy();
@@ -234,7 +238,7 @@ Ext.define('App.controller.Layers', {
             }
         });
         var overlays = queryParams.layers || cache;
-        App.map.addLayer(
+        this.getMap().addLayer(
             new OpenLayers.Layer.WMS(
                 "Overlays",
     //            "http://demo.geoportail.lu/mapproxy/service",

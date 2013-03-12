@@ -186,7 +186,7 @@ Ext.define('App.controller.Main', {
                 if (buttonId != 'ok') {
                     return;
                 }
-                var map = App.map;
+                var map = this.getMainView().getMap();
                 // FIXME: goret des cimes, baselayer en dur
                 var layers = 'topo,';
                 layers += map.getLayersByName('Overlays')[0].params.LAYERS.join(',');
@@ -213,7 +213,7 @@ Ext.define('App.controller.Main', {
                     }
                 });
             },
-            null,
+            this,
             false,
             null,
             {

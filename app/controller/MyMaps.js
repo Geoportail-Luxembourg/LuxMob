@@ -369,7 +369,7 @@ Ext.define('App.controller.MyMaps', {
         var metadata,
             options = {
                 externalProjection: new OpenLayers.Projection('EPSG:4326'),
-                internalProjection: App.map.getProjectionObject()
+                internalProjection: this.getMap().getProjectionObject()
             };
         if (format == 'KML') {
             Ext.apply(options, {
