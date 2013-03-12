@@ -73,6 +73,14 @@
     <script type="text/javascript" src="SavedMapLayer.js"></script>
     <!-- The line below must be kept intact for Sencha Command to build your application -->
     <script id="microloader" type="text/javascript" src="touch/microloader/development.js"></script>
+    <script>
+        function handleOpenURL(url) {
+            setTimeout(function() {
+                var params =  Ext.Object.fromQueryString(url.split('?')[1]);
+                App.loadMap(params.mapid);
+            }, 1000);
+        }
+    </script>
 </head>
 <body>
     <div id="appLoadingIndicator">

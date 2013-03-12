@@ -67,3 +67,7 @@ App.map = {
     fallThrough: true
 };
 App.main_url = 'http://demo.geoportail.lu/';
+
+App.loadMap = function(id) {
+    App.app.getController('MyMaps').showMyMap(id);
+};
