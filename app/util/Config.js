@@ -17,6 +17,20 @@ Ext.define('App.util.Config', {
         defaultLanguage: 'fr',
 
         /**
+         * The URL to the WMS service (MapProxy) to use in the native app.
+         * (FIXME: http://app.geoportail.lu/mapproxy/service is to be used in
+         * production.)
+         */
+        appOverlayUrl: 'http://demo.geoportail.lu/mapproxy/service',
+
+        /**
+         * The URL to the WMS service (MapProxy) to use in the native app.
+         * (FIXME: http://api.geoportail.lu/mapproxy/service is to be used in
+         * production.)
+         */
+        webOverlayUrl: 'http://demo.geoportail.lu/mapproxy/service',
+
+        /**
          * The URLs to the tile service to use in the native app.
          */
         appTileUrl: [
@@ -47,10 +61,6 @@ Ext.define('App.util.Config', {
          * (FIXME: http://api.geoportail.lu/ is to be used in production.)
          */
         webWsgiUrl: 'http://demo.geoportail.lu/',
-
-        /**
-         * The URL to MapProxy.
-         */
 
         /**
          * The OpenLayers.Map configuration.
@@ -109,6 +119,14 @@ Ext.define('App.util.Config', {
            }
        }
        return this.getDefaultLanguage();
+    },
+
+    /**
+     * Get URL to the WMS service.
+     */
+    getOverlayUrl: function() {
+        return this.isNativeApp() ?
+            this.getAppOverlayUrl() : this.getWebOverlayUrl();
     },
 
     /**

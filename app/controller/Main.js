@@ -192,7 +192,7 @@ Ext.define('App.controller.Main', {
                 var layers = 'topo,';
                 layers += map.getLayersByName('Overlays')[0].params.LAYERS.join(',');
                 Ext.Ajax.request({
-                    url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/sendbymail',
+                    url: App.util.Config.getWsgiUrl() + 'sendbymail',
                     params: {
                         layers: layers,
                         bbox: map.getExtent().toBBOX(),

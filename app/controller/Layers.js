@@ -241,8 +241,7 @@ Ext.define('App.controller.Layers', {
         this.getMap().addLayer(
             new OpenLayers.Layer.WMS(
                 "Overlays",
-    //            "http://demo.geoportail.lu/mapproxy/service",
-                "http://geoportail-luxembourg.demo-camptocamp.com/~elemoine-mobileevo/mapproxy/service",
+                App.util.Config.getOverlayUrl(),
                 {
                     layers: overlays || [],
                     transparent: true
@@ -260,9 +259,7 @@ Ext.define('App.controller.Layers', {
     loadOverlays: function(map, theme) {
         theme = theme || 'main';
         Ext.Ajax.request({
-            // FIXME load layers from service
             url: App.util.Config.getWsgiUrl() + 'theme/' + theme + '/layers',
-            url: "http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/theme/" + theme + "/layers",
             success: function(response) {
                 var text = response.responseText;
                 var layers = Ext.JSON.decode(text);
