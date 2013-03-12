@@ -462,11 +462,12 @@ Ext.define('App.controller.MyMaps', {
 
     addPoi: function() {
         this.redirectTo('');
-        var addPoiView = this.getMainView().add({
+        this.getMyMapPreview().items.each(function(item) {
+            item.hide();
+        });
+        var addPoiView = this.getMyMapPreview().add({
             xtype: 'formpanel',
-            cls: 'results-preview',
-            padding: 5,
-            height: 150,
+            height: 144,
             style: {
                 backgroundColor: 'white'
             },
@@ -476,33 +477,47 @@ Ext.define('App.controller.MyMaps', {
                     xtype: 'textfield',
                     placeHolder: 'Nom',
                     flex: 2,
-                    style: {
-                        margin: '5px'
-                    }
+                    margin: 2
                 }, {
                     xtype: 'button',
                     iconCls: 'photo1',
                     iconMask: true,
-                    style: {
-                        margin: '5px'
-                    }
+                    margin: 2
                 }]
             }, {
                 xtype: 'textareafield',
                 placeHolder: 'Description',
-                    style: {
-                        margin: '5px'
-                    }
+                height: 60,
+                margin: 2
             }, {
-                xtype: 'toolbar',
-                docked: 'bottom',
+                layout: {
+                    type: 'hbox',
+                    pack: 'end'
+                },
+                defaults: {
+                    margin: 2
+                },
                 items: [{
-                    text: 'cancel'
+                    xtype: 'button',
+                    text: i18n.message('button.cancel'),
+                    action: 'cancel',
+                    handler: function() {
+                        addPoiView.getParent().remove(addPoiView);
+                        this.getMyMapPreview().items.each(function(item, index) {
+                            if (index !== 0) { // all but mask
+                                item.show();
+                            }
+                        });
+                        this.previewResize(this.getMyMapPreviewHeight());
+                    },
+                    scope: this
                 }, {
-                    text: 'OK',
+                    xtype: 'button',
+                    text: i18n.message('button.OK'),
                     ui: 'confirm'
                 }]
             }]
         });
+        this.previewResize(144);
     }
 });
