@@ -1,6 +1,7 @@
 Ext.define('App.controller.MyMaps', {
     extend: 'Ext.app.Controller',
     requires: [
+        'App.util.Config',
         'App.view.MyMaps',
         'App.view.MyMapDetail',
         'App.view.MyMapFeatureDetail',
@@ -224,8 +225,10 @@ Ext.define('App.controller.MyMaps', {
         );
 
         function loadFeatures(mymap) {
+            var url = App.util.Config.getAppUrl() +
+                'mymaps/' + mymap.uuid + '/features';
             Ext.data.JsonP.request({
-                url: App.main_url + 'mymaps/' + mymap.uuid + '/features',
+                url: url,
                 success: function(response) {
                     var vector = this.getVectorLayer(),
                         map = this.getMap(),
@@ -251,7 +254,7 @@ Ext.define('App.controller.MyMaps', {
         }
 
         Ext.data.JsonP.request({
-            url: App.main_url + 'mymaps/' + id,
+            url: App.util.Config.getAppUrl() + 'mymaps/' + id,
             success: function(response) {
                 loadFeatures.apply(this, [response]);
                 var view = this.getMyMapDetailView();
@@ -387,7 +390,7 @@ Ext.define('App.controller.MyMaps', {
 
         this.getConnection().upload(
             this.getDummyForm(),
-            App.main_url + 'mymaps/export',
+            App.util.Config.getAppUrl() + 'mymaps/export',
             Ext.Object.toQueryString({
                 content: f.write(features, metadata),
                 format: format.toLowerCase(),
@@ -404,7 +407,7 @@ Ext.define('App.controller.MyMaps', {
         var paramsString = 'nbPoints=50&layers=MNT';
 
         Ext.Ajax.request({
-            url: App.main_url + 'profile?' + paramsString,
+            url: App.util.Config.getAppUrl() + 'profile?' + paramsString,
             method: 'POST',
             jsonData: geojson,
             success: function(response) {

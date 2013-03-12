@@ -26,6 +26,11 @@ Ext.define('App.util.Config', {
         ],
 
         /**
+         * The URL to the WSGI app.
+         */
+        appUrl: 'http://demo.geoportail.lu/',
+
+        /**
          * The OpenLayers.Map configuration.
          * Set in the constructor, otherwise an infinite recursion occurs
          * when Sencha Touch tried to shallow-copy the object.
@@ -83,5 +88,3 @@ Ext.define('App.util.Config', {
        return this.getDefaultLanguage();
     }
 });
-
-App.main_url = 'http://demo.geoportail.lu/';

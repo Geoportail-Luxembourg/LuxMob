@@ -4,6 +4,7 @@ Ext.define('App.view.Login', {
     id: 'loginView',
     xtype: 'loginview',
     requires: [
+        'App.util.Config',
         'Ext.form.FieldSet',
         'Ext.field.Text',
         'Ext.field.Password',
@@ -11,7 +12,7 @@ Ext.define('App.view.Login', {
         'Ext.Button'
     ],
     config: {
-        url: App.main_url + 'checkLogin',
+        url: App.util.Config.getAppUrl() + 'checkLogin',
         method: 'POST',
         scrollable: false,
         layout: {

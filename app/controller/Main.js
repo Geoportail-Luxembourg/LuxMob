@@ -3,6 +3,7 @@ Ext.define('App.controller.Main', {
     extend: 'Ext.app.Controller',
 
     requires: [
+        'App.util.Config',
         'App.view.layers.MapSettings',
         'App.view.Settings',
         'App.view.MoreMenu',
@@ -233,7 +234,8 @@ Ext.define('App.controller.Main', {
         this.getLoginView().submit({
             success: function(form, result) {
                 if (result && result.success) {
-                    this.getLoginView().setUrl(App.main_url + 'login_handler');
+                    var url = App.util.Config.getAppUrl() + 'login_handler';
+                    this.getLoginView().setUrl(url);
                     this.getLoginView().submit({});
                     this.redirectTo('');
                     // the login_handler service is supposed to answer with 302
@@ -250,9 +252,8 @@ Ext.define('App.controller.Main', {
     },
 
     logout: function() {
-        Ext.Ajax.request({
-            url: App.main_url + 'logout_handler'
-        });
+        var url = App.util.Config.getAppUrl() + 'logout_handler';
+        Ext.Ajax.request({url: url});
         // the login_handler service is supposed to answer with 302
         // redirect. Thus, we cannot rely on it to use success
         // callback for the submit
@@ -260,8 +261,9 @@ Ext.define('App.controller.Main', {
     },
 
     checkUser: function() {
+        var url = App.util.Config.getAppUrl() + 'user';
         Ext.Ajax.request({
-            url: App.main_url + 'user',
+            url: url,
             success: function(response) {
                 App.user = Ext.decode(response.responseText);
                 this.getLoginButton().hide();

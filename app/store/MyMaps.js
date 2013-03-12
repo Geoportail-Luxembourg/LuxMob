@@ -1,11 +1,14 @@
 Ext.define('App.store.MyMaps', {
     extend: 'Ext.data.Store',
-    requires: 'App.model.MyMaps',
+    requires: [
+        'App.model.MyMaps',
+        'App.util.Config'
+    ],
     config: {
         model: 'App.model.MyMaps',
         proxy: {
             type: 'ajax',
-            url: App.main_url + "mymaps",
+            url: App.util.Config.getAppUrl() + "mymaps",
             reader: {
                 type: 'json'
             }
