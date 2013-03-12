@@ -107,7 +107,7 @@ Ext.define('App.controller.Layers', {
                 Ext.each(records, function(record) {
                     App.map.layers.push(new OpenLayers.Layer.TileCache(
                         record.get('name'),
-                        App.tilecache_url,
+                        App.tileUrl,
                         record.get('layername'),
                         {
                             maxExtent: OpenLayers.Bounds.fromArray(record.get('bbox')),

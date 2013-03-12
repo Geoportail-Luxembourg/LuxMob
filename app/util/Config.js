@@ -39,7 +39,7 @@ Ext.define('App.util.Config', {
 });
 
 // define the map and layers
-App.tilecache_url =  [
+App.tileUrl =  [
     'http://apptile1.geoportail.lu',
     'http://apptile2.geoportail.lu',
     'http://apptile3.geoportail.lu',
