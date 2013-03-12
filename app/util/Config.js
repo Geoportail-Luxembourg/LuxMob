@@ -22,12 +22,12 @@ Ext.define('App.util.Config', {
      * Returns current language setting of browser
      */
     getLanguage: function() {
-
-        var currentLang = (localStorage.getItem('language') || navigator.language || navigator.browserLanguage || navigator.userLanguage || this.defaultLanguage),
+        var currentLang = (localStorage.getItem('language') || navigator.language ||
+                           navigator.browserLanguage || navigator.userLanguage ||
+                           this.defaultLanguage),
             supportedLanguages = this.getSupportedLanguages(),
             langLen = supportedLanguages.length,
             i;
-
        currentLang = currentLang.substring(0, 2).toLowerCase();
        for(i = 0; i < langLen; i++) {
            if (supportedLanguages[i] === currentLang) {
