@@ -5,6 +5,7 @@ Ext.define('App.util.Config', {
     singleton: true,
 
     config: {
+
         /**
          * The languages supported by the application.
          */
@@ -16,9 +17,9 @@ Ext.define('App.util.Config', {
         defaultLanguage: 'fr',
 
         /**
-         * The URLs to the background tile service.
+         * The URLs to the tile service to use in the native app.
          */
-        tileUrl: [
+        appTileUrl: [
             'http://apptile1.geoportail.lu',
             'http://apptile2.geoportail.lu',
             'http://apptile3.geoportail.lu',
@@ -26,16 +27,38 @@ Ext.define('App.util.Config', {
         ],
 
         /**
-         * The URL to the WSGI app.
+         * The URLs to the tile service to use in the native app.
          */
-        appUrl: 'http://demo.geoportail.lu/',
+        webTileUrl: [
+            'http://tile1.geoportail.lu',
+            'http://tile2.geoportail.lu',
+            'http://tile3.geoportail.lu',
+            'http://tile4.geoportail.lu'
+        ],
+
+        /**
+         * The URL to tbe WSGI app to use in the native app.
+         * (FIXME: http://app.geoportail.lu/ is to be used in production.)
+         */
+        appWsgiUrl: 'http://demo.geoportail.lu/',
+
+        /**
+         * The URL to the WSGI app to use in the web app.
+         * (FIXME: http://api.geoportail.lu/ is to be used in production.)
+         */
+        webWsgiUrl: 'http://demo.geoportail.lu/',
+
+        /**
+         * The URL to MapProxy.
+         */
 
         /**
          * The OpenLayers.Map configuration.
          * Set in the constructor, otherwise an infinite recursion occurs
-         * when Sencha Touch tried to shallow-copy the object.
+         * when Sencha Touch tries to shallow-copy the config object.
          */
         mapConfig: null
+
     },
 
     /**
@@ -86,5 +109,26 @@ Ext.define('App.util.Config', {
            }
        }
        return this.getDefaultLanguage();
+    },
+
+    /**
+     * Get URL to the tile service.
+     */
+    getTileUrl: function() {
+        return this.isNativeApp() ? this.getAppTileUrl() : this.getWebTileUrl();
+    },
+
+    /**
+     * Get URL to the WSGI app.
+     */
+    getWsgiUrl: function() {
+        return this.isNativeApp() ? this.getAppWsgiUrl() : this.getWebWsgiUrl();
+    },
+
+    /**
+     * Returns true if native PhoneGap app, false otherwise.
+     */
+    isNativeApp: function() {
+        return !!window.device;
     }
 });

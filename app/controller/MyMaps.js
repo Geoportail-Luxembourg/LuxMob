@@ -225,7 +225,7 @@ Ext.define('App.controller.MyMaps', {
         );
 
         function loadFeatures(mymap) {
-            var url = App.util.Config.getAppUrl() +
+            var url = App.util.Config.getWsgiUrl() +
                 'mymaps/' + mymap.uuid + '/features';
             Ext.data.JsonP.request({
                 url: url,
@@ -254,7 +254,7 @@ Ext.define('App.controller.MyMaps', {
         }
 
         Ext.data.JsonP.request({
-            url: App.util.Config.getAppUrl() + 'mymaps/' + id,
+            url: App.util.Config.getWsgiUrl() + 'mymaps/' + id,
             success: function(response) {
                 loadFeatures.apply(this, [response]);
                 var view = this.getMyMapDetailView();
@@ -390,7 +390,7 @@ Ext.define('App.controller.MyMaps', {
 
         this.getConnection().upload(
             this.getDummyForm(),
-            App.util.Config.getAppUrl() + 'mymaps/export',
+            App.util.Config.getWsgiUrl() + 'mymaps/export',
             Ext.Object.toQueryString({
                 content: f.write(features, metadata),
                 format: format.toLowerCase(),
@@ -407,7 +407,7 @@ Ext.define('App.controller.MyMaps', {
         var paramsString = 'nbPoints=50&layers=MNT';
 
         Ext.Ajax.request({
-            url: App.util.Config.getAppUrl() + 'profile?' + paramsString,
+            url: App.util.Config.getWsgiUrl() + 'profile?' + paramsString,
             method: 'POST',
             jsonData: geojson,
             success: function(response) {

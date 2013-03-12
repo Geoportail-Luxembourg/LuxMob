@@ -8,7 +8,7 @@ Ext.define('App.store.MyMaps', {
         model: 'App.model.MyMaps',
         proxy: {
             type: 'ajax',
-            url: App.util.Config.getAppUrl() + "mymaps",
+            url: App.util.Config.getWsgiUrl() + "mymaps",
             reader: {
                 type: 'json'
             }

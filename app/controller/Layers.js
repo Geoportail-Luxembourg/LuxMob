@@ -261,6 +261,7 @@ Ext.define('App.controller.Layers', {
         theme = theme || 'main';
         Ext.Ajax.request({
             // FIXME load layers from service
+            url: App.util.Config.getWsgiUrl() + 'theme/' + theme + '/layers',
             url: "http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/theme/" + theme + "/layers",
             success: function(response) {
                 var text = response.responseText;

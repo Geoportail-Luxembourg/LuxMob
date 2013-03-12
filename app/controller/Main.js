@@ -234,7 +234,7 @@ Ext.define('App.controller.Main', {
         this.getLoginView().submit({
             success: function(form, result) {
                 if (result && result.success) {
-                    var url = App.util.Config.getAppUrl() + 'login_handler';
+                    var url = App.util.Config.getWsgiUrl() + 'login_handler';
                     this.getLoginView().setUrl(url);
                     this.getLoginView().submit({});
                     this.redirectTo('');
@@ -252,7 +252,7 @@ Ext.define('App.controller.Main', {
     },
 
     logout: function() {
-        var url = App.util.Config.getAppUrl() + 'logout_handler';
+        var url = App.util.Config.getWsgiUrl() + 'logout_handler';
         Ext.Ajax.request({url: url});
         // the login_handler service is supposed to answer with 302
         // redirect. Thus, we cannot rely on it to use success
@@ -261,7 +261,7 @@ Ext.define('App.controller.Main', {
     },
 
     checkUser: function() {
-        var url = App.util.Config.getAppUrl() + 'user';
+        var url = App.util.Config.getWsgiUrl() + 'user';
         Ext.Ajax.request({
             url: url,
             success: function(response) {

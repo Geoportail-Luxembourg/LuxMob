@@ -12,7 +12,7 @@ Ext.define('App.view.Login', {
         'Ext.Button'
     ],
     config: {
-        url: App.util.Config.getAppUrl() + 'checkLogin',
+        url: App.util.Config.getWsgiUrl() + 'checkLogin',
         method: 'POST',
         scrollable: false,
         layout: {
