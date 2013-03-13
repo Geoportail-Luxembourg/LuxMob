@@ -44,7 +44,7 @@ Ext.define('App.controller.MyMaps', {
             },
             myMapFeaturesList: {
                 itemtap: function(list, index, target, record) {
-                    this.showFeatureDetail(record.data);
+                    this.getSelectControl().select(record.data);
                 }
             },
             mainView: {
