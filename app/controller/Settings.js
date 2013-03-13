@@ -27,11 +27,6 @@ Ext.define('App.controller.Settings', {
 
                     Ext.getStore('Overlays').setSorters(newValue);
                 }
-            },
-            themeSelect: {
-                change: function(select, newValue) {
-                    this.fireEvent('themechange', newValue);
-                }
             }
         }
     }

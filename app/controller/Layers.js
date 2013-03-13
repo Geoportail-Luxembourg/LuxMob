@@ -35,7 +35,8 @@ Ext.define('App.controller.Layers', {
                 autoCreate: true
             },
             overlaysList: "#overlaysList",
-            overlaysSearch: '#overlaysSearch'
+            overlaysSearch: '#overlaysSearch',
+            themeSelect: '#themeSelect'
         },
         control: {
             baseLayerButton: {
@@ -93,6 +94,11 @@ Ext.define('App.controller.Layers', {
             },
             'button[action=backtolayers]': {
                 tap: 'showLayers'
+            },
+            themeSelect: {
+                change: function(select, newValue) {
+                    this.loadOverlays(this.getMap(), newValue);
+                }
             }
         },
         routes: {
@@ -167,9 +173,6 @@ Ext.define('App.controller.Layers', {
                     }
                 });
             },
-            themechange: function(theme) {
-                this.loadOverlays(this.getMap(), theme);
-            },
             scope: this
         });
     },
@@ -227,7 +230,6 @@ Ext.define('App.controller.Layers', {
         }, this);
 
         this.getBaseLayerButton().setText(OpenLayers.i18n(this.getMap().baseLayer.name));
-        this.loadOverlays(map);
 
         var queryParams = OpenLayers.Util.getParameters();
         store = Ext.getStore('SelectedOverlays');
@@ -253,47 +255,27 @@ Ext.define('App.controller.Layers', {
             )
         );
         this.setOverlaysOLLayer(map.getLayersByName('Overlays')[0]);
-
+        this.loadOverlays(map);
     },
 
     loadOverlays: function(map, theme) {
-        theme = theme || 'main';
-        Ext.Ajax.request({
-            url: App.util.Config.getWsgiUrl() + 'theme/' + theme + '/layers',
-            success: function(response) {
-                var text = response.responseText;
-                var layers = Ext.JSON.decode(text);
-
-                var store = Ext.getStore('Overlays');
-                store.removeAll();
-                for (l in layers) {
-                    var label = layers[l].label;
-                    store.add({
-                        fr: OpenLayers.Lang.fr[label] || label,
-                        en: OpenLayers.Lang.en[label] || label,
-                        de: OpenLayers.Lang.de[label] || label,
-                        lu: OpenLayers.Lang.lu[label] || label,
-                        name: l,
-                        label: label,
-                        exclusion: layers[l].exclusion
-                    });
-                }
-
-                var layersParam = this.getOverlaysOLLayer().params.LAYERS;
-                var selected = Ext.getStore('Overlays').queryBy(function(record) {
-                    if (layersParam.split) {
-                        layersParam = layersParam.split(',');
-                    }
-                    return Ext.Array.contains(
-                        layersParam,
-                        record.get('name')
-                    );
-                });
-                var list = this.getOverlaysList();
-                list && list.select(selected.items, false, true);
-            },
-            scope: this
+        t = theme || 'main';
+        var store = Ext.getStore('Overlays');
+        store.filterBy(function(record) {
+            return Ext.Array.contains(record.get('themes'), t);
         });
+        var layersParam = this.getOverlaysOLLayer().params.LAYERS;
+        var selected = store.queryBy(function(record) {
+            if (layersParam.split) {
+                layersParam = layersParam.split(',');
+            }
+            return Ext.Array.contains(
+                layersParam,
+                record.get('name')
+            );
+        });
+        var list = this.getOverlaysList();
+        list && list.select(selected.items, false, true);
     },
 
     toArray: function(value) {
@@ -587,7 +569,7 @@ Ext.define('App.controller.Layers', {
 
             //now filter the store by passing a method
             //the passed method will be called for each record in the store
-            store.filter(function(record) {
+            store.filterBy(function(record) {
                 var matched = [];
 
                 //loop through each of the regular expressions
@@ -605,9 +587,12 @@ Ext.define('App.controller.Layers', {
                     return false;
                 } else {
                     //else true true (show in the store)
-                    return matched[0];
+                    return matched[0] &&
+                        Ext.Array.contains(
+                            record.get('themes'),
+                            this.getThemeSelect().getValue());
                 }
-            });
+            }, this);
         }
     },
 

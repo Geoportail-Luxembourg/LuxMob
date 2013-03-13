@@ -95,6 +95,16 @@ Ext.define('App.controller.Search', {
         if (type == 'Adresse' || type == 'Parcelle' || type == 'hydro'|| type == 'hydro_km' || type == 'FLIK') {
             this.showFeatures('locations', [record.get('id')]);
         }
+
+        if (type == 'Parcelle') {
+            var store = Ext.getStore('Overlays');
+            Ext.each(store.data.all, function(r) {
+                if (r.get('name') == 'parcels') {
+                    this.getApplication().getController('Layers').
+                        onOverlayAdd(r);
+                }
+            }, this);
+        }
     },
 
     showFeatures: function(layer, ids) {
