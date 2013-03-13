@@ -33,6 +33,8 @@ build/cordova-android/assets/www/resources/
 build/cordova-android/assets/www/app/
 build/cordova-android/assets/www/SavedMapLayer.js
 build/cordova-android/assets/www/cordova-2.5.0.android.js
+build/cordova-android/assets/www/cordova-2.5.0.ios.js
+build/cordova-android/assets/www/webintent.js
 build/cordova-android/assets/www/deltas/
 build/cordova-android/assets/www/proj4js-compressed.js
 build/cordova-android/bin/

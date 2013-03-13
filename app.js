@@ -62,6 +62,18 @@ Ext.application({
 
         Ext.getStore('Overlays').setSorters(App.util.Config.getLanguage());
 
+        // Android only
+        if (window.plugins) {
+            window.plugins.webintent.getUri(function(url) {
+                if (url=='') return;
+                var params = Ext.Object.fromQueryString(url.split('?')[1]);
+                if (!params.mapid) return;
+                setTimeout(function(){
+                    App.app.getController('MyMaps').showMyMap(params.mapid);
+                }, 500);
+            });
+        }
+
         this.handleTablet();
     },
 
