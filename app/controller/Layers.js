@@ -407,6 +407,8 @@ Ext.define('App.controller.Layers', {
     },
 
     onOverlayChange: function() {
+        this.getApplication().getController('Query').hidePreview();
+
         var store = Ext.getStore('SelectedOverlays');
         var layer = this.getOverlaysOLLayer(),
             layersParam = [];

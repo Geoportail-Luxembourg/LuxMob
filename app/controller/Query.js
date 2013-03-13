@@ -236,6 +236,9 @@ Ext.define('App.controller.Query', {
     hidePreview: function(callback) {
         var layer = this.getVectorLayer(),
             map = this.getMap();
+        if (!layer) {
+            return;
+        }
         layer.removeAllFeatures();
         if (layer in map.layers) {
             map.removeLayer(layer);
