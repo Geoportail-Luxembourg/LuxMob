@@ -69,7 +69,7 @@ Ext.application({
                 var params = Ext.Object.fromQueryString(url.split('?')[1]);
                 if (!params.mapid) return;
                 setTimeout(function(){
-                    App.loadMap(params.mapid);
+                    App.app.getController('MyMaps').showMyMap(params.mapid);
                 }, 500);
             });
         }
