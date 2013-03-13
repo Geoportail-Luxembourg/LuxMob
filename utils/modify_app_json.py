@@ -24,6 +24,8 @@ json_str = re.sub(r'\n', '', json_str)
 json_str = json_str.encode('string-escape')
 
 obj = json.loads(json_str)
+if not 'ios' in cordova:
+    obj['js'].insert(1, {'path': "webintent.js", 'type': 'js'})
 obj['js'].insert(1, {'path': cordova, 'type': 'js'})
 
 f = open('app.json', 'w')
