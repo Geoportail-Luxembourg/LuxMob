@@ -83,8 +83,6 @@ Ext.define('App.util.Config', {
             displayProjection: new OpenLayers.Projection("EPSG:2169"),
             units: "m",
             maxExtent: OpenLayers.Bounds.fromArray([48000,57000,107000,139000]),
-            restrictedExtent: OpenLayers.Bounds.fromArray(
-                    [40000,50000,120000,150000]),
             resolutions: [500.0, 250.0, 150.0, 100.0, 50.0,
                           20.0, 10.0, 5.0, 2.0, 1.0, 0.5, 0.25],
             controls: [
