@@ -23,47 +23,88 @@ Ext.define('App.view.Main', {
     },
 
     applyItems: function(items, collection) {
-        items = [
-            {
-                xtype: 'container',
-                cls: 'x-toolbar', // trick to get the search field displaying as in a toolbar
-                layout: 'fit',
-                flex: 1,
+        items = [];
+        if (!App.util.Config.isNativeApp()
+            && Ext.os.is.iOS
+            && !localStorage.getItem('disable_app_prompt')) {
+            var toolbar = {
+                xtype: 'toolbar',
+                docked: 'top',
+                ui: 'dark',
+                id: 'appwarning',
                 items: [
                     {
-                        xtype: 'component',
-                        id: "map-container",
-                        height: '100%',
-                        style: {
-                            position: 'relative',
-                            zIndex: 0
+                        // text: i18n.message('open_in_app'),
+                        text: 'Ouvrir dans l’application',
+                        handler: function() {
+                            var mapid = OpenLayers.Util.getParameters().mapid,
+                                qs= (mapid) ? 'mapid='+mapid : '';
+                            window.location = "luxmob:///?" + qs;
+                            var time = (new Date()).getTime();
+                            setTimeout(function(){
+                                var now = (new Date()).getTime();
+                                if((now-time)<400) {
+                                    if(confirm('Missing application. Download it now?')){
+                                        // FIXME : set real application URL here
+                                        window.location = 'http://itunes.apple.com/us/app/chrome/id535886823?mt=8';
+                                    }
+                                }
+                            }, 300);
                         }
-                    }, {
-                        xtype: "searchfield",
-                        width: 150,
-                        action: "search",
-                        id: 'fakeSearch',
-                        clearIcon: false,
-                        top: 0,
-                        left: 3
-                    }, {
-                        xtype: "button",
-                        iconCls: "layers",
-                        iconMask: true,
-                        action: "mapsettings",
-                        top: 6,
-                        right: 4
-                    }, {
-                        xtype: "button",
-                        iconCls: "more",
-                        iconMask: true,
-                        action: "more",
-                        bottom: 6,
-                        right: 4
+                    },
+                    {
+                        xtype: 'spacer'
+                    },
+                    {
+                        text: 'Fermer',
+                        handler: function() {
+                            Ext.getCmp('appwarning').destroy();
+                            localStorage.setItem('disable_app_prompt', true);
+                        }
                     }
                 ]
-            }
-        ];
+            };
+            items.push(toolbar);
+        }
+        items.push({
+            xtype: 'container',
+            cls: 'x-toolbar', // trick to get the search field displaying as in a toolbar
+            layout: 'fit',
+            flex: 1,
+            items: [
+                {
+                    xtype: 'component',
+                    id: "map-container",
+                    height: '100%',
+                    style: {
+                        position: 'relative',
+                        zIndex: 0
+                    }
+                }, {
+                    xtype: "searchfield",
+                    width: 150,
+                    action: "search",
+                    id: 'fakeSearch',
+                    clearIcon: false,
+                    top: 0,
+                    left: 3
+                }, {
+                    xtype: "button",
+                    iconCls: "layers",
+                    iconMask: true,
+                    action: "mapsettings",
+                    top: 6,
+                    right: 4
+                }, {
+                    xtype: "button",
+                    iconCls: "more",
+                    iconMask: true,
+                    action: "more",
+                    bottom: 6,
+                    right: 4
+                }
+            ]
+        });
         return this.callParent([items, collection]);
     },
 
