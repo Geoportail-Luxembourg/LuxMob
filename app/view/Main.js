@@ -11,6 +11,7 @@ Ext.define('App.view.Main', {
         plugins: 'statefulmap',
         center: null,
         zoom: null,
+        baseLayer: null,
         layout: 'vbox',
         items: [ ]
     },
@@ -100,6 +101,10 @@ Ext.define('App.view.Main', {
         } else {
             map.zoomToMaxExtent();
         }
+
+        var name = this.getBaseLayer(),
+            baseLayer = map.getLayersByName(name)[0];
+        baseLayer && map.setBaseLayer(baseLayer);
 
         Ext.get(mapContainer).on('longpress', function(event, node) {
             var map = this.getMap();
