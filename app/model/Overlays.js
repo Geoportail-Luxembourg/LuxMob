@@ -9,13 +9,31 @@ Ext.define('App.model.Overlays', {
         }, {
             name: 'exclusion'
         }, {
-            name: 'fr'
+            name: 'themes'
         }, {
-            name: 'en'
+            name: 'fr',
+            convert: function(value, record) {
+                var label = record.get('label');
+                return OpenLayers.Lang.fr[label] || label;
+            }
         }, {
-            name: 'de'
+            name: 'en',
+            convert: function(value, record) {
+                var label = record.get('label');
+                return OpenLayers.Lang.en[label] || label;
+            }
         }, {
-            name: 'lu'
+            name: 'de',
+            convert: function(value, record) {
+                var label = record.get('label');
+                return OpenLayers.Lang.de[label] || label;
+            }
+        }, {
+            name: 'lu',
+            convert: function(value, record) {
+                var label = record.get('label');
+                return OpenLayers.Lang.lu[label] || label;
+            }
         }]
     }
 });

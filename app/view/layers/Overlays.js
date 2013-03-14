@@ -59,8 +59,8 @@ Ext.define('App.view.layers.Overlays', {
     },
 
     initialize: function() {
-        this.down('#overlaysList')
-            .setStore(Ext.getStore('Overlays'))
+        var list = this.down('#overlaysList');
+        list.setStore(Ext.getStore('Overlays'))
             .setItemTpl(['{', i18n.getLanguage(), '}'].join());
         this.fireEvent('ready');
     }
