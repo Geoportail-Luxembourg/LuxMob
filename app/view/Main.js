@@ -31,7 +31,7 @@ Ext.define('App.view.Main', {
             var toolbar = {
                 xtype: 'toolbar',
                 docked: 'top',
-                ui: 'dark',
+                ui: 'plain',
                 id: 'appwarning',
                 items: [
                     {
