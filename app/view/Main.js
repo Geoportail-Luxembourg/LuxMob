@@ -26,7 +26,6 @@ Ext.define('App.view.Main', {
     applyItems: function(items, collection) {
         items = [];
         if (!App.util.Config.isNativeApp()
-            && Ext.os.is.iOS
             && !localStorage.getItem('disable_app_prompt')) {
             var toolbar = {
                 xtype: 'toolbar',
