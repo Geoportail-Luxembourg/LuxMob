@@ -5,7 +5,11 @@ Ext.define('App.store.Overlays', {
         model: 'App.model.Overlays',
         proxy: {
             type: 'ajax',
-            url: 'http://geoportail-luxembourg.demo-camptocamp.com/~pierre_mobile/mobile/layers',
+            // "sc" (set cookie) is set in the query string if executing in
+            // PhoneGap application. This is to be granted access to the web
+            // services.
+            url: App.util.Config.getWsgiUrl() + 'mobile/layers' +
+                (window.device ? '?sc=' : ''),
             reader: {
                 type: 'json'
             }
