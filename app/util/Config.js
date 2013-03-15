@@ -122,24 +122,29 @@ Ext.define('App.util.Config', {
     /**
      * Get URL to the WMS service.
      */
-    getOverlayUrl: function() {
-        return this.isNativeApp() ?
-            this.getAppOverlayUrl() : this.getWebOverlayUrl();
-    },
+    getOverlayUrl: (function() {
+        return !!window.device ?
+                function() { return this.getAppOverlayUrl(); } :
+                function() { return this.getWebOverlayUrl(); };
+    })(),
 
     /**
      * Get URL to the tile service.
      */
-    getTileUrl: function() {
-        return this.isNativeApp() ? this.getAppTileUrl() : this.getWebTileUrl();
-    },
+    getTileUrl: (function() {
+        return !!window.device ?
+                function() { return this.getAppTileUrl(); } :
+                function() { return this.getWebTileUrl(); };
+    })(),
 
     /**
      * Get URL to the WSGI app.
      */
-    getWsgiUrl: function() {
-        return this.isNativeApp() ? this.getAppWsgiUrl() : this.getWebWsgiUrl();
-    },
+    getWsgiUrl: (function() {
+        return !!window.device ?
+                function() { return this.getAppWsgiUrl(); } :
+                function() { return this.getWebWsgiUrl(); };
+    })(),
 
     /**
      * Returns true if native PhoneGap app, false otherwise.
