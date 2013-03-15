@@ -144,7 +144,7 @@ Ext.define('App.view.Main', {
         }
 
         var name = this.getBaseLayer(),
-            baseLayer = map.getLayersByName(name)[0];
+            baseLayer = name && map.getLayersByName(name)[0];
         baseLayer && map.setBaseLayer(baseLayer);
 
         Ext.get(mapContainer).on('longpress', function(event, node) {
