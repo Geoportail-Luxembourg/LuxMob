@@ -22,12 +22,15 @@ Ext.define('App.plugin.StatefulMap', {
                     changebaselayer: this.changebaselayer,
                     scope: this
                 });
+                this.changebaselayer({
+                    layer: {name: map.baseLayer.name}
+                });
             }, this);
         }
     },
 
     moveend: function() {
-        var state = Ext.apply(this.getState(), {
+        var state = Ext.apply(this.getState() || {}, {
             lonlat: this.getMap().getCenter(),
             zoom: this.getMap().getZoom()
         });
@@ -35,7 +38,7 @@ Ext.define('App.plugin.StatefulMap', {
     },
 
     changebaselayer: function(obj) {
-        var state = Ext.apply(this.getState(), {
+        var state = Ext.apply(this.getState() || {}, {
             baselayer: obj.layer.name
         });
         this.setState(state);

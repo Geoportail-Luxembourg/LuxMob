@@ -30,7 +30,7 @@ Ext.define('App.view.Main', {
             var toolbar = {
                 xtype: 'toolbar',
                 docked: 'top',
-                ui: 'dark',
+                ui: 'plain',
                 id: 'appwarning',
                 items: [
                     {
@@ -142,9 +142,10 @@ Ext.define('App.view.Main', {
             map.zoomToMaxExtent();
         }
 
-        var name = this.getBaseLayer(),
-            baseLayer = map.getLayersByName(name)[0];
-        baseLayer && map.setBaseLayer(baseLayer);
+        var name = this.getBaseLayer();
+        if (name) {
+            map.setBaseLayer(map.getLayersByName(name)[0]);
+        }
 
         Ext.get(mapContainer).on('longpress', function(event, node) {
             var map = this.getMap();
