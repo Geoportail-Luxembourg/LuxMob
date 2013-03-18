@@ -7,6 +7,8 @@ build/cordova-ios/www/capabilities.xml
 build/cordova-ios/www/app.json
 build/cordova-ios/www/cache.appcache
 build/cordova-ios/www/index.html
+build/cordova-ios/www/cordova-2.5.0.android.js
+build/cordova-ios/www/webintent.js
 build/cordova-ios/www/resources/
 build/cordova-ios/www/app/
 build/cordova-ios/www/lib/
