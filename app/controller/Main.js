@@ -188,13 +188,12 @@ Ext.define('App.controller.Main', {
                     return;
                 }
                 var map = this.getMainView().getMap();
-                // FIXME: goret des cimes, baselayer en dur
-                var layers = 'topo,';
-                layers += map.getLayersByName('Overlays')[0].params.LAYERS.join(',');
+                var layers = [map.baseLayer.layername];
+                layers = layers.concat(map.getLayersByName('Overlays')[0].params.LAYERS);
                 Ext.Ajax.request({
                     url: App.util.Config.getWsgiUrl() + 'sendbymail',
                     params: {
-                        layers: layers,
+                        layers: layers.join(','),
                         bbox: map.getExtent().toBBOX(),
                         width: map.getSize().w,
                         height: map.getSize().h,
