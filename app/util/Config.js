@@ -67,8 +67,13 @@ Ext.define('App.util.Config', {
          * Set in the constructor, otherwise an infinite recursion occurs
          * when Sencha Touch tries to shallow-copy the config object.
          */
-        mapConfig: null
+        mapConfig: null,
 
+        /**
+         * The list of themes.
+         * Set in the Overlays view initialize method.
+         */
+        themes: null
     },
 
     /**

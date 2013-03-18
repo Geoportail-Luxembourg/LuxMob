@@ -12,7 +12,8 @@ Ext.define('App.store.Overlays', {
                 (window.device ? '?sc=' : ''),
             callbackKey: 'cb',
             reader: {
-                type: 'json'
+                type: 'json',
+                rootProperty: 'layers'
             }
         },
         autoLoad: true
