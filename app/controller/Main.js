@@ -190,7 +190,7 @@ Ext.define('App.controller.Main', {
                 var map = this.getMainView().getMap();
                 var layers = [map.baseLayer.layername];
                 layers = layers.concat(map.getLayersByName('Overlays')[0].params.LAYERS);
-                Ext.Ajax.request({
+                Ext.data.JsonP.request({
                     url: App.util.Config.getWsgiUrl() + 'sendbymail',
                     params: {
                         layers: layers.join(','),
@@ -210,7 +210,8 @@ Ext.define('App.controller.Main', {
                         } else {
                             Ext.Msg.alert('', i18n.message('sendbymail.wrong'));
                         }
-                    }
+                    },
+                    callbackKey: 'cb'
                 });
             },
             this,
