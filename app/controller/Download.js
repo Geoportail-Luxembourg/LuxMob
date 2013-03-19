@@ -133,7 +133,6 @@ Ext.define('App.controller.Download', {
                 id: 'mapname'
             }
         );
-        Ext.getCmp('mapname').focus();
     },
 
     initDownload: function(value) {
