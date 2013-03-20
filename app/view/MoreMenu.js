@@ -40,7 +40,7 @@ Ext.define('App.view.MoreMenu', {
             iconMask: true
         }];
 
-        //if (window.device) {
+        if (window.device) {
             items.push({
                 xtype: 'button',
                 action: 'mymaps',
@@ -66,7 +66,7 @@ Ext.define('App.view.MoreMenu', {
                 hidden: true,
                 iconMask: true
             });
-        //}
+        }
         return this.callParent([items, collection]);
     }
 });

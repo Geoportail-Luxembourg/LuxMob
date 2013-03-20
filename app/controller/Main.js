@@ -261,6 +261,9 @@ Ext.define('App.controller.Main', {
     },
 
     checkUser: function() {
+        if (!window.device) {
+            return;
+        }
         var url = App.util.Config.getWsgiUrl() + 'user';
         Ext.Ajax.request({
             url: url,
