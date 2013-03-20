@@ -7,7 +7,8 @@ Ext.define('App.controller.MyMaps', {
         'App.view.MyMapFeatureDetail',
         'Ext.chart.CartesianChart',
         'Ext.chart.series.Line',
-        'Ext.chart.axis.Numeric'
+        'Ext.chart.axis.Numeric',
+        'Ext.field.Hidden'
     ],
 
     config: {
