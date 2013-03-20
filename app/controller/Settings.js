@@ -17,13 +17,16 @@ Ext.define('App.controller.Settings', {
                     this.fireEvent('languagechange', newValue);
 
                     var themes = this.getThemeSelect();
-                    var options = themes.getOptions();
-                    var value = themes.getValue();
-                    Ext.each(options, function(option) {
-                        option.text = OpenLayers.i18n('theme.' + option.value);
-                    });
-                    themes.updateOptions(options);
-                    themes.setValue(value);
+                    if (themes) {
+                        var options = themes.getOptions();
+                        var value = themes.getValue();
+                        Ext.each(options, function(option) {
+                            option.text = OpenLayers.i18n('theme.' +
+                                App.util.Config.getThemes()[option.value]);
+                        });
+                        themes.updateOptions(options);
+                        themes.setValue(value);
+                    }
 
                     Ext.getStore('Overlays').setSorters(newValue);
                 }

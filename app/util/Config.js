@@ -18,17 +18,15 @@ Ext.define('App.util.Config', {
 
         /**
          * The URL to the WMS service (MapProxy) to use in the native app.
-         * (FIXME: http://app.geoportail.lu/mapproxy/service is to be used in
-         * production.)
          */
-        appOverlayUrl: 'http://demo.geoportail.lu/mapproxy/service',
+        appOverlayUrl: 'http://app.geoportail.lu/mapproxy/service',
 
         /**
          * The URL to the WMS service (MapProxy) to use in the native app.
          * (FIXME: http://api.geoportail.lu/mapproxy/service is to be used in
          * production.)
          */
-        webOverlayUrl: 'http://demo.geoportail.lu/mapproxy/service',
+        webOverlayUrl: 'http://app.geoportail.lu/mapproxy/service',
 
         /**
          * The URLs to the tile service to use in the native app.
@@ -52,23 +50,27 @@ Ext.define('App.util.Config', {
 
         /**
          * The URL to tbe WSGI app to use in the native app.
-         * (FIXME: http://app.geoportail.lu/ is to be used in production.)
          */
-        appWsgiUrl: 'http://demo.geoportail.lu/',
+        appWsgiUrl: 'http://app.geoportail.lu/',
 
         /**
          * The URL to the WSGI app to use in the web app.
          * (FIXME: http://api.geoportail.lu/ is to be used in production.)
          */
-        webWsgiUrl: 'http://demo.geoportail.lu/',
+        webWsgiUrl: 'http://app.geoportail.lu/',
 
         /**
          * The OpenLayers.Map configuration.
          * Set in the constructor, otherwise an infinite recursion occurs
          * when Sencha Touch tries to shallow-copy the config object.
          */
-        mapConfig: null
+        mapConfig: null,
 
+        /**
+         * The list of themes.
+         * Set in the Overlays view initialize method.
+         */
+        themes: null
     },
 
     /**

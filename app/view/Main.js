@@ -82,7 +82,7 @@ Ext.define('App.view.Main', {
                     }
                 }, {
                     xtype: "searchfield",
-                    width: 150,
+                    width: 100,
                     action: "search",
                     id: 'fakeSearch',
                     clearIcon: false,

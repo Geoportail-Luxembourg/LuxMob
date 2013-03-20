@@ -188,13 +188,12 @@ Ext.define('App.controller.Main', {
                     return;
                 }
                 var map = this.getMainView().getMap();
-                // FIXME: goret des cimes, baselayer en dur
-                var layers = 'topo,';
-                layers += map.getLayersByName('Overlays')[0].params.LAYERS.join(',');
-                Ext.Ajax.request({
+                var layers = [map.baseLayer.layername];
+                layers = layers.concat(map.getLayersByName('Overlays')[0].params.LAYERS);
+                Ext.data.JsonP.request({
                     url: App.util.Config.getWsgiUrl() + 'sendbymail',
                     params: {
-                        layers: layers,
+                        layers: layers.join(','),
                         bbox: map.getExtent().toBBOX(),
                         width: map.getSize().w,
                         height: map.getSize().h,
@@ -211,7 +210,8 @@ Ext.define('App.controller.Main', {
                         } else {
                             Ext.Msg.alert('', i18n.message('sendbymail.wrong'));
                         }
-                    }
+                    },
+                    callbackKey: 'cb'
                 });
             },
             this,
@@ -261,6 +261,9 @@ Ext.define('App.controller.Main', {
     },
 
     checkUser: function() {
+        if (!window.device) {
+            return;
+        }
         var url = App.util.Config.getWsgiUrl() + 'user';
         Ext.Ajax.request({
             url: url,

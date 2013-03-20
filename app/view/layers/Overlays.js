@@ -26,10 +26,6 @@ Ext.define('App.view.layers.Overlays', {
                         }, {
                             xtype: "selectfield",
                             id: 'themeSelect',
-                            options: [
-                                {text: OpenLayers.i18n('theme.main'), value: 'main'},
-                                {text: OpenLayers.i18n('theme.tourisme'), value: 'tourisme'}
-                            ],
                             flex: 2
                         }
                     ]
@@ -59,6 +55,25 @@ Ext.define('App.view.layers.Overlays', {
     },
 
     initialize: function() {
+        var select = this.down('#themeSelect');
+        Ext.data.JsonP.request({
+            url: App.util.Config.getWsgiUrl() + 'mobile/layers' +
+                (window.device ? '?sc=' : ''),
+            callbackKey: 'cb',
+            success: function(response) {
+                var themes = response.themes;
+                App.util.Config.setThemes(themes);
+                var options = [];
+                for (var i = 0; i < themes.length; i++) {
+                    options.push({
+                        text: OpenLayers.i18n('theme.' + themes[i]),
+                        value: i
+                    });
+                }
+                select.setOptions(options);
+            }
+        });
+
         var list = this.down('#overlaysList');
         list.setStore(Ext.getStore('Overlays'))
             .setItemTpl(['{', i18n.getLanguage(), '}'].join());
