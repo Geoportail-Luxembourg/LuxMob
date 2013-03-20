@@ -491,6 +491,7 @@ Ext.define('App.controller.MyMaps', {
                         margin: 2
                     }, {
                         xtype: 'button',
+                        action: 'upload',
                         iconCls: 'photo1',
                         iconMask: true,
                         margin: 2,
@@ -660,6 +661,10 @@ Ext.define('App.controller.MyMaps', {
         var form = this.getAddPoiView();
         form.down('field[name=image]').setValue(r.image);
         form.down('field[name=thumbnail]').setValue(r.thumbnail);
+        var button = form.down('button[action=upload]');
+        button.setIconCls(false);
+        button.setIconMask(false);
+        button.setIcon(App.util.Config.getWsgiUrl() + r.thumbnail);
     },
 
     onPhotoFail: function() {}
