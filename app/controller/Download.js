@@ -312,6 +312,10 @@ Ext.define('App.controller.Download', {
 
         record = store.findRecord('name', value);
         percent =  Math.round(( this.getCount() * 100 ) / this.getTotal());
+        // Tile download could be triggered multiple times, be shouldn’t be
+        // counted more than 1 times
+        if (percent>100) { percent = 100; }
+
         record.get('tiles')[url] = { dwl: true };
         record.set('done', percent);
         if (percent === 100) {
