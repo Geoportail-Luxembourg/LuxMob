@@ -7,7 +7,8 @@ Ext.define('App.controller.MyMaps', {
         'App.view.MyMapFeatureDetail',
         'Ext.chart.CartesianChart',
         'Ext.chart.series.Line',
-        'Ext.chart.axis.Numeric'
+        'Ext.chart.axis.Numeric',
+        'Ext.field.Hidden'
     ],
 
     config: {
@@ -491,9 +492,12 @@ Ext.define('App.controller.MyMaps', {
                         margin: 2
                     }, {
                         xtype: 'button',
+                        action: 'upload',
                         iconCls: 'photo1',
                         iconMask: true,
-                        margin: 2
+                        margin: 2,
+                        handler: this.onAddPhoto,
+                        scope: this
                     }]
                 }, {
                     xtype: 'textareafield',
@@ -501,6 +505,12 @@ Ext.define('App.controller.MyMaps', {
                     placeHolder: 'Description',
                     height: 60,
                     margin: 2
+                }, {
+                    xtype: 'hiddenfield',
+                    name: 'thumbnail'
+                }, {
+                    xtype: 'hiddenfield',
+                    name: 'image'
                 }, {
                     layout: {
                         type: 'hbox',
@@ -582,5 +592,81 @@ Ext.define('App.controller.MyMaps', {
             },
             scope: this
         });
-    }
+    },
+
+    onAddPhoto: function(field) {
+        var actions = Ext.Viewport.add({
+            xtype: 'actionsheet',
+            items: [
+                {
+                    text: i18n.message("button.capture_picture"),
+                    handler: function() {
+                        navigator.device.capture.captureImage(
+                            Ext.bind(this.captureSuccess, this, [actions], true),
+                            this.onPhotoFail
+                        );
+                    },
+                    scope: this
+                }, {
+                    text: i18n.message("button.picture_from_library"),
+                    handler: function() {
+                        var destinationType = navigator.camera.DestinationType;
+                        var source = navigator.camera.PictureSourceType;
+                        navigator.camera.getPicture(
+                            Ext.bind(this.onPhotoURISuccess, this, [actions], true),
+                            this.onPhotoFail, {
+                                quality: 50,
+                                destinationType: destinationType.FILE_URI,
+                                sourceType: source.PHOTOLIBRARY
+                            }
+                        );
+                    },
+                    scope: this
+                }, {
+                    text: i18n.message("button.cancel"),
+                    handler: function() {
+                        actions.hide();
+                    }
+                }
+            ]
+        });
+        actions.show();
+    },
+
+    captureSuccess: function(mediaFiles, actions) {
+        var i, len;
+        for (i = 0, len = mediaFiles.length; i < len; i += 1) {
+            this.onPhotoURISuccess(mediaFiles[i].fullPath, actions);
+        }
+    },
+
+    onPhotoURISuccess: function(imageURI, actions) {
+        actions.hide();
+        var options = new FileUploadOptions();
+        options.fileKey = 'file';
+        options.fileName = imageURI.substring(imageURI.lastIndexOf('/') + 1);
+        options.chunkedMode = false;
+
+        var ft = new FileTransfer();
+        ft.upload(
+            imageURI,
+            App.util.Config.getWsgiUrl() + "mymaps/upload_image",
+            Ext.bind(this.onPhotoUploadSuccess, this),
+            function() {alert("failed");},
+            options
+        );
+    },
+
+    onPhotoUploadSuccess: function(response) {
+        var r = Ext.JSON.decode(response.response);
+        var form = this.getAddPoiView();
+        form.down('field[name=image]').setValue(r.image);
+        form.down('field[name=thumbnail]').setValue(r.thumbnail);
+        var button = form.down('button[action=upload]');
+        button.setIconCls(false);
+        button.setIconMask(false);
+        button.setIcon(App.util.Config.getWsgiUrl() + r.thumbnail);
+    },
+
+    onPhotoFail: function() {}
 });
