@@ -235,7 +235,7 @@ Ext.define('App.controller.MyMaps', {
                     var vector = this.getVectorLayer(),
                         map = this.getMap(),
                         format = new OpenLayers.Format.GeoJSON(),
-                        features = format.read(response.rows[0].features);
+                        features = format.read(response);
 
                     map.addLayer(vector);
                     map.addControl(this.getSelectControl());
