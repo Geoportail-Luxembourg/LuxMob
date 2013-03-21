@@ -306,29 +306,34 @@ Ext.define('App.controller.Download', {
             value = this.getValue(),
             store = Ext.getStore('SavedMaps'),
             percent,
+            percent_fixed,
             file,
             record;
         this.setCount(this.getCount()+1);
 
         record = store.findRecord('name', value);
         percent =  Math.round(( this.getCount() * 100 ) / this.getTotal());
+        percent_fixed = percent;
         // Tile download could be triggered multiple times, be shouldn’t be
         // counted more than 1 times
-        if (percent>100) { percent = 100; }
+        if (percent>100) { percent_fixed = 100; }
 
         record.get('tiles')[url] = { dwl: true };
-        record.set('done', percent);
-        if (percent === 100) {
+        record.set('done', percent_fixed);
+        if (percent_fixed === 100) {
             record.set('downloading', false);
         }
+        record.save();
 
-        fileEntry.file(function(file) {
-            record.set(
-                'size',
-                record.get('size') + parseInt(file.size,10)
-            );
-            record.save();
-        });
+        if (percent<=100) {
+            fileEntry.file(function(file) {
+                record.set(
+                    'size',
+                    record.get('size') + parseInt(file.size,10)
+                );
+                record.save();
+            });
+        }
 
         if (this.getTotal()!=this.getCount()) {
             return;
@@ -349,6 +354,7 @@ Ext.define('App.controller.Download', {
             toResume.push([tile.name, url, basePath, fileTransfer]);
         }, this);
         this.setTotal(total);
+        this.setCount(total - toResume.length);
         Ext.each(toResume, function(args) {
             this.downloadFile.apply(this, args);
         }, this);
