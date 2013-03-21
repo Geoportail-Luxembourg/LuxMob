@@ -70,7 +70,15 @@ Ext.define("App.view.MyMapFeatureDetail", {
     },
 
     updateFeature: function(feature) {
-        this.getDockedItems()[0].setTitle(feature.attributes.name);
+        var title = '';
+        if (feature.attributes.thumbnail) {
+            title += '<img src="' +
+                App.util.Config.getWsgiUrl() +
+                feature.attributes.thumbnail +
+                '" style="height:30px;padding-right:5px;"/>';
+        }
+        title += feature.attributes.name;
+        this.getDockedItems()[0].setTitle(title);
         this.down('#featuredescription').setData(feature.attributes);
 
         if (feature.geometry instanceof OpenLayers.Geometry.LineString) {
