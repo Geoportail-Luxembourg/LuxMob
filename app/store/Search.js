@@ -11,7 +11,7 @@ Ext.define('App.store.Search', {
         },
         proxy: {
             type: 'jsonp',
-            url: App.util.Config.getWsgiUrl() + 'search',
+            url: App.util.Config.getWsgiUrl() + 'locationsearch',
             callbackKey: 'cb',
             reader: {
                 type: 'json',
