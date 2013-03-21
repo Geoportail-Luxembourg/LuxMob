@@ -492,7 +492,7 @@ Ext.define('App.controller.Layers', {
         this.onOverlayChange();
 
         if (layersToExclude.length) {
-            Ext.Msg.alert('', i18n.message("layers.exclusion_msg", {
+            this.showMessage(i18n.message("layers.exclusion_msg", {
                 layer: OpenLayers.i18n(layer.get('name')),
                 layers: layersToExclude.join(', ')
             }));
