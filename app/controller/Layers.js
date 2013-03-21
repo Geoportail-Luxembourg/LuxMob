@@ -126,7 +126,9 @@ Ext.define('App.controller.Layers', {
                             buffer: 0,
                             transitionEffect: 'resize',
                             tileLoadingDelay: 125,
-                            exclusion: record.get('exclusion')
+                            exclusion: record.get('exclusion'),
+                            serverResolutions: [500.0, 250.0, 150.0, 100.0, 50.0,
+                                                20.0, 10.0, 5.0, 2.0, 1.0, 0.5]
                         }
                     ));
                 });
