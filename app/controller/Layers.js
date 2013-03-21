@@ -304,7 +304,7 @@ Ext.define('App.controller.Layers', {
         actionSheet.show();
         Ext.Function.defer(function() {
             actionSheet.hide();
-        }, 2000);
+        }, 4000);
     },
 
     onOverlayAdd: function(record, silent) {
