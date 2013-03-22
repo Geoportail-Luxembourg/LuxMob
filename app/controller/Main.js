@@ -216,6 +216,8 @@ Ext.define('App.controller.Main', {
                         var resp = Ext.JSON.decode(response.responseText);
                         if (resp.success === true) {
                             Ext.Msg.alert('', i18n.message('sendbymail.done'));
+                        } else if (resp.message == "Invalid e-mail address." ){
+                            Ext.Msg.alert('', i18n.message('sendbymail.invalidemail'));
                         } else {
                             Ext.Msg.alert('', i18n.message('sendbymail.wrong'));
                         }
