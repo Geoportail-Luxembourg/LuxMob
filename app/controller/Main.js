@@ -37,7 +37,8 @@ Ext.define('App.controller.Main', {
             searchField: 'searchfield[action=search]',
             loginButton: 'button[action=loginform]',
             logoutButton: 'button[action=logout]',
-            myMapsButton: 'button[action=mymaps]'
+            myMapsButton: 'button[action=mymaps]',
+            themeSelect: '#themeSelect'
         },
         control: {
             'button[action=more]': {
@@ -188,8 +189,15 @@ Ext.define('App.controller.Main', {
                     return;
                 }
                 var map = this.getMainView().getMap();
-                var layers = [map.baseLayer.layername];
+                var layers = [];
+                if (map.baseLayer.layername) {
+                    layers = [map.baseLayer.layername];
+                }
                 layers = layers.concat(map.getLayersByName('Overlays')[0].params.LAYERS);
+                var theme = this.getThemeSelect() ?
+                    this.getThemeSelect().getValue() : 0;
+                theme = App.util.Config.getThemes() ?
+                    App.util.Config.getThemes()[theme] : 'main';
                 Ext.data.JsonP.request({
                     url: App.util.Config.getWsgiUrl() + 'sendbymail',
                     params: {
@@ -201,6 +209,7 @@ Ext.define('App.controller.Main', {
                         y: map.getCenter().lat,
                         zoom: map.getZoom(),
                         lang: i18n.getLanguage(),
+                        theme: theme,
                         mail: value
                     },
                     success: function(response) {
