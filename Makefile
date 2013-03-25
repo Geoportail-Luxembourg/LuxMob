@@ -1,5 +1,6 @@
 SRC = app.js app.json index.html openlayers-mobile.js proj4js-compressed.js GeolocateControl.js SavedMapLayer.js
 SRC_APP = $(shell find app -name \*.js)
+SHA1 = $(shell git rev-parse HEAD)
 
 .PHONY: all
 all: app
@@ -58,6 +59,16 @@ build/App/production/app.js: $(SRC) $(SRC_APP)
 
 external/openlayers:
 	git submodule update --init
+
+.PHONY: copy-to-svn
+copy-to-svn: svn-checkout app
+	cp -r build/App/production/* luxmob-svn/
+	svn add --quiet --depth infinity luxmob-svn/*
+	svn commit -m "Update luxmod [https://github.com/camptocamp/luxembourg_mobileevo/tree/$(SHA1)]" luxmob-svn
+
+.PHONY: svn-checkout
+svn-checkout:
+	svn co https://project.camptocamp.com/svn/geoportail_luxembourg/branches/mobileevo/geoadmin/luxmob luxmob-svn
 
 .PHONY:
 clean:
