@@ -13,6 +13,7 @@ Ext.define('App.controller.Download', {
         extent: null,
         nbZoomLevels: 4,
         maskControl: null,
+        holding: false,
         refs: {
             mainView: '#mainView',
             mapSettingsView: '#mapSettingsView',
@@ -37,7 +38,9 @@ Ext.define('App.controller.Download', {
             },
             savedMapsList: {
                 resume: 'initResumeDownload',
-                itemswipe: 'removeMap'
+                itemswipe: 'removeMap',
+                itemtaphold: 'removeMap',
+                itemtap: 'selectMap'
             }
         },
         routes: {
@@ -361,40 +364,39 @@ Ext.define('App.controller.Download', {
     },
 
     removeMap: function(dataview, ix, target, record, event, options) {
-        var del = Ext.create("Ext.Button", {
-            ui: "decline",
-            text: i18n.message('button.map_remove'),
-            style: "position:absolute;right:0;",
-            handler: function(btn, event) {
-                event.preventDefault();
-                event.stopPropagation();
-                this.deleteTiles(record, function(record) {
-                    var store = record.stores[0];
-                    store.remove(record);
-                    store.sync();
-                });
-            },
-            scope: this
+        this.setHolding(true);
+        var actions = Ext.Viewport.add({
+            xtype: 'actionsheet',
+            items: [
+                {
+                    text: i18n.message("button.map_remove"),
+                    ui: 'decline',
+                    handler: function() {
+                        this.deleteTiles(record, function(record) {
+                            var store = record.stores[0];
+                            store.remove(record);
+                            store.sync();
+                        });
+                        actions.hide();
+                    },
+                    scope: this
+                }, {
+                    text: i18n.message("button.cancel"),
+                    handler: function() {
+                        actions.hide();
+                    }
+                }
+            ]
         });
-        var removeDeleteButton = function() {
-            Ext.Anim.run(del, 'fade', {
-                after: function() {
-                    del.destroy();
-                },
-                out: true
-            });
-        };
-        del.renderTo(Ext.DomQuery.selectNode(".deleteplaceholder", target.bodyElement.dom));
-        dataview.on({
-            single: true,
-            buffer: 250,
-            itemtouchstart: removeDeleteButton
-        });
-        dataview.element.on({
-            single: true,
-            buffer: 250,
-            touchstart: removeDeleteButton
-        });
+        actions.show();
+        actions.on('hide', function() {
+            this.setHolding(false);
+        }, this);
+    },
+
+    selectMap: function(dataview, ix, target, record, event, options) {
+        // prevent select to be fired if holding
+        dataview.setDisableSelection(this.getHolding());
     },
 
     deleteTiles: function(record, callback) {

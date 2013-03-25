@@ -15,6 +15,7 @@ Ext.define('App.controller.Layers', {
         map: null,
         baseLayersStore: null,
         overlaysOLLayer: null,
+        holding: false,
         refs: {
             mainView: '#mainView',
             layersView: '#layersView',
@@ -354,9 +355,11 @@ Ext.define('App.controller.Layers', {
             element: 'label',
             longpress: Ext.bind(this.onOverlaySwipe, this, [field]),
             swipe: Ext.bind(this.onOverlaySwipe, this, [field]),
-            tap: function() {
-                field.setChecked(!field.isChecked());
-            }
+            tap: Ext.bind(function(field) {
+                if (!this.getHolding()) {
+                    field.setChecked(!field.isChecked());
+                }
+            }, this, [field])
         });
     },
 
@@ -409,6 +412,7 @@ Ext.define('App.controller.Layers', {
     },
 
     onOverlaySwipe: function(field) {
+        this.setHolding(true);
         var actions = Ext.Viewport.add({
             xtype: 'actionsheet',
             items: [
@@ -435,6 +439,9 @@ Ext.define('App.controller.Layers', {
             ]
         });
         actions.show();
+        actions.on('hide', function() {
+            this.setHolding(false);
+        }, this);
     },
 
     /**
