@@ -8,7 +8,7 @@ Cmd 3.0.0.250 and the Android SDK Tools installed.
 ### Sencha Cmd
 
 Download Sencha Cmd 3.0.2.288 for your OS from
-http://www.sencha.com/products/sencha-cmd/download.
+http://cdn.sencha.com/cmd/3.0.2.288/SenchaCmd-3.0.2.288-linux.run.zip or http://cdn.sencha.com/cmd/3.0.2.288/SenchaCmd-3.0.2.288-linux-x64.run.zip.
 
 Unzip the downloaded zip file:
         
