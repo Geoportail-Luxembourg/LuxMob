@@ -8,7 +8,7 @@ Ext.define('App.store.Overlays', {
             // "sc" (set cookie) is set in the query string if executing in
             // PhoneGap application. This is to be granted access to the web
             // services.
-            url: App.util.Config.getWsgiUrl() + 'mobile/layers' +
+            url: App.util.Config.getWsgiUrl() + 'mobile_layers' +
                 (window.device ? '?sc=' : ''),
             callbackKey: 'cb',
             reader: {
