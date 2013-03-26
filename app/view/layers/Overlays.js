@@ -57,7 +57,7 @@ Ext.define('App.view.layers.Overlays', {
     initialize: function() {
         var select = this.down('#themeSelect');
         Ext.data.JsonP.request({
-            url: App.util.Config.getWsgiUrl() + 'mobile/layers' +
+            url: App.util.Config.getWsgiUrl() + 'mobile_layers' +
                 (window.device ? '?sc=' : ''),
             callbackKey: 'cb',
             success: function(response) {
