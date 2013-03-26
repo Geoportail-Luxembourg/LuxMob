@@ -119,6 +119,11 @@ Ext.define('App.controller.MyMaps', {
                         },
                         scope: this
                     });
+
+                    var map_id = OpenLayers.Util.getParameters().map_id;
+                    if (map_id) {
+                        this.getApplication().redirectTo('main/map/' + map_id);
+                    }
                 }
             },
             'button[action=hidefeaturedetail]': {
