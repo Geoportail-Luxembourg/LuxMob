@@ -86,7 +86,7 @@ Ext.application({
             var msg = OpenLayers.String.format(
                 OpenLayers.i18n('mobile.redirect_msg'),
                 {
-                    url: 'http://maps.geoportail.lu'
+                    url: App.util.Config.getWsgiUrl() + '?no_redirect'
                 }
             );
             msg += "<a href='#' class='close' style='float:right'>" +
