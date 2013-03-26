@@ -67,9 +67,9 @@ Ext.application({
             window.plugins.webintent.getUri(function(url) {
                 if (!url) return;
                 var params = Ext.Object.fromQueryString(url.split('?')[1]);
-                if (!params.mapid) return;
+                if (!params.map_id) return;
                 setTimeout(function(){
-                    App.app.getController('MyMaps').showMyMap(params.mapid);
+                    App.app.getController('MyMaps').showMyMap(params.map_id);
                 }, 500);
             });
         }
