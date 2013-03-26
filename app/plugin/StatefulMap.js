@@ -45,7 +45,7 @@ Ext.define('App.plugin.StatefulMap', {
     },
 
     getState: function() {
-        return JSON.parse(localStorage.getItem(this.getMap().id+'-state'));
+        return Ext.JSON.decode(localStorage.getItem(this.getMap().id+'-state'));
     },
 
     applyState: function(state) {
