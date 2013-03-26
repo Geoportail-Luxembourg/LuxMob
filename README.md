@@ -2,13 +2,16 @@
 
 ## Build Requirements
 
-Building the Luxembourg Mobile Sencha Touch app (LuxMob) requires having Sencha
-Cmd 3.0.0.250 and the Android SDK Tools installed.
+Building the Luxembourg Mobile Sencha Touch app (LuxMob) requires installing
+Sencha Cmd 3.0.2.288, which has its own requirements (see below).
+
+The Android SDK Tools are also required to build the app for Android.
 
 ### Sencha Cmd
 
 Download Sencha Cmd 3.0.2.288 for your OS from
-http://cdn.sencha.com/cmd/3.0.2.288/SenchaCmd-3.0.2.288-linux.run.zip or http://cdn.sencha.com/cmd/3.0.2.288/SenchaCmd-3.0.2.288-linux-x64.run.zip.
+http://cdn.sencha.com/cmd/3.0.2.288/SenchaCmd-3.0.2.288-linux.run.zip or
+http://cdn.sencha.com/cmd/3.0.2.288/SenchaCmd-3.0.2.288-linux-x64.run.zip.
 
 Unzip the downloaded zip file:
         
@@ -97,6 +100,22 @@ To build the PhoneGap iOS app run this command:
 If you change the source code of the Sencha app you don't need to run `make`
 before running `make android` or `make ios`. The latter commands will build he
 Sencha app when required.
+
+## Push the web app to SVN
+
+To be able to deploy the web app it is first needed to copy/commit it into the
+Luxembourg project's [SVN
+repository](https://project.camptocamp.com/svn/geoportail_luxembourg/trunk/geoadmin/).
+The actual deployment of the mobile web app is done as part of the standard
+deploy procedure (`deploy-geoadmin.sh`).
+
+To copy/commit the web app into the Luxembourg project's SVN use the
+`copy-to-svn` target:
+
+    $ make copy-to-svn
+
+This target checks out the Luxembourg project from SVN, updates the mobile web
+app in the `luxmob` directory, and commits the update.
 
 ## Install and run app on Android
 
