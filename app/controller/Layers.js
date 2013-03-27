@@ -253,7 +253,6 @@ Ext.define('App.controller.Layers', {
                 },
                 {
                     visibility: overlays.length,
-                    transitionEffect: 'resize',
                     buffer: 0
                 }
             )
