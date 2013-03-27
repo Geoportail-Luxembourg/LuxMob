@@ -344,7 +344,7 @@ Ext.define('App.controller.Layers', {
         var field = this.getSelectedOverlaysList().insert(0, {
             label: OpenLayers.i18n(label),
             name: name,
-            value: name,
+            value: label,
             checked: visible,
             listeners: {
                 check: this.onOverlayCheck,
@@ -381,14 +381,14 @@ Ext.define('App.controller.Layers', {
 
     onOverlayCheck: function(field) {
         var store = Ext.getStore("SelectedOverlays");
-        var record = store.getAt(store.findExact('name', field.getValue()));
+        var record = store.getAt(store.findExact('label', field.getValue()));
         record.set('visible', true);
         this.checkForLayersExclusion(record);
     },
 
     onOverlayUncheck: function(field) {
         var store = Ext.getStore('SelectedOverlays');
-        var record = store.getAt(store.findExact('name', field.getValue()));
+        var record = store.getAt(store.findExact('label', field.getValue()));
         record.set('visible', false);
         store.sync();
         this.onOverlayChange();
