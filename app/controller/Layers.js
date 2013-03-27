@@ -264,6 +264,7 @@ Ext.define('App.controller.Layers', {
     loadOverlays: function(map, theme) {
         var t = theme || 0;
         var store = Ext.getStore('Overlays');
+        store.clearFilter();
         store.filterBy(function(record) {
             return Ext.Array.contains(record.get('themes'), t);
         });
