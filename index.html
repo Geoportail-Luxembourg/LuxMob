@@ -77,8 +77,8 @@
         function handleOpenURL(url) {
             setTimeout(function() {
                 var params =  Ext.Object.fromQueryString(url.split('?')[1]);
-                if (params.mapid) {
-                    App.app.getController('MyMaps').showMyMap(params.mapid);
+                if (params.map_id) {
+                    App.app.getController('MyMaps').showMyMap(params.map_id);
                 }
             }, 1000);
         }
