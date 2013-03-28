@@ -110,7 +110,19 @@ Ext.define('App.controller.Layers', {
 
     init: function() {
         // load the map (with its baselayers)
-        Ext.getStore('BaseLayers').load({
+
+        // "sc" (set cookie) is set in the query string if executing in
+        // PhoneGap application. This is to be granted access to the web
+        // services.
+        var store = Ext.getStore('BaseLayers');
+        if (window.device) {
+            var proxy = store.getProxy();
+            proxy.setUrl(
+                proxy.getUrl() + '?sc='
+            );
+        }
+
+        store.load({
             callback: function(records) {
                 var configObject = App.util.Config;
 
