@@ -395,16 +395,23 @@ Ext.define('App.controller.MyMaps', {
 
         var f = new OpenLayers.Format[format](options);
 
-        this.getConnection().upload(
-            this.getDummyForm(),
-            App.util.Config.getWsgiUrl() + 'mymaps/export',
-            Ext.Object.toQueryString({
-                content: f.write(features, metadata),
-                format: format.toLowerCase(),
-                name: title,
-                dc: Math.random()
-            })
-        );
+        Ext.defer(function() {
+            this.getConnection().upload(
+                this.getDummyForm(),
+                App.util.Config.getWsgiUrl() + 'mymaps/export',
+                Ext.Object.toQueryString({
+                    content: f.write(features, metadata),
+                    format: format.toLowerCase(),
+                    name: title,
+                    dc: Math.random()
+                })
+            );
+        }, 100, this);
+
+        // workaround to prevent errors with Sencha Touch
+        // See http://www.sencha.com/forum/showthread.php?258561-Ext.Connection.upload-first-call-raises-javascript-error&p=946608
+        var frame = document.createElement('iframe');
+        Ext.fly(frame).on('load', function() {});
     },
 
     profile: function(feature) {
