@@ -376,6 +376,11 @@ Ext.define('App.controller.MyMaps', {
     },
 
     'export': function(title, description, features, format) {
+
+        Ext.Viewport.setMasked({
+            xtype: 'loadmask',
+            indicator: false
+        });
         var metadata,
             options = {
                 externalProjection: new OpenLayers.Projection('EPSG:4326'),
@@ -406,6 +411,7 @@ Ext.define('App.controller.MyMaps', {
                     dc: Math.random()
                 })
             );
+            Ext.Viewport.setMasked(false);
         }, 100, this);
 
         // workaround to prevent errors with Sencha Touch
@@ -415,6 +421,10 @@ Ext.define('App.controller.MyMaps', {
     },
 
     profile: function(feature) {
+        Ext.Viewport.setMasked({
+            xtype: 'loadmask',
+            indicator: false
+        });
         var format = new OpenLayers.Format.GeoJSON();
         var geojson = format.write(feature.geometry);
 
@@ -427,6 +437,7 @@ Ext.define('App.controller.MyMaps', {
             success: function(response) {
                 var data = Ext.decode(response.responseText);
                 this.drawProfile(data.profile.points);
+                Ext.Viewport.setMasked(false);
             },
             failure: function() {
             },
