@@ -178,7 +178,7 @@ Ext.define('App.view.Main', {
      * pixel - {<OpenLayers.Pixel>}
      */
     pixelToBounds: function(pixel) {
-        var tolerance = 15;
+        var tolerance = 25;
         var llPx = pixel.add(-tolerance/2, tolerance/2);
         var urPx = pixel.add(tolerance/2, -tolerance/2);
         var ll = this.getMap().getLonLatFromPixel(llPx);
