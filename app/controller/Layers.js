@@ -550,7 +550,13 @@ Ext.define('App.controller.Layers', {
 
     deactivateSavedMap: function() {
         var map = this.getMap();
-        map.setBaseLayer(map.layers[0]);
+
+        // set the previously selected base layer
+        var radio = this.getBaseLayersView().items.findBy(function(item) {
+            return item.getChecked && item.getChecked();
+        });
+        map.setBaseLayer(map.getLayersByName(radio.getValue())[0]);
+
         var overlays = this.getOverlaysOLLayer();
         overlays.setVisibility(overlays.params.LAYERS.length);
         var savedmap = map.getLayersByName('savedmap')[0];
