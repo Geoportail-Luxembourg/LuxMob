@@ -235,13 +235,7 @@ Ext.define('App.controller.Download', {
                     url = getURL(map.getLayersByName('Overlays')[0], col, row, z);
                     name = [ uuid, i, col, row ].join('_');
                     record.get('tiles')[url] = { dwl: false, name: name };
-                    Ext.Function.defer(
-                        this.downloadFile,
-                        delay,
-                        this,
-                        [ name, url, basePath, fileTransfer ]
-                    );
-                    delay += 5;
+                    this.downloadFile(name, url, basePath, fileTransfer);
                 }
             }
             z++;
