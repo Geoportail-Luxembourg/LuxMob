@@ -9,6 +9,7 @@ Ext.define('App.controller.Download', {
         map: null,
         count: 0,
         total: 0,
+        size: 0,
         value: null,
         extent: null,
         nbZoomLevels: 4,
@@ -203,6 +204,7 @@ Ext.define('App.controller.Download', {
             i++;
         }
         this.setTotal(total);
+        this.setSize(0);
 
         var records = store.add({
             name: value,
@@ -299,8 +301,7 @@ Ext.define('App.controller.Download', {
     },
 
     increaseAndCheck: function(url, fileEntry) {
-        var ls = localStorage,
-            value = this.getValue(),
+        var value = this.getValue(),
             store = Ext.getStore('SavedMaps'),
             percent,
             percent_fixed,
@@ -316,20 +317,21 @@ Ext.define('App.controller.Download', {
         if (percent>100) { percent_fixed = 100; }
 
         record.get('tiles')[url] = { dwl: true };
-        record.set('done', percent_fixed);
-        if (percent_fixed === 100) {
-            record.set('downloading', false);
-        }
-        record.save();
+        fileEntry.file(Ext.bind(function(file) {
+            this.setSize(this.getSize() + parseInt(file.size,10));
+        }, this));
 
-        if (percent<=100) {
-            fileEntry.file(function(file) {
-                record.set(
-                    'size',
-                    record.get('size') + parseInt(file.size,10)
-                );
-                record.save();
-            });
+        // refresh view and save into local storage only every 5%
+        if (percent_fixed%5 === 0) {
+            record.set('done', percent_fixed);
+            if (percent_fixed === 100) {
+                record.set('downloading', false);
+            }
+            record.save();
+            record.set(
+                'size',
+                this.getSize()
+            );
         }
 
         if (this.getTotal()!=this.getCount()) {
@@ -351,6 +353,7 @@ Ext.define('App.controller.Download', {
             toResume.push([tile.name, url, basePath, fileTransfer]);
         }, this);
         this.setTotal(total);
+        this.setSize(record.get('size'));
         this.setCount(total - toResume.length);
         Ext.each(toResume, function(args) {
             this.downloadFile.apply(this, args);
