@@ -178,6 +178,9 @@ Ext.define('App.controller.Download', {
     },
 
     download: function(fs, basePath, fileTransfer) {
+        Ext.Viewport.setActiveItem(this.getMapSettingsView());
+        this.getMapSettingsView().setActiveItem(1);
+
         var map = this.getMap(),
             zoom = map.getZoom(),
             value = this.getValue(),
@@ -221,28 +224,29 @@ Ext.define('App.controller.Download', {
         var record = records[0],
             uuid = record.getId();
 
-        Ext.Viewport.setActiveItem(this.getMapSettingsView());
-        this.getMapSettingsView().setActiveItem(1);
-
         i = 0;
         z = zoom;
-        var delay = 0, url, name;
-        while (i < this.getNbZoomLevels()) {
-            range = getTileRangeForExtentAndResolution(
-                map.layers[0], bounds, map.getResolutionForZoom(z));
-            cols = range[2] - range[0] + 1;
-            rows = range[3] - range[1] + 1;
-            for (col = range[0]; col <= range[2]; col++) {
-                for (row = range[1]; row <= range[3]; row++) {
-                    url = getURL(map.getLayersByName('Overlays')[0], col, row, z);
-                    name = [ uuid, i, col, row ].join('_');
-                    record.get('tiles')[url] = { dwl: false, name: name };
-                    this.downloadFile(name, url, basePath, fileTransfer);
+        var url, name;
+
+        // defer the download so that the view and new map item are shown
+        Ext.defer(function() {
+            while (i < this.getNbZoomLevels()) {
+                range = getTileRangeForExtentAndResolution(
+                    map.layers[0], bounds, map.getResolutionForZoom(z));
+                cols = range[2] - range[0] + 1;
+                rows = range[3] - range[1] + 1;
+                for (col = range[0]; col <= range[2]; col++) {
+                    for (row = range[1]; row <= range[3]; row++) {
+                        url = getURL(map.getLayersByName('Overlays')[0], col, row, z);
+                        name = [ uuid, i, col, row ].join('_');
+                        record.get('tiles')[url] = { dwl: false, name: name };
+                        this.downloadFile(name, url, basePath, fileTransfer);
+                    }
                 }
+                z++;
+                i++;
             }
-            z++;
-            i++;
-        }
+        }, 800, this);
 
         function getURL(layer, tileX, tileY, tileZ) {
             var top, right, bottom, left,
