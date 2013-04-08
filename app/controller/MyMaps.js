@@ -381,17 +381,22 @@ Ext.define('App.controller.MyMaps', {
             xtype: 'loadmask',
             indicator: false
         });
-        var metadata,
+
+        var contentType,
+            metadata,
             options = {
                 externalProjection: new OpenLayers.Projection('EPSG:4326'),
                 internalProjection: this.getMap().getProjectionObject()
             };
+
         if (format == 'KML') {
+            contentType = 'application/vnd.google-earth.kml+xml';
             Ext.apply(options, {
                 foldersName: title,
                 foldersDesc: description
             });
         } else if (format == 'GPX') {
+            contentType = 'application/gpx+xml';
             metadata = {
                 name: title,
                 desc: description
@@ -400,24 +405,25 @@ Ext.define('App.controller.MyMaps', {
 
         var f = new OpenLayers.Format[format](options);
 
-        Ext.defer(function() {
-            this.getConnection().upload(
-                this.getDummyForm(),
-                App.util.Config.getWsgiUrl() + 'mymaps/export',
-                Ext.Object.toQueryString({
-                    content: f.write(features, metadata),
-                    format: format.toLowerCase(),
-                    name: title,
-                    dc: Math.random()
-                })
-            );
-            Ext.Viewport.setMasked(false);
-        }, 100, this);
-
-        // workaround to prevent errors with Sencha Touch
-        // See http://www.sencha.com/forum/showthread.php?258561-Ext.Connection.upload-first-call-raises-javascript-error&p=946608
-        var frame = document.createElement('iframe');
-        Ext.fly(frame).on('load', function() {});
+        Ext.Ajax.request({
+            url: App.util.Config.getWsgiUrl() + 'upload/upload',
+            method: 'POST',
+            xmlData: f.write(features, metadata),
+            headers: {
+                'Content-Type': contentType
+            },
+            callback: function(options, success, response) {
+                Ext.Viewport.setMasked(false);
+                if (success) {
+                    var o = Ext.decode(response.responseText);
+                    // See http://docs.phonegap.com/en/2.3.0/cordova_inappbrowser_inappbrowser.md.html#window.open
+                    // for information on the '_system' target.
+                    window.open(o.url, '_system');
+                } else {
+                    window.alert('Upload failed');
+                }
+            }
+        });
     },
 
     profile: function(feature) {
