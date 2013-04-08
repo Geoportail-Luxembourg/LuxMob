@@ -13,6 +13,7 @@ Ext.define('App.controller.Download', {
         maskControl: null,
         holding: false,
         fileSystem: null,
+        fileTransfer: null,
         basePath: null,
         refs: {
             mainView: '#mainView',
@@ -57,6 +58,7 @@ Ext.define('App.controller.Download', {
                     {create: true, exclusive: false},
                     Ext.bind(function (fileEntry) {
                         this.setBasePath(fileEntry.fullPath.replace("dummy.html",""));
+                        this.setFileTransfer(new FileTransfer());
                     }, this),
                     function() {
                         console.log('fail root.getFile("dummy.html")');
@@ -281,8 +283,7 @@ Ext.define('App.controller.Download', {
 
     downloadFile: function(record, name, url) {
         var fileName = name + '.png';
-        var fileTransfer = new FileTransfer();
-        fileTransfer.download(
+        this.getFileTransfer().download(
             url,
             this.getBasePath() + fileName,
             Ext.bind(function(file) {
