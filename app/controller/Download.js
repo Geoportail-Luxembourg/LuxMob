@@ -7,9 +7,6 @@ Ext.define('App.controller.Download', {
 
     config: {
         map: null,
-        count: 0,
-        total: 0,
-        size: 0,
         value: null,
         extent: null,
         nbZoomLevels: 4,
@@ -149,8 +146,6 @@ Ext.define('App.controller.Download', {
     },
 
     initResumeDownload: function(record, btn, index) {
-        this.setValue(record.get('name'));
-        this.setCount(0);
         this._setup(this.resumeDownload, record);
     },
 
@@ -187,7 +182,6 @@ Ext.define('App.controller.Download', {
             bounds = map.calculateBounds(),
             store = Ext.getStore('SavedMaps'),
             i = 0,
-            total = 0,
             z = zoom,
             range,
             cols,
@@ -202,12 +196,9 @@ Ext.define('App.controller.Download', {
                 map.layers[0], bounds, resolution);
             cols = range[2] - range[0] + 1;
             rows = range[3] - range[1] + 1;
-            total += cols * rows;
             z++;
             i++;
         }
-        this.setTotal(total);
-        this.setSize(0);
 
         var records = store.add({
             name: value,
@@ -240,7 +231,7 @@ Ext.define('App.controller.Download', {
                         url = getURL(map.getLayersByName('Overlays')[0], col, row, z);
                         name = [ uuid, i, col, row ].join('_');
                         record.get('tiles')[url] = { dwl: false, name: name };
-                        this.downloadFile(name, url, basePath, fileTransfer);
+                        this.downloadFile(record, name, url, basePath, fileTransfer);
                     }
                 }
                 z++;
@@ -288,77 +279,70 @@ Ext.define('App.controller.Download', {
         }
     },
 
-    downloadFile: function(name, url, basePath, fileTransfer) {
+    downloadFile: function(record, name, url, basePath, fileTransfer) {
         var fileName = name + '.png';
         fileTransfer.download(
             url,
             basePath + fileName,
             Ext.bind(function(file) {
-                this.increaseAndCheck(url, file);
+                this.onDownloadSuccess(record, url, file);
             }, this),
             Ext.bind(function(error) {
-                console.log("download error source: " + error.source);
-                console.log("download error target: " + error.target);
-                console.log("upload error code: " + error.code);
+                this.onDownloadError(record, error);
             }, this)
         );
     },
 
-    increaseAndCheck: function(url, fileEntry) {
-        var value = this.getValue(),
-            store = Ext.getStore('SavedMaps'),
-            percent,
-            percent_fixed,
+    onDownloadError: function(record, error) {
+        record.set('errors', record.get('errors') + 1);
+        this.checkCount(record);
+    },
+
+    onDownloadSuccess: function(record, url, fileEntry) {
+        var percent,
             file,
-            record;
-        this.setCount(this.getCount()+1);
+            done = record.get('done')+1,
+            tiles = record.get('tiles');
 
-        record = store.findRecord('name', value);
-        percent =  Math.round(( this.getCount() * 100 ) / this.getTotal());
-        percent_fixed = percent;
-        // Tile download could be triggered multiple times, be shouldn’t be
-        // counted more than 1 times
-        if (percent>100) { percent_fixed = 100; }
+        record.set('done', done);
+        percent =  Math.round(( done * 100 ) / Object.keys(tiles).length);
 
-        record.get('tiles')[url] = { dwl: true };
+        tiles[url] = { dwl: true };
         fileEntry.file(Ext.bind(function(file) {
-            this.setSize(this.getSize() + parseInt(file.size,10));
+            record.set(
+                'size',
+                record.get('size') + parseInt(file.size,10)
+            );
         }, this));
 
         // refresh view and save into local storage only every 5%
-        if (percent_fixed%5 === 0) {
-            record.set('done', percent_fixed);
-            if (percent_fixed === 100) {
-                record.set('downloading', false);
-            }
+        if (percent%5 === 0) {
             record.save();
-            record.set(
-                'size',
-                this.getSize()
-            );
         }
+        this.checkCount(record);
+    },
 
-        if (this.getTotal()!=this.getCount()) {
+    checkCount: function(r) {
+        if (Object.keys(r.get('tiles')).length != r.get('done') + r.get('errors')) {
             return;
         }
-        this.setCount(0);
-        this.setTotal(0);
+        r.set('downloading', false);
+        if (r.get('errors')) {
+            r.set('resumable', true);
+        }
     },
 
     resumeDownload: function(fs, basePath, fileTransfer, record) {
-        var total = 0,
-            toResume = [];
+        var toResume = [];
+        record.set('downloading', true);
+        record.set('resumable', false);
+        record.set('errors', 0);
         Ext.iterate(record.get('tiles'), function(url, tile) {
-            total++;
-            if (tile.dwl) {
-                this.setCount(this.getCount()+1);
+            if (!tile.dwl) {
+                toResume.push([record, tile.name, url, basePath, fileTransfer]);
                 return;
             }
-            toResume.push([tile.name, url, basePath, fileTransfer]);
         }, this);
-        this.setTotal(total);
-        this.setSize(record.get('size'));
-        this.setCount(total - toResume.length);
         Ext.each(toResume, function(args) {
             this.downloadFile.apply(this, args);
         }, this);
