@@ -12,6 +12,8 @@ Ext.define('App.controller.Download', {
         nbZoomLevels: 4,
         maskControl: null,
         holding: false,
+        fileSystem: null,
+        basePath: null,
         refs: {
             mainView: '#mainView',
             mapSettingsView: '#mapSettingsView',
@@ -44,6 +46,27 @@ Ext.define('App.controller.Download', {
         routes: {
             'download': 'showDownload'
         }
+    },
+
+    init: function() {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
+            Ext.bind(function(fs) {
+                this.setFileSystem(fs);
+                fs.root.getFile(
+                    "dummy.html",
+                    {create: true, exclusive: false},
+                    Ext.bind(function (fileEntry) {
+                        this.setBasePath(fileEntry.fullPath.replace("dummy.html",""));
+                    }, this),
+                    function() {
+                        console.log('fail root.getFile("dummy.html")');
+                    }
+                );
+            }, this),
+            function() {
+                console.log('fail requestFileSystem');
+            }
+        );
     },
 
     showDownload: function() {
@@ -142,37 +165,14 @@ Ext.define('App.controller.Download', {
         this.setValue(value);
         this.setExtent(this.getMap().getExtent());
 
-        this._setup(this.download);
+        this.download();
     },
 
     initResumeDownload: function(record, btn, index) {
-        this._setup(this.resumeDownload, record);
+        this.resumeDownload(record);
     },
 
-    _setup: function(callback, arg) {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
-            Ext.bind(function(fs) {
-                fs.root.getFile(
-                    "dummy.html",
-                    {create: true, exclusive: false},
-                    Ext.bind(function (fileEntry) {
-                        var basePath = fileEntry.fullPath.replace("dummy.html","");
-                        var args = [fs, basePath, new FileTransfer()];
-                        if (arg) { args.push(arg); }
-                        callback.apply(this, args);
-                    }, this),
-                    function() {
-                        console.log('fail root.getFile("dummy.html")');
-                    }
-                );
-            }, this),
-            function() {
-                console.log('fail requestFileSystem');
-            }
-        );
-    },
-
-    download: function(fs, basePath, fileTransfer) {
+    download: function() {
         Ext.Viewport.setActiveItem(this.getMapSettingsView());
         this.getMapSettingsView().setActiveItem(1);
 
@@ -231,7 +231,7 @@ Ext.define('App.controller.Download', {
                         url = getURL(map.getLayersByName('Overlays')[0], col, row, z);
                         name = [ uuid, i, col, row ].join('_');
                         record.get('tiles')[url] = { dwl: false, name: name };
-                        this.downloadFile(record, name, url, basePath, fileTransfer);
+                        this.downloadFile(record, name, url);
                     }
                 }
                 z++;
@@ -279,11 +279,12 @@ Ext.define('App.controller.Download', {
         }
     },
 
-    downloadFile: function(record, name, url, basePath, fileTransfer) {
+    downloadFile: function(record, name, url) {
         var fileName = name + '.png';
+        var fileTransfer = new FileTransfer();
         fileTransfer.download(
             url,
-            basePath + fileName,
+            this.getBasePath() + fileName,
             Ext.bind(function(file) {
                 this.onDownloadSuccess(record, url, file);
             }, this),
@@ -332,19 +333,15 @@ Ext.define('App.controller.Download', {
         }
     },
 
-    resumeDownload: function(fs, basePath, fileTransfer, record) {
-        var toResume = [];
+    resumeDownload: function(record) {
         record.set('downloading', true);
         record.set('resumable', false);
         record.set('errors', 0);
         Ext.iterate(record.get('tiles'), function(url, tile) {
             if (!tile.dwl) {
-                toResume.push([record, tile.name, url, basePath, fileTransfer]);
+                this.downloadFile(record, tile.name, url);
                 return;
             }
-        }, this);
-        Ext.each(toResume, function(args) {
-            this.downloadFile.apply(this, args);
         }, this);
     },
 
@@ -386,40 +383,38 @@ Ext.define('App.controller.Download', {
 
     deleteTiles: function(record, callback) {
         var id = record.get('id');
-        this._setup(function(fs, basePath, fileTransfer) {
-            fs.root.getDirectory(basePath, null,
-                function(dirEntry) {
-                    var directoryReader = dirEntry.createReader();
-                    directoryReader.readEntries(
-                        function success(entries) {
-                            var toRemove = [], total = 0, count = 0;
-                            Ext.each(entries, function(entry) {
-                                if (entry.name.indexOf(id) == 0) {
-                                    toRemove.push(entry);
+        this.getFileSystem().root.getDirectory(this.getBasePath(), null,
+            function(dirEntry) {
+                var directoryReader = dirEntry.createReader();
+                directoryReader.readEntries(
+                    function success(entries) {
+                        var toRemove = [], total = 0, count = 0;
+                        Ext.each(entries, function(entry) {
+                            if (entry.name.indexOf(id) == 0) {
+                                toRemove.push(entry);
+                            }
+                        });
+                        total = toRemove.length;
+                        Ext.each(toRemove, function(entry) {
+                            entry.remove(function(){
+                                count++;
+                                if (count == total) {
+                                    callback.apply(this, [record]);
                                 }
+                            }, function(){
+                                console.log('fail to delete file');
                             });
-                            total = toRemove.length;
-                            Ext.each(toRemove, function(entry) {
-                                entry.remove(function(){
-                                    count++;
-                                    if (count == total) {
-                                        callback.apply(this, [record]);
-                                    }
-                                }, function(){
-                                    console.log('fail to delete file');
-                                });
-                            });
-                        },
-                        function() {
-                            console.log('fail to get directory reader');
-                        }
-                    );
-                },
-                function() {
-                    console.log('fail to get directory');
-                }
-            );
-        });
+                        });
+                    },
+                    function() {
+                        console.log('fail to get directory reader');
+                    }
+                );
+            },
+            function() {
+                console.log('fail to get directory');
+            }
+        );
     }
 
 });
