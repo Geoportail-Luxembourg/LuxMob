@@ -15,6 +15,10 @@ Ext.define('App.controller.Download', {
         fileSystem: null,
         fileTransfer: null,
         basePath: null,
+        // the amount of currently downloading images
+        downloadCount: 0,
+        // the tiles to download
+        queue: [],
         refs: {
             mainView: '#mainView',
             mapSettingsView: '#mapSettingsView',
@@ -233,7 +237,7 @@ Ext.define('App.controller.Download', {
                         url = getURL(map.getLayersByName('Overlays')[0], col, row, z);
                         name = [ uuid, i, col, row ].join('_');
                         record.get('tiles')[url] = { dwl: false, name: name };
-                        this.downloadFile(record, name, url);
+                        this.addToQueue(record, name, url);
                     }
                 }
                 z++;
@@ -281,7 +285,20 @@ Ext.define('App.controller.Download', {
         }
     },
 
+    addToQueue: function(record, name, url) {
+        var queue = this.getQueue();
+        queue.push([record, name, url]);
+
+        // 8 tiles are downloaded at the same time
+        if (this.getDownloadCount() <= 8) {
+            var tile = queue.shift();
+            this.downloadFile.apply(this, tile);
+        }
+    },
+
+
     downloadFile: function(record, name, url) {
+        this.setDownloadCount(this.getDownloadCount() + 1);
         var fileName = name + '.png';
         this.getFileTransfer().download(
             url,
@@ -322,9 +339,16 @@ Ext.define('App.controller.Download', {
             record.save();
         }
         this.checkCount(record);
+
+        var queue = this.getQueue();
+        if (queue.length) {
+            var tile = queue.shift();
+            this.downloadFile.apply(this, tile);
+        }
     },
 
     checkCount: function(r) {
+        this.setDownloadCount(this.getDownloadCount() - 1);
         if (Object.keys(r.get('tiles')).length != r.get('done') + r.get('errors')) {
             return;
         }
@@ -340,7 +364,7 @@ Ext.define('App.controller.Download', {
         record.set('errors', 0);
         Ext.iterate(record.get('tiles'), function(url, tile) {
             if (!tile.dwl) {
-                this.downloadFile(record, tile.name, url);
+                this.addToQueue(record, tile.name, url);
                 return;
             }
         }, this);
