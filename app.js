@@ -75,6 +75,20 @@ Ext.application({
         }
 
         this.handleTablet();
+
+        // Make home screen webapp open in Safari, to prevent
+        // Geolocation iOS bug
+        var removeElementByName = function (elName) {
+            var appleEls = document.getElementsByName (elName),
+                l = appleEls.length,
+                i;
+            for (i = 0; i < l; i++) {
+                var el = appleEls [0];
+                Ext.removeNode (el);
+            }
+        };
+        removeElementByName ('apple-mobile-web-app-capable');
+        removeElementByName ('apple-touch-fullscreen');
     },
 
     onUpdated: function() {
