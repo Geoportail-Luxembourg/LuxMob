@@ -63,6 +63,15 @@ Ext.define('App.controller.Download', {
                     Ext.bind(function (fileEntry) {
                         this.setBasePath(fileEntry.fullPath.replace("dummy.html",""));
                         this.setFileTransfer(new FileTransfer());
+                        var store = Ext.getStore('SavedMaps');
+                        store.load();
+                        store.each(function(record) {
+                            if (record.get('downloading') === true) {
+                                Ext.defer(function() {
+                                    this.resumeDownload(record);
+                                }, 1000, this);
+                            }
+                        }, this);
                     }, this),
                     function() {
                         console.log('fail root.getFile("dummy.html")');
@@ -242,6 +251,7 @@ Ext.define('App.controller.Download', {
                 }
                 z++;
                 i++;
+                record.save();
             }
         }, 800, this);
 
@@ -356,6 +366,7 @@ Ext.define('App.controller.Download', {
         if (r.get('errors')) {
             r.set('resumable', true);
         }
+        r.save();
     },
 
     resumeDownload: function(record) {
