@@ -35,7 +35,7 @@ Ext.define('App.view.layers.SavedMaps', {
                     '<small class="map_properties">',
                         '{[(values.size/1024/1024).toFixed(1)]}Mb',
                         '<tpl if="resumable">',
-                            OpenLayers.i18n('mobile.incomplete'),
+                            i18n.message('savedmaps.incomplete'),
                         '</tpl>',
                     '</small>',
                 '</tpl>',
@@ -52,7 +52,7 @@ Ext.define('App.view.layers.SavedMaps', {
                     }
                 }
             ),
-            emptyText: i18n.message('savedmaps.nomaps'),
+            emptyText: "<p class='action'>" + i18n.message('savedmaps.nomaps') + "</p>",
             disclosureProperty: 'resumable',
             onItemDisclosure: function(record, btn, index) {
                 this.fireEvent('resume', record, btn, index);
