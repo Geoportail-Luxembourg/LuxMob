@@ -264,9 +264,17 @@ Ext.define('App.controller.Download', {
             right = left + resolution * OpenLayers.Map.TILE_WIDTH;
             top = bottom + resolution * OpenLayers.Map.TILE_HEIGHT;
 
-             return layer.getURL(
-                 new OpenLayers.Bounds(left, bottom, right, top)
-             ).replace(/LAYERS=/, 'LAYERS=' + layer.map.baseLayer.layername + ',');
+            var url = layer.getURL(
+                new OpenLayers.Bounds(left, bottom, right, top)
+            );
+            var params = OpenLayers.Util.getParameters(url);
+            var layers = [layer.map.baseLayer.layername];
+            if (params.LAYERS !== '') {
+                layers.push(params.LAYERS);
+            }
+            params.LAYERS = layers.join(',');
+            var base = url.split('?')[0];
+            return [base, '?', OpenLayers.Util.getParameterString(params)].join('');
         }
 
         function getTileRangeForExtentAndResolution(layer, extent, resolution) {
