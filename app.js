@@ -49,33 +49,6 @@ Ext.application({
     },
 
     launch: function() {
-        function animateSquare() {
-            var test = document.getElementById('test'),
-                start = Date.now();
-
-                console.log("step");
-            window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-                                           window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.setTimeout;
-
-            function step() {
-                var now = Date.now(),
-                    progress = now - start;
-
-                if (progress > 2000) {
-                    progress = 0;
-                    start = now;
-                }
-
-                test.style.left = (progress / 10) + "px";
-
-                requestAnimationFrame(step);
-            }
-
-            requestAnimationFrame(step);
-        }
-
-        animateSquare();
-
         this.prepareI18n();
 
         // create the main view and set the map into it
