@@ -34,7 +34,7 @@ Ext.define('App.view.layers.SavedMaps', {
                 '<tpl if="!downloading">',
                     '<small class="map_properties">',
                         '{[(values.size/1024/1024).toFixed(1)]}Mb',
-                        '<tpl if="errors">',
+                        '<tpl if="resumable">',
                             OpenLayers.i18n('mobile.incomplete'),
                         '</tpl>',
                     '</small>',

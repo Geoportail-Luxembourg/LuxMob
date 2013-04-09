@@ -63,13 +63,15 @@ Ext.define('App.controller.Download', {
                     Ext.bind(function (fileEntry) {
                         this.setBasePath(fileEntry.fullPath.replace("dummy.html",""));
                         this.setFileTransfer(new FileTransfer());
+
+                        // set any downloading map as resumable
                         var store = Ext.getStore('SavedMaps');
                         store.load();
-                        store.each(function(record) {
-                            if (record.get('downloading') === true) {
-                                Ext.defer(function() {
-                                    this.resumeDownload(record);
-                                }, 1000, this);
+                        store.each(function(r) {
+                            if (r.get('downloading') === true) {
+                                r.set('downloading', false);
+                                r.set('resumable', true);
+                                r.save();
                             }
                         }, this);
                     }, this),
@@ -357,15 +359,15 @@ Ext.define('App.controller.Download', {
             record.save();
         }
         this.checkCount(record);
+    },
 
+    checkCount: function(r) {
         var queue = this.getQueue();
         if (queue.length) {
             var tile = queue.shift();
             this.downloadFile.apply(this, tile);
         }
-    },
 
-    checkCount: function(r) {
         this.setDownloadCount(this.getDownloadCount() - 1);
         if (Object.keys(r.get('tiles')).length != r.get('done') + r.get('errors')) {
             return;
