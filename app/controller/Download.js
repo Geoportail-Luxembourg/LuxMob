@@ -7,13 +7,18 @@ Ext.define('App.controller.Download', {
 
     config: {
         map: null,
-        count: 0,
-        total: 0,
         value: null,
         extent: null,
         nbZoomLevels: 4,
         maskControl: null,
         holding: false,
+        fileSystem: null,
+        fileTransfer: null,
+        basePath: null,
+        // the amount of currently downloading images
+        downloadCount: 0,
+        // the tiles to download
+        queue: [],
         refs: {
             mainView: '#mainView',
             mapSettingsView: '#mapSettingsView',
@@ -46,6 +51,39 @@ Ext.define('App.controller.Download', {
         routes: {
             'download': 'showDownload'
         }
+    },
+
+    init: function() {
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
+            Ext.bind(function(fs) {
+                this.setFileSystem(fs);
+                fs.root.getFile(
+                    "dummy.html",
+                    {create: true, exclusive: false},
+                    Ext.bind(function (fileEntry) {
+                        this.setBasePath(fileEntry.fullPath.replace("dummy.html",""));
+                        this.setFileTransfer(new FileTransfer());
+
+                        // set any downloading map as resumable
+                        var store = Ext.getStore('SavedMaps');
+                        store.load();
+                        store.each(function(r) {
+                            if (r.get('downloading') === true) {
+                                r.set('downloading', false);
+                                r.set('resumable', true);
+                                r.save();
+                            }
+                        }, this);
+                    }, this),
+                    function() {
+                        console.log('fail root.getFile("dummy.html")');
+                    }
+                );
+            }, this),
+            function() {
+                console.log('fail requestFileSystem');
+            }
+        );
     },
 
     showDownload: function() {
@@ -144,46 +182,23 @@ Ext.define('App.controller.Download', {
         this.setValue(value);
         this.setExtent(this.getMap().getExtent());
 
-        this._setup(this.download);
+        this.download();
     },
 
     initResumeDownload: function(record, btn, index) {
-        this.setValue(record.get('name'));
-        this.setCount(0);
-        this._setup(this.resumeDownload, record);
+        this.resumeDownload(record);
     },
 
-    _setup: function(callback, arg) {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
-            Ext.bind(function(fs) {
-                fs.root.getFile(
-                    "dummy.html",
-                    {create: true, exclusive: false},
-                    Ext.bind(function (fileEntry) {
-                        var basePath = fileEntry.fullPath.replace("dummy.html","");
-                        var args = [fs, basePath, new FileTransfer()];
-                        if (arg) { args.push(arg); }
-                        callback.apply(this, args);
-                    }, this),
-                    function() {
-                        console.log('fail root.getFile("dummy.html")');
-                    }
-                );
-            }, this),
-            function() {
-                console.log('fail requestFileSystem');
-            }
-        );
-    },
+    download: function() {
+        Ext.Viewport.setActiveItem(this.getMapSettingsView());
+        this.getMapSettingsView().setActiveItem(1);
 
-    download: function(fs, basePath, fileTransfer) {
         var map = this.getMap(),
             zoom = map.getZoom(),
             value = this.getValue(),
             bounds = map.calculateBounds(),
             store = Ext.getStore('SavedMaps'),
             i = 0,
-            total = 0,
             z = zoom,
             range,
             cols,
@@ -198,11 +213,9 @@ Ext.define('App.controller.Download', {
                 map.layers[0], bounds, resolution);
             cols = range[2] - range[0] + 1;
             rows = range[3] - range[1] + 1;
-            total += cols * rows;
             z++;
             i++;
         }
-        this.setTotal(total);
 
         var records = store.add({
             name: value,
@@ -219,28 +232,30 @@ Ext.define('App.controller.Download', {
         var record = records[0],
             uuid = record.getId();
 
-        Ext.Viewport.setActiveItem(this.getMapSettingsView());
-        this.getMapSettingsView().setActiveItem(1);
-
         i = 0;
         z = zoom;
-        var delay = 0, url, name;
-        while (i < this.getNbZoomLevels()) {
-            range = getTileRangeForExtentAndResolution(
-                map.layers[0], bounds, map.getResolutionForZoom(z));
-            cols = range[2] - range[0] + 1;
-            rows = range[3] - range[1] + 1;
-            for (col = range[0]; col <= range[2]; col++) {
-                for (row = range[1]; row <= range[3]; row++) {
-                    url = getURL(map.getLayersByName('Overlays')[0], col, row, z);
-                    name = [ uuid, i, col, row ].join('_');
-                    record.get('tiles')[url] = { dwl: false, name: name };
-                    this.downloadFile(name, url, basePath, fileTransfer);
+        var url, name;
+
+        // defer the download so that the view and new map item are shown
+        Ext.defer(function() {
+            while (i < this.getNbZoomLevels()) {
+                range = getTileRangeForExtentAndResolution(
+                    map.layers[0], bounds, map.getResolutionForZoom(z));
+                cols = range[2] - range[0] + 1;
+                rows = range[3] - range[1] + 1;
+                for (col = range[0]; col <= range[2]; col++) {
+                    for (row = range[1]; row <= range[3]; row++) {
+                        url = getURL(map.getLayersByName('Overlays')[0], col, row, z);
+                        name = [ uuid, i, col, row ].join('_');
+                        record.get('tiles')[url] = { dwl: false, name: name };
+                        this.addToQueue(record, name, url);
+                    }
                 }
+                z++;
+                i++;
+                record.save();
             }
-            z++;
-            i++;
-        }
+        }, 800, this);
 
         function getURL(layer, tileX, tileY, tileZ) {
             var top, right, bottom, left,
@@ -251,9 +266,17 @@ Ext.define('App.controller.Download', {
             right = left + resolution * OpenLayers.Map.TILE_WIDTH;
             top = bottom + resolution * OpenLayers.Map.TILE_HEIGHT;
 
-             return layer.getURL(
-                 new OpenLayers.Bounds(left, bottom, right, top)
-             ).replace(/LAYERS=/, 'LAYERS=' + layer.map.baseLayer.layername + ',');
+            var url = layer.getURL(
+                new OpenLayers.Bounds(left, bottom, right, top)
+            );
+            var params = OpenLayers.Util.getParameters(url);
+            var layers = [layer.map.baseLayer.layername];
+            if (params.LAYERS !== '') {
+                layers.push(params.LAYERS);
+            }
+            params.LAYERS = layers.join(',');
+            var base = url.split('?')[0];
+            return [base, '?', OpenLayers.Util.getParameterString(params)].join('');
         }
 
         function getTileRangeForExtentAndResolution(layer, extent, resolution) {
@@ -282,78 +305,89 @@ Ext.define('App.controller.Download', {
         }
     },
 
-    downloadFile: function(name, url, basePath, fileTransfer) {
+    addToQueue: function(record, name, url) {
+        var queue = this.getQueue();
+        queue.push([record, name, url]);
+
+        // 8 tiles are downloaded at the same time
+        if (this.getDownloadCount() <= 8) {
+            var tile = queue.shift();
+            this.downloadFile.apply(this, tile);
+        }
+    },
+
+
+    downloadFile: function(record, name, url) {
+        this.setDownloadCount(this.getDownloadCount() + 1);
         var fileName = name + '.png';
-        fileTransfer.download(
+        this.getFileTransfer().download(
             url,
-            basePath + fileName,
+            this.getBasePath() + fileName,
             Ext.bind(function(file) {
-                this.increaseAndCheck(url, file);
+                this.onDownloadSuccess(record, url, file);
             }, this),
             Ext.bind(function(error) {
-                console.log("download error source: " + error.source);
-                console.log("download error target: " + error.target);
-                console.log("upload error code: " + error.code);
+                this.onDownloadError(record, error);
             }, this)
         );
     },
 
-    increaseAndCheck: function(url, fileEntry) {
-        var ls = localStorage,
-            value = this.getValue(),
-            store = Ext.getStore('SavedMaps'),
-            percent,
-            percent_fixed,
-            file,
-            record;
-        this.setCount(this.getCount()+1);
-
-        record = store.findRecord('name', value);
-        percent =  Math.round(( this.getCount() * 100 ) / this.getTotal());
-        percent_fixed = percent;
-        // Tile download could be triggered multiple times, be shouldn’t be
-        // counted more than 1 times
-        if (percent>100) { percent_fixed = 100; }
-
-        record.get('tiles')[url] = { dwl: true };
-        record.set('done', percent_fixed);
-        if (percent_fixed === 100) {
-            record.set('downloading', false);
-        }
-        record.save();
-
-        if (percent<=100) {
-            fileEntry.file(function(file) {
-                record.set(
-                    'size',
-                    record.get('size') + parseInt(file.size,10)
-                );
-                record.save();
-            });
-        }
-
-        if (this.getTotal()!=this.getCount()) {
-            return;
-        }
-        this.setCount(0);
-        this.setTotal(0);
+    onDownloadError: function(record, error) {
+        record.set('errors', record.get('errors') + 1);
+        this.checkCount(record);
     },
 
-    resumeDownload: function(fs, basePath, fileTransfer, record) {
-        var total = 0,
-            toResume = [];
+    onDownloadSuccess: function(record, url, fileEntry) {
+        var percent,
+            file,
+            done = record.get('done')+1,
+            tiles = record.get('tiles');
+
+        record.set('done', done);
+        percent =  Math.round(( done * 100 ) / Object.keys(tiles).length);
+
+        tiles[url] = { dwl: true };
+        fileEntry.file(Ext.bind(function(file) {
+            record.set(
+                'size',
+                record.get('size') + parseInt(file.size,10)
+            );
+        }, this));
+
+        // refresh view and save into local storage only every 5%
+        if (percent%5 === 0) {
+            record.save();
+        }
+        this.checkCount(record);
+    },
+
+    checkCount: function(r) {
+        var queue = this.getQueue();
+        if (queue.length) {
+            var tile = queue.shift();
+            this.downloadFile.apply(this, tile);
+        }
+
+        this.setDownloadCount(this.getDownloadCount() - 1);
+        if (Object.keys(r.get('tiles')).length != r.get('done') + r.get('errors')) {
+            return;
+        }
+        r.set('downloading', false);
+        if (r.get('errors')) {
+            r.set('resumable', true);
+        }
+        r.save();
+    },
+
+    resumeDownload: function(record) {
+        record.set('downloading', true);
+        record.set('resumable', false);
+        record.set('errors', 0);
         Ext.iterate(record.get('tiles'), function(url, tile) {
-            total++;
-            if (tile.dwl) {
-                this.setCount(this.getCount()+1);
+            if (!tile.dwl) {
+                this.addToQueue(record, tile.name, url);
                 return;
             }
-            toResume.push([tile.name, url, basePath, fileTransfer]);
-        }, this);
-        this.setTotal(total);
-        this.setCount(total - toResume.length);
-        Ext.each(toResume, function(args) {
-            this.downloadFile.apply(this, args);
         }, this);
     },
 
@@ -395,40 +429,38 @@ Ext.define('App.controller.Download', {
 
     deleteTiles: function(record, callback) {
         var id = record.get('id');
-        this._setup(function(fs, basePath, fileTransfer) {
-            fs.root.getDirectory(basePath, null,
-                function(dirEntry) {
-                    var directoryReader = dirEntry.createReader();
-                    directoryReader.readEntries(
-                        function success(entries) {
-                            var toRemove = [], total = 0, count = 0;
-                            Ext.each(entries, function(entry) {
-                                if (entry.name.indexOf(id) == 0) {
-                                    toRemove.push(entry);
+        this.getFileSystem().root.getDirectory(this.getBasePath(), null,
+            function(dirEntry) {
+                var directoryReader = dirEntry.createReader();
+                directoryReader.readEntries(
+                    function success(entries) {
+                        var toRemove = [], total = 0, count = 0;
+                        Ext.each(entries, function(entry) {
+                            if (entry.name.indexOf(id) == 0) {
+                                toRemove.push(entry);
+                            }
+                        });
+                        total = toRemove.length;
+                        Ext.each(toRemove, function(entry) {
+                            entry.remove(function(){
+                                count++;
+                                if (count == total) {
+                                    callback.apply(this, [record]);
                                 }
+                            }, function(){
+                                console.log('fail to delete file');
                             });
-                            total = toRemove.length;
-                            Ext.each(toRemove, function(entry) {
-                                entry.remove(function(){
-                                    count++;
-                                    if (count == total) {
-                                        callback.apply(this, [record]);
-                                    }
-                                }, function(){
-                                    console.log('fail to delete file');
-                                });
-                            });
-                        },
-                        function() {
-                            console.log('fail to get directory reader');
-                        }
-                    );
-                },
-                function() {
-                    console.log('fail to get directory');
-                }
-            );
-        });
+                        });
+                    },
+                    function() {
+                        console.log('fail to get directory reader');
+                    }
+                );
+            },
+            function() {
+                console.log('fail to get directory');
+            }
+        );
     }
 
 });

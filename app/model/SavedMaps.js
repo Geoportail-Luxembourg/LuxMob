@@ -28,6 +28,13 @@ Ext.define('App.model.SavedMaps', {
             },{
                 name: 'downloading',
                 type: 'boolean'
+            },{
+                name: 'errors',
+                defaultValue: 0
+            },{
+                name: 'resumable',
+                type: 'boolean',
+                defaultValue: false
             }
         ],
         identifier: 'uuid',

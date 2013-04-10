@@ -24,23 +24,36 @@ Ext.define('App.view.layers.SavedMaps', {
             itemTpl: new Ext.XTemplate(
                 '<div class="savedmap">',
                 '<h4>{name} ',
-                '<small class="map_weight">{[(values.size/1024/1024).toFixed(1)]}Mb</small>',
                 '</h4>',
-                '{[this.getProgress(values)]}',
+                '<tpl if="downloading">',
+                    '<div class="progress">',
+                        '<div class="progress_value">{[this.getPercent(values)]}%</div>',
+                        '<div style="width:{[this.getPercent(values)]}%" class="progress_bar">&nbsp;</div>',
+                    '</div>',
+                '</tpl>',
+                '<tpl if="!downloading">',
+                    '<small class="map_properties">',
+                        '{[(values.size/1024/1024).toFixed(1)]}Mb',
+                        '<tpl if="resumable">',
+                            i18n.message('savedmaps.incomplete'),
+                        '</tpl>',
+                    '</small>',
+                '</tpl>',
                 '</div>',
                 {
-                    getProgress: function(values) {
-                        if (values.done == 100) {
-                            return '';
+                    getPercent: function(v) {
+                        if (Object.keys(v.tiles).length) {
+                            return Math.round(
+                                (v.done + v.errors) / Object.keys(v.tiles).length * 100
+                            );
+                        } else {
+                            return 0;
                         }
-                        return '<div class="progress"><div class="progress_value">' +
-                            values.done +'%</div><div style="width:' +
-                            values.done +'%" class="progress_bar">&nbsp;</div></div>';
                     }
                 }
             ),
-            emptyText: i18n.message('savedmaps.nomaps'),
-            disclosureProperty: 'downloading',
+            emptyText: "<p class='action'>" + i18n.message('savedmaps.nomaps') + "</p>",
+            disclosureProperty: 'resumable',
             onItemDisclosure: function(record, btn, index) {
                 this.fireEvent('resume', record, btn, index);
             },
