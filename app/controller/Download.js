@@ -54,36 +54,38 @@ Ext.define('App.controller.Download', {
     },
 
     init: function() {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
-            Ext.bind(function(fs) {
-                this.setFileSystem(fs);
-                fs.root.getFile(
-                    "dummy.html",
-                    {create: true, exclusive: false},
-                    Ext.bind(function (fileEntry) {
-                        this.setBasePath(fileEntry.fullPath.replace("dummy.html",""));
-                        this.setFileTransfer(new FileTransfer());
+        if (window.device) {
+            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
+                Ext.bind(function(fs) {
+                    this.setFileSystem(fs);
+                    fs.root.getFile(
+                        "dummy.html",
+                        {create: true, exclusive: false},
+                        Ext.bind(function (fileEntry) {
+                            this.setBasePath(fileEntry.fullPath.replace("dummy.html",""));
+                            this.setFileTransfer(new FileTransfer());
 
-                        // set any downloading map as resumable
-                        var store = Ext.getStore('SavedMaps');
-                        store.load();
-                        store.each(function(r) {
-                            if (r.get('downloading') === true) {
-                                r.set('downloading', false);
-                                r.set('resumable', true);
-                                r.save();
-                            }
-                        }, this);
-                    }, this),
-                    function() {
-                        console.log('fail root.getFile("dummy.html")');
-                    }
-                );
-            }, this),
-            function() {
-                console.log('fail requestFileSystem');
-            }
-        );
+                            // set any downloading map as resumable
+                            var store = Ext.getStore('SavedMaps');
+                            store.load();
+                            store.each(function(r) {
+                                if (r.get('downloading') === true) {
+                                    r.set('downloading', false);
+                                    r.set('resumable', true);
+                                    r.save();
+                                }
+                            }, this);
+                        }, this),
+                        function() {
+                            console.log('fail root.getFile("dummy.html")');
+                        }
+                    );
+                }, this),
+                function() {
+                    console.log('fail requestFileSystem');
+                }
+            );
+        }
     },
 
     showDownload: function() {
