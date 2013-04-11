@@ -134,19 +134,15 @@ Ext.define('App.util.Config', {
      * Get URL to the tile service.
      */
     getTileUrl: function() {
-        return !!window.device ?
-            this.getAppTileUrl() :
-            this.getWebTileUrl();
+        return !!window.device ? this.getAppTileUrl() : this.getWebTileUrl();
     },
 
     /**
      * Get URL to the WSGI app.
      */
-    getWsgiUrl: (function() {
-        return !!window.device ?
-                function() { return this.getAppWsgiUrl(); } :
-                function() { return this.getWebWsgiUrl(); };
-    })(),
+    getWsgiUrl: function() {
+        return !!window.device ? this.getAppWsgiUrl() : this.getWebWsgiUrl();
+    },
 
     /**
      * Returns true if native PhoneGap app, false otherwise.
