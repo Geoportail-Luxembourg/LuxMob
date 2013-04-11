@@ -272,7 +272,10 @@ Ext.define('App.controller.Download', {
                 new OpenLayers.Bounds(left, bottom, right, top)
             );
             var params = OpenLayers.Util.getParameters(url);
-            var layers = [layer.map.baseLayer.layername];
+            var layers = [];
+            if (layer.map.baseLayer.layername) {
+                layers.push(layer.map.baseLayer.layername);
+            }
             if (params.LAYERS !== '') {
                 layers.push(params.LAYERS);
             }
