@@ -29,6 +29,26 @@ Ext.define('App.util.Config', {
         webOverlayUrl: 'http://app.geoportail.lu/mapproxy/service',
 
         /**
+         * The URLs to the tile service to use in the native app.
+         */
+        appTileUrl: [
+            'http://apptile1.geoportail.lu',
+            'http://apptile2.geoportail.lu',
+            'http://apptile3.geoportail.lu',
+            'http://apptile4.geoportail.lu'
+        ],
+
+        /**
+         * The URLs to the tile service to use in the native app.
+         */
+        webTileUrl: [
+            'http://tile1.geoportail.lu',
+            'http://tile2.geoportail.lu',
+            'http://tile3.geoportail.lu',
+            'http://tile4.geoportail.lu'
+        ],
+
+        /**
          * The URL to tbe WSGI app to use in the native app.
          */
         appWsgiUrl: 'http://app.geoportail.lu/',
@@ -115,18 +135,8 @@ Ext.define('App.util.Config', {
      */
     getTileUrl: function() {
         return !!window.device ?
-            [
-                'http://apptile1.geoportail.lu',
-                'http://apptile2.geoportail.lu',
-                'http://apptile3.geoportail.lu',
-                'http://apptile4.geoportail.lu'
-            ] :
-            [
-                'http://tile1.geoportail.lu',
-                'http://tile2.geoportail.lu',
-                'http://tile3.geoportail.lu',
-                'http://tile4.geoportail.lu'
-            ];
+            this.getAppTileUrl() :
+            this.getWebTileUrl();
     },
 
     /**
