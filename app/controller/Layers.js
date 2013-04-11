@@ -639,8 +639,9 @@ Ext.define('App.controller.Layers', {
      * Removes any highlighted vector feature
      */
     clearHighlight: function() {
-        this.getApplication().getController('Search').getVectorLayer()
-            .removeAllFeatures();
+        var search = this.getApplication().getController('Search');
+        search && search.getVectorLayer() &&
+            search.getVectorLayer().removeAllFeatures();
     }
 });
 
