@@ -327,6 +327,23 @@ Ext.define('App.controller.Layers', {
             name,
             label,
             visible = true;
+
+        // if the record comes from the Overlays store check if there's not
+        // a corresponding record in the selected overlays already
+        if (record.get && record.get('name')) {
+            var found = false;
+            this.getSelectedOverlaysList().items.each(function(field) {
+                if (field.isXType('field') &&
+                    field.getName() == record.get('name')) {
+                    field.check();
+                    found = true;
+                }
+            });
+            if (found) {
+                return;
+            }
+        }
+
         if (record.get && record.get('visible') === false) {
             visible = record.get('visible');
         }
