@@ -124,11 +124,9 @@ Ext.define('App.util.Config', {
     /**
      * Get URL to the WMS service.
      */
-    getOverlayUrl: (function() {
-        return !!window.device ?
-                function() { return this.getAppOverlayUrl(); } :
-                function() { return this.getWebOverlayUrl(); };
-    })(),
+    getOverlayUrl: function() {
+        return !!window.device ? this.getAppOverlayUrl() : this.getWebOverlayUrl();
+    },
 
     /**
      * Get URL to the tile service.
