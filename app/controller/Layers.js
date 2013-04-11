@@ -304,6 +304,7 @@ Ext.define('App.controller.Layers', {
         this.checkForLayersExclusion(record, true);
         this.getMap().setBaseLayer(layer);
         this.getBaseLayerButton().setText(OpenLayers.i18n(layer.name));
+        this.clearHighlight();
         this.redirectTo('main');
     },
 
@@ -421,6 +422,7 @@ Ext.define('App.controller.Layers', {
             layer.setVisibility(layersParam.length);
             layer.mergeNewParams({'LAYERS': layersParam});
         }
+        this.clearHighlight();
         this.redirectTo('main');
     },
 
@@ -631,6 +633,14 @@ Ext.define('App.controller.Layers', {
     onSearchClearIconTap: function() {
         //call the clearFilter method on the store instance
         Ext.getStore('Overlays').clearFilter();
+    },
+
+    /**
+     * Removes any highlighted vector feature
+     */
+    clearHighlight: function() {
+        this.getApplication().getController('Search').getVectorLayer()
+            .removeAllFeatures();
     }
 });
 
