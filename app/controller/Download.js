@@ -14,7 +14,7 @@ Ext.define('App.controller.Download', {
         holding: false,
         fileSystem: null,
         fileTransfer: null,
-        basePath: null,
+        directory: null,
         // the amount of currently downloading images
         downloadCount: 0,
         // the tiles to download
@@ -58,11 +58,10 @@ Ext.define('App.controller.Download', {
             window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
                 Ext.bind(function(fs) {
                     this.setFileSystem(fs);
-                    fs.root.getFile(
-                        "dummy.html",
+                    fs.root.getDirectory("com.c2c.LuxMob",
                         {create: true, exclusive: false},
-                        Ext.bind(function (fileEntry) {
-                            this.setBasePath(fileEntry.fullPath.replace("dummy.html",""));
+                        Ext.bind(function (dirEntry) {
+                            this.setDirectory(dirEntry);
                             this.setFileTransfer(new FileTransfer());
 
                             // set any downloading map as resumable
@@ -77,7 +76,7 @@ Ext.define('App.controller.Download', {
                             }, this);
                         }, this),
                         function() {
-                            console.log('fail root.getFile("dummy.html")');
+                            console.log('fail root.getDirectory(...)');
                         }
                     );
                 }, this),
@@ -327,7 +326,7 @@ Ext.define('App.controller.Download', {
         var fileName = name + '.png';
         this.getFileTransfer().download(
             url,
-            this.getBasePath() + fileName,
+            this.getDirectory().fullPath + '/' + fileName,
             Ext.bind(function(file) {
                 this.onDownloadSuccess(record, url, file);
             }, this),
@@ -434,40 +433,32 @@ Ext.define('App.controller.Download', {
 
     deleteTiles: function(record, callback) {
         var id = record.get('id');
-        this.getFileSystem().root.getDirectory(this.getBasePath(), null,
-            function(dirEntry) {
-                var directoryReader = dirEntry.createReader();
-                directoryReader.readEntries(
-                    function success(entries) {
-                        var toRemove = [], total = 0, count = 0;
-                        Ext.each(entries, function(entry) {
-                            if (entry.name.indexOf(id) == 0) {
-                                toRemove.push(entry);
-                            }
-                        });
-                        total = toRemove.length;
-                        Ext.each(toRemove, function(entry) {
-                            entry.remove(function(){
-                                count++;
-                                if (count == total) {
-                                    callback.apply(this, [record]);
-                                }
-                            }, function(){
-                                console.log('fail to delete file');
-                            });
-                        });
-                    },
-                    function() {
-                        console.log('fail to get directory reader');
+        var directoryReader = this.getDirectory().createReader();
+        directoryReader.readEntries(
+            function success(entries) {
+                var toRemove = [], total = 0, count = 0;
+                Ext.each(entries, function(entry) {
+                    if (entry.name.indexOf(id) == 0) {
+                        toRemove.push(entry);
                     }
-                );
+                });
+                total = toRemove.length;
+                Ext.each(toRemove, function(entry) {
+                    entry.remove(function(){
+                        count++;
+                        if (count == total) {
+                            callback.apply(this, [record]);
+                        }
+                    }, function(){
+                        console.log('fail to delete file');
+                    });
+                });
             },
             function() {
-                console.log('fail to get directory');
+                console.log('fail to get directory reader');
             }
         );
     }
-
 });
 
 App.MaskControl = OpenLayers.Class(OpenLayers.Control, {
