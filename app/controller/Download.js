@@ -58,7 +58,12 @@ Ext.define('App.controller.Download', {
             window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
                 Ext.bind(function(fs) {
                     this.setFileSystem(fs);
-                    fs.root.getDirectory("com.c2c.LuxMob",
+                    // Make sure that we use the applications prefered path on
+                    // Android so that files are destroyed after application
+                    // removal. Still doesn't work in certain cases.
+                    var path = Ext.os.is.Android ?
+                        "Android/data/com.c2c.LuxMob" : "";
+                    fs.root.getDirectory(path,
                         {create: true, exclusive: false},
                         Ext.bind(function (dirEntry) {
                             this.setDirectory(dirEntry);
