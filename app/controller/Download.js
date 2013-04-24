@@ -409,11 +409,7 @@ Ext.define('App.controller.Download', {
                     text: i18n.message("button.map_remove"),
                     ui: 'decline',
                     handler: function() {
-                        this.deleteTiles(record, function(record) {
-                            var store = record.stores[0];
-                            store.remove(record);
-                            store.sync();
-                        });
+                        this.deleteTiles(record);
                         actions.hide();
                     },
                     scope: this
@@ -436,7 +432,7 @@ Ext.define('App.controller.Download', {
         dataview.setDisableSelection(this.getHolding());
     },
 
-    deleteTiles: function(record, callback) {
+    deleteTiles: function(record) {
         var id = record.get('id');
         var directoryReader = this.getDirectory().createReader();
         directoryReader.readEntries(
@@ -452,7 +448,9 @@ Ext.define('App.controller.Download', {
                     entry.remove(function(){
                         count++;
                         if (count == total) {
-                            callback.apply(this, [record]);
+                            var store = record.stores[0];
+                            store.remove(record);
+                            store.sync();
                         }
                     }, function(){
                         console.log('fail to delete file');
