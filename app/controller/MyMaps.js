@@ -643,6 +643,7 @@ Ext.define('App.controller.MyMaps', {
             method: 'PUT',
             params: params,
             success: function(reponse) {
+                this.redirectTo('main/map/' + id);
                 this.closeAddPoi();
             },
             scope: this
