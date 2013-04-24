@@ -109,6 +109,13 @@ Ext.define('App.controller.MyMaps', {
                             autoActivate: true
                         }
                     );
+                    // Workaround for
+                    // https://github.com/openlayers/openlayers/pull/955
+                    // To be removed when #955 is closed and OpenLayers
+                    // is updated in the project.
+                    select.handlers.feature.touchmove = function(evt) {
+                        OpenLayers.Util.preventDefault(evt);
+                    };
                     this.setSelectControl(select);
                     vector.events.on({
                         'featureselected': function(e) {
