@@ -364,55 +364,43 @@ Ext.define('App.controller.Layers', {
     },
 
     onOverlayAdd: function(record, silent) {
-        var store = Ext.getStore('SelectedOverlays'),
-            name,
-            label,
-            visible = true;
 
-        // if the record comes from the Overlays store check if there's not
-        // a corresponding record in the selected overlays already
-        if (record.get && record.get('name')) {
-            var found = false;
-            this.getSelectedOverlaysList().items.each(function(field) {
-                if (field.isXType('field') &&
-                    field.getName() == record.get('name')) {
-                    field.check();
-                    found = true;
-                }
-            });
-            if (found) {
-                return;
+        var selectedOverlaysList = this.getSelectedOverlaysList();
+
+        // Bail out if we have already a field for this record in the
+        // selected overlays list.
+        var found = false;
+        selectedOverlaysList.items.each(function(field) {
+            if (field.isXType('field') &&
+                field.getName() == record.get('name')) {
+                field.check();
+                found = true;
             }
+        });
+        if (found) {
+            return;
         }
 
-        if (record.get && record.get('visible') === false) {
+        var selectedOverlaysStore = Ext.getStore('SelectedOverlays');
+
+        var visible = true;
+        if (record.get('visible') === false) {
             visible = record.get('visible');
         }
+
         if (!silent) {
-            if (!record.data) {
-                name = record.name;
-                label = record.label;
-                record = store.add({
-                    fr: OpenLayers.Lang.fr[label] || label,
-                    en: OpenLayers.Lang.en[label] || label,
-                    de: OpenLayers.Lang.de[label] || label,
-                    lu: OpenLayers.Lang.lu[label] || label,
-                    label: label,
-                    name: name,
-                    exclusion: record.exclusion,
-                    visible: true
-                })[0];
-            } else {
-                record = store.add(record.raw)[0];
-                record.set('visible', true);
-            }
-            store.sync();
+            record = selectedOverlaysStore.add(record.raw)[0];
+            record.set('visible', true);
+            selectedOverlaysStore.sync();
             this.onOverlayChange();
         }
-        name = record.get('name');
-        label = record.get('label');
+
+        var name = record.get('name');
+        var label = record.get('label');
+
         this.checkForLayersExclusion(record);
-        var field = this.getSelectedOverlaysList().insert(0, {
+
+        var field = selectedOverlaysList.insert(0, {
             label: OpenLayers.i18n(label),
             name: name,
             value: label,
@@ -423,6 +411,7 @@ Ext.define('App.controller.Layers', {
                 scope: this
             }
         });
+
         field.on({
             element: 'label',
             longpress: Ext.bind(this.onOverlaySwipe, this, [field]),
