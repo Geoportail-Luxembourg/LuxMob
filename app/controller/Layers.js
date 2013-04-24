@@ -506,7 +506,10 @@ Ext.define('App.controller.Layers', {
                         item.check();
                     }
                 });
-                layersToExclude.push(OpenLayers.i18n(curBaseLayer.get('name')));
+                this.showMessage(i18n.message("layers.exclusion_baselayer_msg", {
+                    baseLayer: OpenLayers.i18n(curBaseLayer.get('name')),
+                    overlay: OpenLayers.i18n(layer.get('name'))
+                }));
             }
         }
 
