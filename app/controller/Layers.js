@@ -95,7 +95,7 @@ Ext.define('App.controller.Layers', {
             },
             themeSelect: {
                 change: function(select, newValue) {
-                    this.loadOverlays(this.getMap(), newValue);
+                    this.loadOverlays(newValue);
                 }
             }
         },
@@ -315,7 +315,7 @@ Ext.define('App.controller.Layers', {
         map.addLayer(this.getOverlaysOLLayer());
     },
 
-    loadOverlays: function(map, theme) {
+    loadOverlays: function(theme) {
         var store = Ext.getStore('Overlays');
         store.clearFilter();
         store.filterBy(function(record) {
