@@ -74,7 +74,9 @@ Ext.application({
             });
         }
 
-        this.handleTablet();
+        if (Ext.os.is.Tablet) {
+            this.handleTablet();
+        }
 
         // Make home screen webapp open in Safari, to prevent
         // Geolocation iOS bug
@@ -96,35 +98,37 @@ Ext.application({
     },
 
     handleTablet: function() {
-        if (Ext.os.is.Tablet) {
-            var queryString = window.location.search;
-            if (queryString.length === 0) {
-                queryString = '?';
-            }
-            var url = App.util.Config.getWsgiUrl() + queryString + '&no_redirect';
-            var msg = OpenLayers.String.format(
-                OpenLayers.i18n('mobile.redirect_msg'), {url: url});
-            msg += "<a href='#' class='close' style='float:right'>" +
-                   OpenLayers.i18n('mobile.close') + "</a>";
-            var actionSheet = Ext.create('Ext.ActionSheet', {
-                ui: 'redirect',
-                modal: false,
-                html: msg
-            });
+        var queryString = window.location.search;
+        if (queryString.length === 0) {
+            queryString = '?';
+        }
+        var url = App.util.Config.getWsgiUrl() + queryString + '&no_redirect';
 
-            Ext.Viewport.add(actionSheet);
-            actionSheet.show();
-            Ext.Function.defer(function() {
-                actionSheet.hide();
-            }, 15000);
-            actionSheet.element.on({
-                'tap': function(e) {
-                    if (Ext.get(e.target).hasCls('close')) {
-                        actionSheet.hide();
-                    }
-                }
-            });
-        }
+        var msg = OpenLayers.String.format(
+            OpenLayers.i18n('mobile.redirect_msg'), {url: url});
+        msg += "<a href='#' class='close' style='float:right'>" +
+               OpenLayers.i18n('mobile.close') + "</a>";
+
+        var actionSheet = Ext.create('Ext.ActionSheet', {
+            ui: 'redirect',
+            modal: false,
+            html: msg
+        });
+
+        Ext.Viewport.add(actionSheet);
+
+        actionSheet.show();
+        Ext.Function.defer(function() {
+            actionSheet.hide();
+        }, 15000);
+
+        actionSheet.element.on({
+            'tap': function(e) {
+                if (Ext.get(e.target).hasCls('close')) {
+                    actionSheet.hide();
+                }
+            }
+        });
     },
 
     prepareI18n: function() {
