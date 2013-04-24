@@ -114,7 +114,7 @@ Ext.define('App.controller.MyMaps', {
                     // To be removed when #955 is closed and OpenLayers
                     // is updated in the project.
                     select.handlers.feature.touchmove = function(evt) {
-                        OpenLayers.Util.preventDefault(evt);
+                        OpenLayers.Event.preventDefault(evt);
                     };
                     this.setSelectControl(select);
                     vector.events.on({
