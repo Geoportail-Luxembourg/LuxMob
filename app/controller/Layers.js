@@ -55,9 +55,6 @@ Ext.define('App.controller.Layers', {
                     this.redirectTo('overlays');
                 }
             },
-            selectedOverlaysList: {
-                ready: 'loadOverlaysFromCache'
-            },
             overlaysView: {
                 ready: function() {
                     var store = Ext.getStore('SelectedOverlays');
@@ -167,6 +164,27 @@ Ext.define('App.controller.Layers', {
             scope: this
         });
 
+        var overlaysOLLayer = new OpenLayers.Layer.WMS(
+            "Overlays",
+            App.util.Config.getOverlayUrl(),
+            {layers: [], transparent: true},
+            {visibility: false, buffer: 0}
+        );
+        this.setOverlaysOLLayer(overlaysOLLayer);
+
+        // onOverlaysStoreLoaded is where we actually add the overlays
+        // to the map.
+        var overlaysStore = Ext.getStore('Overlays');
+        if (overlaysStore.isLoaded()) {
+            this.onOverlaysStoreLoaded();
+        } else {
+            overlaysStore.on({
+                load: this.onOverlaysStoreLoaded,
+                scope: this,
+                single: true
+            });
+        }
+
         // support language change for some widgets
         this.getApplication().getController('Settings').on({
             languagechange: function(code) {
@@ -192,11 +210,59 @@ Ext.define('App.controller.Layers', {
         });
     },
 
-    loadOverlaysFromCache: function() {
-        var store = Ext.getStore('SelectedOverlays');
-        store.load();
-        store.each(function(record) {
-            this.onOverlayAdd(record, true);
+    /**
+     * Function called when the Overlays store is loaded.
+     *
+     * This function adds the overlays to the map. The displayed
+     * overlays are selected based on the "layers" query string
+     * parameter, and what we have in the local storage. The
+     * query string has precedence over the local storage.
+     */
+    onOverlaysStoreLoaded: function(store) {
+
+        var selectedOverlaysStore = Ext.getStore('SelectedOverlays');
+        selectedOverlaysStore.load();
+
+        var queryParamsLayers = OpenLayers.Util.getParameters().layers;
+
+        if (queryParamsLayers) {
+
+            // getParameters creates an array when it sees commas in
+            // the parameter value, so we either get an array or a
+            // string with no commas.
+            if (!Ext.isArray(queryParamsLayers)) {
+                queryParamsLayers = [queryParamsLayers];
+            }
+
+            var queryParamsLayerRecords = store.queryBy(function(record) {
+                return Ext.Array.contains(queryParamsLayers, record.get('name'));
+            });
+
+            if (queryParamsLayerRecords.length > 0) {
+
+                // The query string has a "layers" param with layer names
+                // that we have in store. So we clear the SelectedOverlays
+                // store, and populate it with new records corresponding
+                // to what's specificed in the query string.
+
+                selectedOverlaysStore.removeAll();
+
+                queryParamsLayerRecords.each(function(record) {
+                    record = selectedOverlaysStore.add(record.raw)[0];
+                    record.set('visible', true);
+                });
+
+                selectedOverlaysStore.sync();
+            }
+        }
+
+        // Now add the overlays to the map and to the selected overlays
+        // list. We set silent to true when calling onOverlayAdd because
+        // we don't want onOverlayAdd to add the record to the
+        // SelectedOverlays store, as the record is already in the store.
+
+        selectedOverlaysStore.each(function(record) {
+            this.onOverlayAdd(record, /* silent */ true);
         }, this);
     },
 
@@ -246,39 +312,14 @@ Ext.define('App.controller.Layers', {
 
         this.getBaseLayerButton().setText(OpenLayers.i18n(this.getMap().baseLayer.name));
 
-        var queryParams = OpenLayers.Util.getParameters();
-        store = Ext.getStore('SelectedOverlays');
-        var cache = [];
-        store.each(function(record) {
-            if (record.get('visible')) {
-                cache.push(record.get('name'));
-            }
-        });
-        var overlays = queryParams.layers || cache;
-        this.getMap().addLayer(
-            new OpenLayers.Layer.WMS(
-                "Overlays",
-                App.util.Config.getOverlayUrl(),
-                {
-                    layers: overlays || [],
-                    transparent: true
-                },
-                {
-                    visibility: overlays.length,
-                    buffer: 0
-                }
-            )
-        );
-        this.setOverlaysOLLayer(map.getLayersByName('Overlays')[0]);
-        this.loadOverlays(map);
+        map.addLayer(this.getOverlaysOLLayer());
     },
 
     loadOverlays: function(map, theme) {
-        var t = theme || 0;
         var store = Ext.getStore('Overlays');
         store.clearFilter();
         store.filterBy(function(record) {
-            return Ext.Array.contains(record.get('themes'), t);
+            return Ext.Array.contains(record.get('themes'), theme);
         });
         var layersParam = this.getOverlaysOLLayer().params.LAYERS;
         var selected = store.queryBy(function(record) {
@@ -291,7 +332,7 @@ Ext.define('App.controller.Layers', {
             );
         });
         var list = this.getOverlaysList();
-        list && list.select(selected.items, false, true);
+        list.select(selected.items, false, true);
     },
 
     toArray: function(value) {
