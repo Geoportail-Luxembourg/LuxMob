@@ -98,6 +98,11 @@ Ext.application({
     },
 
     handleTablet: function() {
+        // If native app we do not invite user to go to desktop app
+        if (window.device) {
+            return;
+        }
+
         var queryString = window.location.search;
         if (queryString.length === 0) {
             queryString = '?';
