@@ -97,12 +97,13 @@ Ext.application({
 
     handleTablet: function() {
         if (Ext.os.is.Tablet) {
+            var queryString = window.location.search;
+            if (queryString.length === 0) {
+                queryString = '?';
+            }
+            var url = App.util.Config.getWsgiUrl() + queryString + '&no_redirect';
             var msg = OpenLayers.String.format(
-                OpenLayers.i18n('mobile.redirect_msg'),
-                {
-                    url: App.util.Config.getWsgiUrl() + '?no_redirect'
-                }
-            );
+                OpenLayers.i18n('mobile.redirect_msg'), {url: url});
             msg += "<a href='#' class='close' style='float:right'>" +
                    OpenLayers.i18n('mobile.close') + "</a>";
             var actionSheet = Ext.create('Ext.ActionSheet', {
