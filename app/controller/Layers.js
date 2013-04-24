@@ -483,12 +483,16 @@ Ext.define('App.controller.Layers', {
                     ui: 'decline',
                     handler: function() {
                         field.getParent().remove(field);
-                        this.onOverlayRemove(field.getValue());
+                        this.onOverlayRemove(field.getName());
+
                         var list = this.getOverlaysList();
-                        var store = Ext.getStore('Overlays');
-                        list && list.deselect(store.getAt(store.findExact(
-                            'name', field.getValue()
-                        )));
+                        if (list) {
+                            var store = Ext.getStore('Overlays');
+                            var recordIndex = store.findExact(
+                                'name', field.getName());
+                            var record = store.getAt(recordIndex);
+                            list.deselect(record);
+                        }
                         actions.hide();
                     },
                     scope: this
