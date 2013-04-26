@@ -28,10 +28,12 @@ var SavedMapLayer = OpenLayers.Class(OpenLayers.Layer.XYZ, {
 
     getURLasync: function(bounds, callback, scope) {
         var url = this.getURL(bounds);
+        var path = Ext.os.is.Android ?
+            "Android/data/com.c2c.LuxMob" : "";
         var fileName = this.uuid + '_' + url.replace(/\//g,'_');
 
         this.fs.root.getFile(
-            fileName,
+            path + '/' + fileName,
             null,
             function(fileEntry) {
                 callback.call(scope, fileEntry.toURL());
