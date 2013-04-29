@@ -614,7 +614,24 @@ Ext.define('App.controller.MyMaps', {
             }, 250, this);
             this.getVectorLayer().addFeatures([
                 new OpenLayers.Feature.Vector(
-                    new OpenLayers.Geometry.Point(e.point.x, e.point.y)
+                    new OpenLayers.Geometry.Point(e.point.x, e.point.y),
+                    null,
+                    OpenLayers.Util.applyDefaults({
+                        externalGraphic: 'resources/images/marker.png',
+                        graphicWidth: 17.6,
+                        graphicHeight: 24,
+                        graphicYOffset: -24,
+                        graphicOpacity: 1,
+                        backgroundGraphic: 'resources/images/shadow-marker.png',
+                        backgroundWidth: 38,
+                        backgroundHeight: 30,
+                        backgroundYOffset: -30,
+                        backgroundXOffset: -10,
+                        strokeWidth: 3,
+                        strokeColor: 'red',
+                        graphicZIndex: 1,
+                        backgroundGraphicZIndex: 0
+                    }, OpenLayers.Feature.Vector.style['default'])
                 )
             ]);
         }
