@@ -637,6 +637,10 @@ Ext.define('App.controller.MyMaps', {
     saveMap: function() {
         var features = this.getVectorLayer().features;
         var form = this.getAddPoiView();
+        form.mask({
+            xtype: 'loadmask',
+            indicator: false
+        });
         Ext.apply(features[features.length - 1].attributes, form.getValues());
 
         var format = new OpenLayers.Format.GeoJSON();
