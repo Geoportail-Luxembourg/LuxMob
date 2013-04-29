@@ -710,6 +710,12 @@ Ext.define('App.controller.MyMaps', {
         options.fileName = imageURI.substring(imageURI.lastIndexOf('/') + 1);
         options.chunkedMode = false;
 
+        var form = this.getAddPoiView();
+        var button = form.down('button[action=upload]');
+        button.setIconCls(false);
+        button.setIconMask(false);
+        button.setIcon("resources/images/loading.gif");
+
         var ft = new FileTransfer();
         ft.upload(
             imageURI,
