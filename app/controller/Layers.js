@@ -78,7 +78,7 @@ Ext.define('App.controller.Layers', {
                 deactivate: 'deactivateSavedMap'
             },
             savedMapsList: {
-                select: 'onSavedMapsSelected'
+                itemtap: 'onSavedMapsSelected'
             },
             overlaysList: {
                 select: function(list, record) {
@@ -575,7 +575,7 @@ Ext.define('App.controller.Layers', {
         }
     },
 
-    onSavedMapsSelected: function(list, record) {
+    onSavedMapsSelected: function(list, index, target, record) {
         var map = this.getMap();
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0,
             Ext.bind(function(fs) {
