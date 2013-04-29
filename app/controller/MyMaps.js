@@ -343,11 +343,15 @@ Ext.define('App.controller.MyMaps', {
         var detail = preview.add(new App.view.MyMapFeatureDetail());
         detail.setFeature(feature);
         this.redirectTo('main');
-        Ext.defer(this.previewResize, 10, this, [this.getFeatureDetailHeight()]);
+        this.previewResize(this.getFeatureDetailHeight());
     },
 
     hideFeatureDetail: function() {
-        this.previewResize(this.getMyMapPreviewHeight());
+        Ext.defer(function() {
+            if (!this.getVectorLayer().selectedFeatures.length) {
+                this.previewResize(this.getMyMapPreviewHeight());
+            }
+        }, 100, this);
 
         var preview = this.getMyMapPreview();
         if (preview) {
