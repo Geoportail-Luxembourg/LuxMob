@@ -190,6 +190,13 @@ Ext.define('App.controller.Layers', {
             languagechange: function(code) {
                 var list = this.getOverlaysList();
                 list && list.setItemTpl(['{', code, '}'].join(''));
+                list && list.on({
+                    painted: function() {
+                        list.refresh();
+                    },
+                    scope: this,
+                    single: true
+                });
 
                 this.getBaseLayersView().items.each(function(item) {
                     if (item.getXTypes().indexOf('radio') != -1) {
