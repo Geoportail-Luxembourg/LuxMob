@@ -290,8 +290,9 @@ Ext.define('App.controller.MyMaps', {
             layer = this.getVectorLayer(),
             map = this.getMap();
         layer.removeAllFeatures();
-        if (layer in map.layers) {
+        if (Ext.Array.contains(map.layers, layer)) {
             map.removeLayer(layer);
+            this.getSelectControl().deactivate();
             map.removeControl(this.getSelectControl());
         }
         if (preview && !preview.isHidden()) {
