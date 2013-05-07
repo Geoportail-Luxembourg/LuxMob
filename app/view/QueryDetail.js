@@ -23,5 +23,22 @@ Ext.define('App.view.QueryDetail', {
                 action: "back"
             }]
         }]
+    },
+
+    initialize: function() {
+        if (window.device) {
+            // detect any click on link to open them in the native browser
+            this.on({
+                tap: {
+                    fn: function(e, node) {
+                        e.stopEvent();
+                        window.open(e.getTarget().href, '_system');
+                    },
+                    element: 'innerElement',
+                    delegate: 'a'
+                },
+                scope: this
+            });
+        }
     }
 });

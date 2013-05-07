@@ -108,13 +108,16 @@ Ext.define('App.view.Main', {
         return this.callParent([items, collection]);
     },
 
-    setCenterZoomFromQueryParams: function() {
+    setCenterZoomBgFromQueryParams: function() {
         var queryParams = OpenLayers.Util.getParameters();
         if (queryParams.X && queryParams.Y && queryParams.zoom) {
             // Note: Y -> lon, X -> lat
             this.setCenter(
                 new OpenLayers.LonLat(queryParams.Y, queryParams.X));
             this.setZoom(queryParams.zoom);
+        }
+        if (queryParams.bgLayer) {
+            this.setBaseLayer(queryParams.bgLayer);
         }
     },
 
@@ -128,7 +131,7 @@ Ext.define('App.view.Main', {
         var mapContainer = this.down('#map-container').element;
         map.render(mapContainer.dom);
 
-        this.setCenterZoomFromQueryParams();
+        this.setCenterZoomBgFromQueryParams();
 
         // required so that the map gets effectively displayed
         // height = 0 if not set
