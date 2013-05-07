@@ -1,3 +1,4 @@
+window.i18n = Ext.i18n.Bundle;
 Ext.define('App.controller.MyMaps', {
     extend: 'Ext.app.Controller',
     requires: [
@@ -422,45 +423,46 @@ Ext.define('App.controller.MyMaps', {
         // window.open in an XHR callback does not work in the web app,
         // because of the popup blocker.
 
-        if (window.device) {
-            Ext.Ajax.request({
-                url: App.util.Config.getWsgiUrl() + 'upload/upload',
-                method: 'POST',
-                xmlData: content,
-                headers: {
-                    'Content-Type': contentType
-                },
-                callback: function(options, success, response) {
-                    Ext.Viewport.setMasked(false);
-                    if (success) {
-                        var o = Ext.decode(response.responseText);
+        Ext.Ajax.request({
+            url: App.util.Config.getWsgiUrl() + 'upload/upload',
+            method: 'POST',
+            xmlData: content,
+            headers: {
+                'Content-Type': contentType
+            },
+            callback: function(options, success, response) {
+                Ext.Viewport.setMasked(false);
+                if (success) {
+                    var o = Ext.decode(response.responseText);
+                    if (window.device) {
                         // See http://docs.phonegap.com/en/2.3.0/cordova_inappbrowser_inappbrowser.md.html#window.open
                         // for information on the '_system' target.
                         window.open(o.url, '_system');
                     } else {
-                        window.alert('Upload failed');
+                        // Offer standard link to user
+                        var panel = Ext.Viewport.add({
+                            xtype: 'panel',
+                            modal: true,
+                            hideOnMaskTap: true,
+                            centered: true,
+                            cls: 'my_map_dwlFile',
+                            width: 260,
+                            height: 220,
+                            html: [
+                                '<a href="',
+                                o.url,
+                                '" target="_blank" class="x-button">',
+                                i18n.message('mymaps.exportdwl'),
+                                '</a>'
+                            ].join('')
+                        });
+                        panel.show();
                     }
+                } else {
+                    window.alert('Upload failed');
                 }
-            });
-        } else {
-            Ext.defer(function() {
-                this.getConnection().upload(
-                    this.getDummyForm(),
-                    App.util.Config.getWsgiUrl() + 'mymaps/export',
-                    Ext.Object.toQueryString({
-                        content: content,
-                        format: format.toLowerCase(),
-                        name: title,
-                        dc: Math.random()
-                    })
-                );
-                Ext.Viewport.setMasked(false);
-            }, 100, this);
-            // workaround to prevent errors with Sencha Touch
-            // See http://www.sencha.com/forum/showthread.php?258561-Ext.Connection.upload-first-call-raises-javascript-error&p=946608
-            var frame = document.createElement('iframe');
-            Ext.fly(frame).on('load', function() {});
-        }
+            }
+        });
     },
 
     profile: function(feature) {
