@@ -314,11 +314,29 @@ Ext.define('App.controller.Query', {
     },
 
     showDetail: function(id) {
+        var view = this.getQueryDetailView();
+        view.setData({});
+
+        // we use defer here to prevent link click to be taken into account
+        // while the view is loaded
+        Ext.defer(function() {
+            view.setData(Ext.getStore('Query').getById(id).get('properties'));
+
+            if (window.device) {
+                // detect any click on link to open them in the native browser
+                Ext.select('a', view.element.dom).each(function(link) {
+                    link = link.dom;
+                    link.onclick = function(e) {
+                        e.preventDefault();
+                        window.open(link.href, '_system');
+                    };
+                });
+            }
+        }, 350);
+
         Ext.Viewport.animateActiveItem(
             this.getQueryDetailView(),
             {type: 'slide', direction: 'left'}
         );
-        this.getQueryDetailView()
-            .setData(Ext.getStore('Query').getById(id).get('properties'));
     }
 });
