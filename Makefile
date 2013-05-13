@@ -26,8 +26,8 @@ ios-json:
 	python utils/modify_app_json.py cordova-2.5.0.ios.js
 
 .PHONY: android
-android: android-json build/cordova-android/local.properties app
-	cp -r build/App/production/* build/cordova-android/assets/www/
+android: android-json build/cordova-android/local.properties testingapp
+	cp -r build/App/testing/* build/cordova-android/assets/www/
 	./build/cordova-android/cordova/build
 	adb uninstall com.c2c.LuxMob
 	./build/cordova-android/cordova/run
@@ -54,6 +54,12 @@ build/cordova-android/local.properties:
 .PHONY: app
 app: external/openlayers build/App/production/app.js
 
+.PHONY: testingapp
+testingapp: external/openlayers build/App/testing/app.js
+
+build/App/testing/app.js: $(SRC) $(SRC_APP)
+	sencha app build testing || rm -f $@
+
 build/App/production/app.js: $(SRC) $(SRC_APP)
 	sencha app build production || rm -f $@
 
@@ -73,6 +79,7 @@ svn-checkout:
 .PHONY:
 clean:
 	rm -rf build/App/production/*
+	rm -rf build/App/testing/*
 	rm -rf $(filter-out build/cordova-ios/www/cordova-2.5.0.ios.js, $(shell find build/cordova-ios/www -mindepth 1 -maxdepth 1))
 	rm -rf $(filter-out build/cordova-android/assets/www/cordova-2.5.0.android.js, $(shell find build/cordova-android/assets/www -mindepth 1 -maxdepth 1|grep -v .empty_folder))
 	rm -f build/cordova-android/local.properties
