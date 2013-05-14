@@ -119,57 +119,14 @@ Ext.define('App.controller.Layers', {
             );
         }
 
-        store.load({
-            callback: function(records) {
-                var configObject = App.util.Config;
-
-                // The map config object will be modified but that's ok.
-                var mapConfig = configObject.getMapConfig();
-                Ext.each(records, function(record) {
-                    mapConfig.layers.push(new OpenLayers.Layer.TileCache(
-                        record.get('name'),
-                        configObject.getTileUrl(),
-                        record.get('layername'),
-                        {
-                            maxExtent: OpenLayers.Bounds.fromArray(record.get('bbox')),
-                            format: record.get('format'),
-                            buffer: 0,
-                            transitionEffect: 'resize',
-                            tileLoadingDelay: 125,
-                            exclusion: record.get('exclusion'),
-                            serverResolutions: [500.0, 250.0, 150.0, 100.0, 50.0,
-                                                20.0, 10.0, 5.0, 2.0, 1.0, 0.5]
-                        }
-                    ));
-                });
-
-                var name = 'voidLayer';
-                mapConfig.layers.push(new OpenLayers.Layer(name, {
-                    isBaseLayer: true
-                }));
-                Ext.getStore('BaseLayers').add({
-                    name: name,
-                    exclusion: []
-                });
-
-                var map = new OpenLayers.Map(mapConfig);
-                this.getMainView().setMap(map);
-
-                // destroy the #appLoadingIndicator element
-                Ext.fly('appLoadingIndicator').destroy();
-
-                // now add the main view to the viewport
-                Ext.Viewport.add(this.getMainView());
-            },
-            scope: this
-        });
+        this.loadStores(false);
 
         var overlaysOLLayer = new OpenLayers.Layer.WMS(
-            "Overlays",
+            "Overlays",
             App.util.Config.getOverlayUrl(),
-            {layers: [], transparent: true},
-            {visibility: false, buffer: 0}
-        );
+            {layers: [], transparent: true},
+            {visibility: false, buffer: 0}
+        );
         this.setOverlaysOLLayer(overlaysOLLayer);
 
         // onOverlaysStoreLoaded is where we actually add the overlays
@@ -215,6 +172,69 @@ Ext.define('App.controller.Layers', {
             },
             scope: this
         });
+    },
+
+    loadStores: function(defered) {
+        if (defered) {
+            Ext.getStore('Overlays').load();
+        }
+        var store = Ext.getStore('BaseLayers');
+        store.load({
+            callback: function(records) {
+                App.app.loaded = records.length > 0;
+                var configObject = App.util.Config;
+
+                // The map config object will be modified but that's ok.
+                var mapConfig = configObject.getMapConfig();
+                Ext.each(records, Ext.bind(function(record) {
+                    var layer = new OpenLayers.Layer.TileCache(
+                        record.get('name'),
+                        configObject.getTileUrl(),
+                        record.get('layername'),
+                        {
+                            maxExtent: OpenLayers.Bounds.fromArray(record.get('bbox')),
+                            format: record.get('format'),
+                            buffer: 0,
+                            transitionEffect: 'resize',
+                            tileLoadingDelay: 125,
+                            exclusion: record.get('exclusion'),
+                            serverResolutions: [500.0, 250.0, 150.0, 100.0, 50.0,
+                                                20.0, 10.0, 5.0, 2.0, 1.0, 0.5]
+                        }
+                    );
+                    if (defered) {
+                        var map = this.getMainView().getMap();
+                        map.addLayer(layer);
+                    } else {
+                        mapConfig.layers.push(layer);
+                    }
+                },this));
+
+                if (defered) {
+                    this.updateMap(this.getMainView().getMap());
+                    return;
+                }
+                var name = 'voidLayer';
+                mapConfig.layers.push(new OpenLayers.Layer(name, {
+                    isBaseLayer: true
+                }));
+                Ext.getStore('BaseLayers').add({
+                    name: name,
+                    exclusion: []
+                });
+
+                var map = new OpenLayers.Map(mapConfig);
+                this.getMainView().setMap(map);
+
+                // destroy the #appLoadingIndicator element
+                Ext.fly('appLoadingIndicator').destroy();
+
+                // now add the main view to the viewport
+                Ext.Viewport.add(this.getMainView());
+            },
+            scope: this
+        });
+
     },
 
     /**

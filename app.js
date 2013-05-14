@@ -49,6 +49,7 @@ Ext.application({
     },
 
     launch: function() {
+        App.app.loaded = false;
         this.prepareI18n();
 
         // create the main view and set the map into it
@@ -56,11 +57,42 @@ Ext.application({
 
         Ext.create('App.view.layers.MapSettings');
         Ext.create('App.view.MoreMenu');
+        Ext.create('App.view.Settings');
 
         this.configurePicker();
         this.configureMessageBox();
 
         Ext.getStore('Overlays').setSorters(App.util.Config.getLanguage());
+
+        // Load store when online
+        var onlineCallback = function(){
+            if (App.app.loaded) {
+                return;
+            }
+            // Load language files
+            var head = document.getElementsByTagName('head')[0],
+                uris = [],
+                inject = function(urls) {
+                    if (urls.length==0) {
+                        var select = Ext.getCmp('languageSelect');
+                        select.fireEvent('change',
+                            select,
+                            App.util.Config.getLanguage()
+                        );
+                        // Then populate layers stores
+                        App.app.getController('Layers').loadStores(true);
+                        return;
+                    }
+                    Ext.Loader.injectScriptElement(urls[0], function() {
+                        inject(urls.slice(1));
+                    });
+                };
+            Ext.each(document.getElementsByClassName('externalscript'), function(sc) {
+                uris.push(sc.src);
+            });
+            inject(uris);
+        };
+        document.addEventListener("online", onlineCallback, false);
 
         // Android only
         if (window.plugins) {
