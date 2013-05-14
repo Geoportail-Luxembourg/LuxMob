@@ -19,8 +19,7 @@ Ext.define('App.controller.Main', {
             mapSettingsView: '#mapSettingsView',
             settingsView: {
                 selector: '#settingsView',
-                xtype: 'settingsview',
-                autoCreate: true
+                xtype: 'settingsview'
             },
             searchView: {
                 selector: '#searchView',
