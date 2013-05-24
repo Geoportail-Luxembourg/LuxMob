@@ -19,6 +19,7 @@ Ext.define('App.controller.Layers', {
         refs: {
             mainView: '#mainView',
             layersView: '#layersView',
+            downloadButton: 'button[action=download]',
             mapSettingsView: '#mapSettingsView',
             savedMapsView: '#savedmaps',
             savedMapsList: '#savedmapsList',
@@ -629,6 +630,7 @@ Ext.define('App.controller.Layers', {
                 console.log('fail requestFileSystem');
             }
         );
+        this.getDownloadButton().setDisabled(true);
     },
 
     deactivateSavedMap: function() {
@@ -647,6 +649,7 @@ Ext.define('App.controller.Layers', {
             map.removeLayer(savedmap);
         }
         this.getSavedMapsList().deselectAll();
+        this.getDownloadButton().setDisabled(false);
     },
 
     /**
