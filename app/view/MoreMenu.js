@@ -31,6 +31,7 @@ Ext.define('App.view.MoreMenu', {
             cls: "download",
             iconCls: "cloud_download",
             text: i18n.message("button.download"),
+            disabled: true,
             iconMask: true
         }, {
             xtype: 'button',
