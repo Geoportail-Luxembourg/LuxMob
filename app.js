@@ -66,6 +66,12 @@ Ext.application({
 
         // Load store when online
         var onlineCallback = function(){
+            // enable the download button if possible
+            var baseLayer = App.app.getController('Layers').getMap().baseLayer;
+            if (baseLayer.name != 'savedmap') {
+                Ext.ComponentQuery.query('button[action=download]')[0].setDisabled(false);
+            }
+
             if (App.app.loaded) {
                 return;
             }
@@ -93,6 +99,13 @@ Ext.application({
             inject(uris);
         };
         document.addEventListener("online", onlineCallback, false);
+
+        // when offline ...
+        var offlineCallback = function() {
+            // ... disable the download button
+            Ext.ComponentQuery.query('button[action=download]')[0].setDisabled(true);
+        };
+        document.addEventListener("offline", offlineCallback, false);
 
         // Android only
         if (window.plugins) {

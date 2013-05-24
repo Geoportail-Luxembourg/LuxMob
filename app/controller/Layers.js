@@ -630,6 +630,8 @@ Ext.define('App.controller.Layers', {
                 console.log('fail requestFileSystem');
             }
         );
+
+        // deactivate the download button
         this.getDownloadButton().setDisabled(true);
     },
 
@@ -649,7 +651,9 @@ Ext.define('App.controller.Layers', {
             map.removeLayer(savedmap);
         }
         this.getSavedMapsList().deselectAll();
-        this.getDownloadButton().setDisabled(false);
+
+        // reactivate the download button
+        this.getDownloadButton().setDisabled(!App.app.loaded);
     },
 
     /**
