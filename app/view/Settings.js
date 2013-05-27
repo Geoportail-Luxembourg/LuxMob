@@ -1,6 +1,7 @@
 window.i18n = Ext.i18n.Bundle;
 Ext.define("App.view.Settings", {
     extend: 'Ext.form.Panel',
+    id: 'settingsView',
     xtype: 'settingsview',
     requires: [
         'Ext.field.Select'
