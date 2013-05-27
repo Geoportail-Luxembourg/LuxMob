@@ -520,10 +520,17 @@ Ext.define('App.controller.Layers', {
                         var list = this.getOverlaysList();
                         if (list) {
                             var store = Ext.getStore('Overlays');
+
+                            // temporary clear filters
+                            var filters = store.getFilters();
+                            store.clearFilter();
                             var recordIndex = store.findExact(
                                 'name', field.getName());
                             var record = store.getAt(recordIndex);
                             list.deselect(record);
+
+                            // reapply filters
+                            store.filter(filters);
                         }
                         actions.hide();
                     },
