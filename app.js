@@ -73,6 +73,7 @@ Ext.application({
             }
 
             if (App.app.loaded) {
+                App.app.getController('Layers').getLayersView().maskContent(false);
                 return;
             }
             // Load language files
@@ -89,9 +90,15 @@ Ext.application({
                         App.app.getController('Layers').loadStores(true);
                         return;
                     }
-                    Ext.Loader.injectScriptElement(urls[0], function() {
-                        inject(urls.slice(1));
-                    });
+                    Ext.Loader.injectScriptElement(
+                        urls[0]+'?nocache='+Ext.id(),
+                        function() {
+                            inject(urls.slice(1));
+                        }, function() {
+                            console.log('fail to load «' + urls[0] + '», retrying');
+                            inject(urls);
+                        }
+                    );
                 };
             Ext.each(document.getElementsByClassName('externalscript'), function(sc) {
                 uris.push(sc.src);
@@ -102,6 +109,7 @@ Ext.application({
 
         // when offline ...
         var offlineCallback = function() {
+            App.app.getController('Layers').getLayersView().maskContent(true);
             // ... disable the download button
             Ext.ComponentQuery.query('button[action=download]')[0].setDisabled(true);
         };

@@ -183,6 +183,7 @@ Ext.define('App.controller.Layers', {
         store.load({
             callback: function(records) {
                 App.app.loaded = records.length > 0;
+                this.getLayersView().maskContent(!App.app.loaded);
                 var configObject = App.util.Config;
 
                 // The map config object will be modified but that's ok.
