@@ -153,14 +153,19 @@ Ext.define('App.controller.Main', {
     },
 
     showSearch: function() {
-        Ext.Viewport.animateActiveItem(
-            this.getSearchView(),
-            {
-                type: 'fade',
-                duration: 500
-            }
-        );
-        this.getSearchView().down('searchfield').focus();
+        if (navigator.connection && navigator.connection.type == Connection.NONE) {
+            Ext.Msg.alert("", i18n.message('search.nonetwork'));
+            this.getMainView().down('#fakeSearch').blur();
+        } else {
+            Ext.Viewport.animateActiveItem(
+                this.getSearchView(),
+                {
+                    type: 'fade',
+                    duration: 500
+                }
+            );
+            this.getSearchView().down('searchfield').focus();
+        }
     },
 
     onMore: function(button) {
