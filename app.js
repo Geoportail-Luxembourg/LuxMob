@@ -66,14 +66,10 @@ Ext.application({
 
         // Load store when online
         var onlineCallback = function(){
-            // enable the download button if possible
-            var baseLayer = App.app.getController('Layers').getMap().baseLayer;
-            if (baseLayer.name != 'savedmap') {
-                Ext.ComponentQuery.query('button[action=download]')[0].setDisabled(false);
-            }
 
             if (App.app.loaded) {
                 App.app.getController('Layers').getLayersView().maskContent(false);
+                App.app.getController('Download').enableDownload();
                 return;
             }
             // Load language files

@@ -214,6 +214,7 @@ Ext.define('App.controller.Layers', {
 
                 if (defered) {
                     this.updateMap(this.getMainView().getMap());
+                    this.getController('Download').enableDownload();
                     return;
                 }
                 var name = 'voidLayer';
@@ -233,6 +234,8 @@ Ext.define('App.controller.Layers', {
 
                 // now add the main view to the viewport
                 Ext.Viewport.add(this.getMainView());
+
+                this.getController('Download').enableDownload();
             },
             scope: this
         });

@@ -461,6 +461,22 @@ Ext.define('App.controller.Download', {
                 console.log('fail to get directory reader');
             }
         );
+    },
+
+    /**
+     * Function called when application is loaded and device has network, or
+     * when application is offline and goes online again.
+     *
+     * Enables the download button.
+     */
+    enableDownload: function() {
+        var baseLayer = this.getMainView().getMap().baseLayer;
+        alert(baseLayer.name);
+        // enable the button only if user is not currently displaying a saved
+        // map.
+        if (baseLayer.name != 'savedmap') {
+            Ext.ComponentQuery.query('button[action=download]')[0].setDisabled(false);
+        }
     }
 });
 
