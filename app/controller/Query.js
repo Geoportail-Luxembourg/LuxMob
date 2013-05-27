@@ -140,7 +140,7 @@ Ext.define('App.controller.Query', {
                 scale: params[2],
                 lang: i18n.getLanguage()
             },
-            callback: function() {
+            callback: function(records, operation, success) {
                 this.setLoading(false);
                 var preview = this.getResultsPreview();
                 preview.removeAll();
@@ -148,7 +148,9 @@ Ext.define('App.controller.Query', {
                 var count = store.getCount();
                 var text, cb = Ext.emptyFn;
 
-                if (count === 0) {
+                if (success === false) {
+                    text = i18n.message('query.impossible');
+                } else if (count === 0) {
                     text = i18n.message('query.noresults');
                 } else if (count > 1) {
                     text = i18n.message('query.results', {
