@@ -471,7 +471,6 @@ Ext.define('App.controller.Download', {
      */
     enableDownload: function() {
         var baseLayer = this.getMainView().getMap().baseLayer;
-        alert(baseLayer.name);
         // enable the button only if user is not currently displaying a saved
         // map.
         if (baseLayer.name != 'savedmap') {
