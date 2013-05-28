@@ -11,6 +11,7 @@ Ext.define('App.view.QueryDetail', {
         scrollable: true,
         padding: 10,
         tpl: '{html}',
+        scrollable: false,
         data: null,
         items: [{
             docked: 'top',

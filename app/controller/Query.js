@@ -103,6 +103,9 @@ Ext.define('App.controller.Query', {
                             this.redirectTo('main/map/' + params.map_id);
                         }
                     }, this);
+                    view.on('hide', function() {
+                        this.setData({});
+                    });
                 }
             }
         },
