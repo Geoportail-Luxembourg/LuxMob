@@ -209,11 +209,11 @@ Ext.define('App.controller.MyMaps', {
             iconAlign: 'right',
             listeners: {
                 tap: function(button, e) {
-                    if (Ext.get(e.target).hasCls('delete')) {
+                    if (Ext.get(e.target).hasCls('x-button-label')) {
+                        this.redirectTo('mymapdetail');
+                    } else {
                         this.closeMyMap();
                         this.redirectTo('main');
-                    } else {
-                        this.redirectTo('mymapdetail');
                     }
                 },
                 scope: this
