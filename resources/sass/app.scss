@@ -410,6 +410,17 @@ div.Mask {
 .x-chart-watermark {
     display: none;
 }
+#queryDetailView table {
+    width: 100%;
+}
+@media screen and (orientation:portrait) {
+    #queryDetailView tr, #queryDetailView td {
+        display: block;
+    }
+    #queryDetailView td:first-child {
+        font-weight: bold;
+    }
+}
 
 #appwarning {
     background: black;
