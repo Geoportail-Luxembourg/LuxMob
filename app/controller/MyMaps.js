@@ -419,11 +419,6 @@ Ext.define('App.controller.MyMaps', {
         var f = new OpenLayers.Format[format](options);
         var content = f.write(features, metadata);
 
-        // We use a different strategy for the web app and for the native app.
-        // The iframe/form hack does not work in the native app. And
-        // window.open in an XHR callback does not work in the web app,
-        // because of the popup blocker.
-
         Ext.Ajax.request({
             url: App.util.Config.getWsgiUrl() + 'upload/upload',
             method: 'POST',
@@ -435,6 +430,10 @@ Ext.define('App.controller.MyMaps', {
                 Ext.Viewport.setMasked(false);
                 if (success) {
                     var o = Ext.decode(response.responseText);
+                    // window.open doesn't work in the web app because of
+                    // the popup blocker. So for the web app we create a
+                    // panel whose content includes a link to the exported
+                    // file.
                     if (window.device) {
                         // See http://docs.phonegap.com/en/2.3.0/cordova_inappbrowser_inappbrowser.md.html#window.open
                         // for information on the '_system' target.
