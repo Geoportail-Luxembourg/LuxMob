@@ -27,7 +27,8 @@ Ext.application({
     stores: ['BaseLayers', 'Overlays', 'SelectedOverlays', 'Search', 'Query', 'SavedMaps', 'MyMaps'],
 
     viewport: {
-        autoMaximize: true
+        autoMaximize: !Ext.os.is.android ||
+            (Ext.os.is.android && Ext.os.version.isGreaterThan(4.1))
     },
 
     icon: {
