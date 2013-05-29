@@ -151,7 +151,8 @@ Ext.define('App.controller.Main', {
     },
 
     showSearch: function() {
-        if (navigator.connection && navigator.connection.type == Connection.NONE) {
+        if (window.device && navigator.connection &&
+            navigator.connection.type == Connection.NONE) {
             Ext.Msg.alert("", i18n.message('search.nonetwork'));
             this.getMainView().down('#fakeSearch').blur();
         } else {
