@@ -65,6 +65,17 @@ body.x-android.x-phone {
     display: none;
 }
 
+// login extra links
+.x-button.link {
+    background: none;
+    border: 0;
+}
+.x-button.link .x-button-label {
+    font-weight: normal;
+    color: blue;
+    font-size: 80%;
+}
+
 // forms
 .x-form-fieldset {
     margin-bottom: 1em;

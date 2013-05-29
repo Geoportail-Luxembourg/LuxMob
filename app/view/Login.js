@@ -58,6 +58,26 @@ Ext.define('App.view.Login', {
                 action: 'login',
                 margin: 2
             }]
+        }, {
+            xtype: 'component',
+            padding: 20,
+            html: i18n.message('login.info')
+        }, {
+            xtype: 'button',
+            text: i18n.message('login.lostpassword'),
+            cls: 'link',
+            handler: function() {
+                var link = "http://myaccount.geoportail.lu/lostpassword?lang=";
+                window.open(link + i18n.getLanguage(), '_system');
+            }
+        }, {
+            xtype: 'button',
+            text: i18n.message('login.newaccount'),
+            cls: 'link',
+            handler: function() {
+                var link = "http://myaccount.geoportail.lu/newaccount?lang=";
+                window.open(link + i18n.getLanguage(), '_system');
+            }
         }]
     }
 });
