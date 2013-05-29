@@ -119,6 +119,12 @@ Ext.define('App.controller.Main', {
         var field = this.getSearchField();
         field && field.hide() && field.setDisabled(true);
 
+        animation.listeners = {
+            animationend: function() {
+                this.getMainView().getMap().updateSize();
+            },
+            scope: this
+        }
         Ext.Viewport.animateActiveItem(0, animation);
 
         // show the search field again
