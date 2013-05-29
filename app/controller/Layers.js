@@ -235,6 +235,11 @@ Ext.define('App.controller.Layers', {
                 // now add the main view to the viewport
                 Ext.Viewport.add(this.getMainView());
 
+                // change background to white so that we don't see any blue
+                // screen when fading from one view to an other (search ->
+                // main)
+                document.body.style.backgroundColor = 'white';
+
                 this.getApplication().getController('Download').enableDownload();
             },
             scope: this
