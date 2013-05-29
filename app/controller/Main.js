@@ -124,7 +124,7 @@ Ext.define('App.controller.Main', {
                 this.getMainView().getMap().updateSize();
             },
             scope: this
-        }
+        };
         Ext.Viewport.animateActiveItem(0, animation);
 
         // show the search field again
