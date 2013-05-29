@@ -429,8 +429,12 @@ div.Mask {
     #queryDetailView tr, #queryDetailView td {
         display: block;
     }
+    #queryDetailView td {
+        margin-left: 1em;
+    }
     #queryDetailView td:first-child {
         font-weight: bold;
+        margin: 0.5em 0 0;
     }
 }
 
