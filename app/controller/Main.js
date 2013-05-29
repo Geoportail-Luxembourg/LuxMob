@@ -128,8 +128,6 @@ Ext.define('App.controller.Main', {
             });
             Ext.defer(field.enable, 1000, field);
         }
-
-        this.checkUser();
     },
 
     showMapSettings: function() {
@@ -248,6 +246,7 @@ Ext.define('App.controller.Main', {
         this.getLoginView().submit({
             success: function(form, result) {
                 if (result && result.success) {
+                    var prevUrl = this.getLoginView().getUrl();
                     var url = App.util.Config.getWsgiUrl() + 'login_handler';
                     this.getLoginView().setUrl(url);
                     this.getLoginView().submit({});
@@ -255,7 +254,8 @@ Ext.define('App.controller.Main', {
                     // the login_handler service is supposed to answer with 302
                     // redirect. Thus, we cannot rely on it to use success
                     // callback for the submit
-                    Ext.defer(this.checkUser, 500, this);
+                    Ext.defer(this.checkUser, 1000, this);
+                    this.getLoginView().setUrl(prevUrl);
                 }
             },
             failure: function() {
@@ -271,7 +271,7 @@ Ext.define('App.controller.Main', {
         // the login_handler service is supposed to answer with 302
         // redirect. Thus, we cannot rely on it to use success
         // callback for the submit
-        Ext.defer(this.checkUser, 500, this);
+        Ext.defer(this.checkUser, 1000, this);
     },
 
     checkUser: function() {
