@@ -36,7 +36,8 @@ Ext.define('App.controller.MyMaps', {
             },
             myMapsList: '#myMapsList',
             myMapFeaturesList: '#myMapFeaturesList',
-            myMapFeatureDetailView: 'mymapfeaturedetailview'
+            myMapFeatureDetailView: 'mymapfeaturedetailview',
+            addPoiSubmitButton: 'button[action=addpoisubmit]'
         },
         control: {
             myMapsList: {
@@ -596,6 +597,7 @@ Ext.define('App.controller.MyMaps', {
                     }, {
                         xtype: 'button',
                         text: i18n.message('button.OK'),
+                        action: 'addpoisubmit',
                         ui: 'confirm',
                         handler: this.saveMap,
                         scope: this
@@ -742,6 +744,7 @@ Ext.define('App.controller.MyMaps', {
         button.setIconCls(false);
         button.setIconMask(false);
         button.setIcon("resources/images/loading.gif");
+        this.getAddPoiSubmitButton().setDisabled(true);
 
         var ft = new FileTransfer();
         ft.upload(
@@ -762,6 +765,7 @@ Ext.define('App.controller.MyMaps', {
         button.setIconCls(false);
         button.setIconMask(false);
         button.setIcon(App.util.Config.getWsgiUrl() + r.thumbnail);
+        this.getAddPoiSubmitButton().setDisabled(false);
     },
 
     onPhotoFail: function() {}
