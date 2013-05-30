@@ -6,8 +6,8 @@ SHA1 = $(shell git rev-parse HEAD)
 all: app
 
 .PHONY: ios
-ios: ios-json app
-	cp -r build/App/production/* build/cordova-ios/www/
+ios: ios-json testingapp
+	cp -r build/App/testing/* build/cordova-ios/www/
 	./build/cordova-ios/cordova/build
 	mv app.json.bak app.json
 
