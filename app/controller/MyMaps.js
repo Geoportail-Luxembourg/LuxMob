@@ -18,6 +18,7 @@ Ext.define('App.controller.MyMaps', {
         featureDetailHeight: 120,
         map: null,
         vectorLayer: null,
+        geolocateControl: null,
         selectControl: null,
         dummyForm: null,
         connection: null,
@@ -538,8 +539,7 @@ Ext.define('App.controller.MyMaps', {
         this.redirectTo('');
 
         function onLocationUpdated(e) {
-            // event to be fired only once
-            control.events.unregister('locationupdated', this, onLocationUpdated);
+            this.getGeolocateControl().destroy();
 
             this.getMyMapPreview().items.each(function(item) {
                 item.hide();
@@ -640,8 +640,9 @@ Ext.define('App.controller.MyMaps', {
             ]);
         }
 
-        var control = this.getMap().getControlsByClass('Geolocate')[0].geolocateControl;
-        this.getMap().addControl(control);
+        var control = new OpenLayers.Control.Geolocate();
+        this.setGeolocateControl(control);
+        this.getMap().addControls([control]);
         control.events.on({
             "locationupdated": onLocationUpdated,
             scope: this
