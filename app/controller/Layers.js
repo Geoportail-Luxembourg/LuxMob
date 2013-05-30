@@ -324,7 +324,9 @@ Ext.define('App.controller.Layers', {
     updateMap: function(map) {
         this.setBaseLayersStore(Ext.getStore('BaseLayers'));
 
-        var store = this.getBaseLayersStore();
+        // Avoid duplicate of white background
+        this.getBaseLayersView().removeAt(1);
+
         Ext.each(map.layers, function(layer) {
             if (layer.isBaseLayer) {
                 var radio = this.getBaseLayersView().add({
