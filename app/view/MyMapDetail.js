@@ -30,9 +30,12 @@ Ext.define('App.view.MyMapDetail', {
                 xtype: 'spacer'
             }, {
                 xtype: 'button',
-                iconCls: 'add',
+                iconCls: 'locate1',
                 iconMask: true,
-                action: "addpoi"
+                action: "addpoi",
+                text: i18n.message('mymaps.detail.addpoi')
+            },{
+                xtype: 'spacer'
             }]
         }, {
             id: 'description',

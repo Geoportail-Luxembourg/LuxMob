@@ -546,12 +546,15 @@ Ext.define('App.controller.MyMaps', {
             });
             this.setAddPoiView(this.getMyMapPreview().add({
                 xtype: 'formpanel',
-                height: 144,
+                height: 204,
                 padding: 0,
                 style: {
                     backgroundColor: 'white'
                 },
                 items: [{
+                    xtype: 'toolbar',
+                    title: i18n.message('mymaps.detail.addpoi')
+                },{
                     layout: 'hbox',
                     items: [{
                         xtype: 'textfield',
@@ -604,7 +607,7 @@ Ext.define('App.controller.MyMaps', {
                     }]
                 }]
             }));
-            this.previewResize(144);
+            this.previewResize(204);
 
             var accuracy = new OpenLayers.Geometry.Polygon.createRegularPolygon(
                 e.point,
