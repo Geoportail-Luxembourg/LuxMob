@@ -640,7 +640,14 @@ Ext.define('App.controller.MyMaps', {
             ]);
         }
 
-        var control = new OpenLayers.Control.Geolocate();
+        var control = new OpenLayers.Control.Geolocate({
+            bind: false,
+            geolocationOptions: {
+                enableHighAccuracy: true,
+                maximumAge: 0,
+                timeout: 7000
+            }
+        });
         this.setGeolocateControl(control);
         this.getMap().addControls([control]);
         control.events.on({
