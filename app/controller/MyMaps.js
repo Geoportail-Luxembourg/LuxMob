@@ -624,6 +624,7 @@ Ext.define('App.controller.MyMaps', {
                     text: i18n.message('button.OK'),
                     action: 'addpoisubmit',
                     ui: 'confirm',
+                    disabled: true,
                     handler: this.saveMap,
                     scope: this
                 }]
