@@ -33,7 +33,8 @@ Ext.define("App.view.Settings", {
                     {text: 'Français', value: 'fr'},
                     {text: 'Deutsch', value: 'de'},
                     {text: 'Lëtzebuergesch', value: 'lu'}
-                ]
+                ],
+                usePicker: false
             }]
         }]
     }

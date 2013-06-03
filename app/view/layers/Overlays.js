@@ -26,7 +26,8 @@ Ext.define('App.view.layers.Overlays', {
                         }, {
                             xtype: "selectfield",
                             id: 'themeSelect',
-                            flex: 2
+                            flex: 2,
+                            usePicker: false
                         }
                     ]
                 },
