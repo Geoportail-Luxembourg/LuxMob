@@ -23,6 +23,11 @@ Ext.define('App.controller.MyMaps', {
         dummyForm: null,
         connection: null,
         addPoiView: null,
+        marker: null,
+        // tells whether a picture is currently being uploaded
+        loadingPhoto: false,
+        // tells whether a location has been found when adding a POI
+        hasLocation: false,
         refs: {
             mainView: '#mainView',
             myMapsView: {
@@ -538,129 +543,138 @@ Ext.define('App.controller.MyMaps', {
     addPoi: function() {
         this.redirectTo('');
 
-        function onLocationUpdated(e) {
-            this.getGeolocateControl().destroy();
-
-            this.getMyMapPreview().items.each(function(item) {
-                item.hide();
-            });
-            this.setAddPoiView(this.getMyMapPreview().add({
-                xtype: 'formpanel',
-                height: 204,
-                padding: 0,
-                style: {
-                    backgroundColor: 'white'
-                },
-                items: [{
-                    xtype: 'toolbar',
-                    title: i18n.message('mymaps.detail.addpoi')
-                },{
-                    layout: 'hbox',
-                    items: [{
-                        xtype: 'textfield',
-                        name: 'name',
-                        placeHolder: 'Nom',
-                        flex: 2,
-                        margin: 2
-                    }, {
-                        xtype: 'button',
-                        action: 'upload',
-                        iconCls: 'photo1',
-                        iconMask: true,
-                        margin: 2,
-                        handler: this.onAddPhoto,
-                        scope: this
-                    }]
-                }, {
-                    xtype: 'textareafield',
-                    name: 'description',
-                    placeHolder: 'Description',
-                    height: 60,
-                    margin: 2
-                }, {
-                    xtype: 'hiddenfield',
-                    name: 'thumbnail'
-                }, {
-                    xtype: 'hiddenfield',
-                    name: 'image'
-                }, {
-                    layout: {
-                        type: 'hbox',
-                        pack: 'end'
-                    },
-                    defaults: {
-                        margin: 2
-                    },
-                    items: [{
-                        xtype: 'button',
-                        text: i18n.message('button.cancel'),
-                        action: 'cancel',
-                        handler: this.closeAddPoi,
-                        scope: this
-                    }, {
-                        xtype: 'button',
-                        text: i18n.message('button.OK'),
-                        action: 'addpoisubmit',
-                        ui: 'confirm',
-                        handler: this.saveMap,
-                        scope: this
-                    }]
-                }]
-            }));
-            this.previewResize(204);
-
-            var accuracy = new OpenLayers.Geometry.Polygon.createRegularPolygon(
-                e.point,
-                e.position.coords.accuracy/2,
-                40,
-                0
-            );
-            Ext.defer(function() {
-                this.getMap().updateSize();
-                this.getMap().zoomToExtent(accuracy.getBounds());
-            }, 250, this);
-            this.getVectorLayer().addFeatures([
-                new OpenLayers.Feature.Vector(
-                    new OpenLayers.Geometry.Point(e.point.x, e.point.y),
-                    null,
-                    OpenLayers.Util.applyDefaults({
-                        externalGraphic: 'resources/images/marker.png',
-                        graphicWidth: 17.6,
-                        graphicHeight: 24,
-                        graphicYOffset: -24,
-                        graphicOpacity: 1,
-                        backgroundGraphic: 'resources/images/shadow-marker.png',
-                        backgroundWidth: 38,
-                        backgroundHeight: 30,
-                        backgroundYOffset: -30,
-                        backgroundXOffset: -10,
-                        strokeWidth: 3,
-                        strokeColor: 'red',
-                        graphicZIndex: 1,
-                        backgroundGraphicZIndex: 0
-                    }, OpenLayers.Feature.Vector.style['default'])
-                )
-            ]);
-        }
-
         var control = new OpenLayers.Control.Geolocate({
             bind: false,
+            autoCenter: true,
+            watch: true,
             geolocationOptions: {
                 enableHighAccuracy: true,
                 maximumAge: 0,
                 timeout: 7000
             }
         });
+        this.showForm();
         this.setGeolocateControl(control);
         this.getMap().addControls([control]);
         control.events.on({
-            "locationupdated": onLocationUpdated,
-            scope: this
+            "locationupdated": Ext.bind(this.onLocationUpdated, this)
         });
         control.activate();
     },
 
+    showForm: function() {
+        this.getMyMapPreview().items.each(function(item) {
+            item.hide();
+        });
+        this.setAddPoiView(this.getMyMapPreview().add({
+            xtype: 'formpanel',
+            height: 204,
+            padding: 0,
+            style: {
+                backgroundColor: 'white'
+            },
+            items: [{
+                xtype: 'toolbar',
+                title: i18n.message('mymaps.detail.addpoi')
+            },{
+                layout: 'hbox',
+                items: [{
+                    xtype: 'textfield',
+                    name: 'name',
+                    placeHolder: 'Nom',
+                    flex: 2,
+                    margin: 2
+                }, {
+                    xtype: 'button',
+                    action: 'upload',
+                    iconCls: 'photo1',
+                    iconMask: true,
+                    margin: 2,
+                    handler: this.onAddPhoto,
+                    scope: this
+                }]
+            }, {
+                xtype: 'textareafield',
+                name: 'description',
+                placeHolder: 'Description',
+                height: 60,
+                margin: 2
+            }, {
+                xtype: 'hiddenfield',
+                name: 'thumbnail'
+            }, {
+                xtype: 'hiddenfield',
+                name: 'image'
+            }, {
+                layout: {
+                    type: 'hbox',
+                    pack: 'end'
+                },
+                defaults: {
+                    margin: 2
+                },
+                items: [{
+                    xtype: 'button',
+                    text: i18n.message('button.cancel'),
+                    action: 'cancel',
+                    handler: this.closeAddPoi,
+                    scope: this
+                }, {
+                    xtype: 'button',
+                    text: i18n.message('button.OK'),
+                    action: 'addpoisubmit',
+                    ui: 'confirm',
+                    handler: this.saveMap,
+                    scope: this
+                }]
+            }]
+        }));
+        this.previewResize(204);
+    },
+
+    onLocationUpdated: function(e) {
+        this.getVectorLayer().removeFeatures(this.getMarker());
+        var accuracy = new OpenLayers.Geometry.Polygon.createRegularPolygon(
+            e.point,
+            e.position.coords.accuracy/2,
+            40,
+            0
+        );
+        Ext.defer(function() {
+            this.getMap().updateSize();
+            this.getMap().zoomToExtent(accuracy.getBounds());
+        }, 250, this);
+        this.setMarker(
+            new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.Point(e.point.x, e.point.y),
+                null,
+                OpenLayers.Util.applyDefaults({
+                    externalGraphic: 'resources/images/marker.png',
+                    graphicWidth: 17.6,
+                    graphicHeight: 24,
+                    graphicYOffset: -24,
+                    graphicOpacity: 1,
+                    backgroundGraphic: 'resources/images/shadow-marker.png',
+                    backgroundWidth: 38,
+                    backgroundHeight: 30,
+                    backgroundYOffset: -30,
+                    backgroundXOffset: -10,
+                    strokeWidth: 3,
+                    strokeColor: 'red',
+                    graphicZIndex: 1,
+                    backgroundGraphicZIndex: 0
+                }, OpenLayers.Feature.Vector.style['default'])
+            )
+        );
+        this.getVectorLayer().addFeatures([
+            this.getMarker()
+        ]);
+        this.setHasLocation(true);
+        this.getAddPoiSubmitButton().setDisabled(this.getLoadingPhoto());
+    },
+
     closeAddPoi: function() {
+        this.getGeolocateControl().destroy();
         this.getAddPoiView().getParent().remove(this.getAddPoiView());
         this.getMyMapPreview().items.each(function(item, index) {
             if (index !== 0) { // all but mask
@@ -668,6 +682,7 @@ Ext.define('App.controller.MyMaps', {
             }
         });
         this.previewResize(this.getMyMapPreviewHeight());
+        this.setHasLocation(false);
     },
 
     saveMap: function() {
@@ -744,6 +759,7 @@ Ext.define('App.controller.MyMaps', {
     },
 
     onPhotoURISuccess: function(imageURI, actions) {
+        this.setLoadingPhoto(true);
         actions.hide();
         var options = new FileUploadOptions();
         options.fileKey = 'file';
@@ -776,7 +792,8 @@ Ext.define('App.controller.MyMaps', {
         button.setIconCls(false);
         button.setIconMask(false);
         button.setIcon(App.util.Config.getWsgiUrl() + r.thumbnail);
-        this.getAddPoiSubmitButton().setDisabled(false);
+        this.getAddPoiSubmitButton().setDisabled(!this.getHasLocation());
+        this.setLoadingPhoto(false);
     },
 
     onPhotoFail: function() {}
