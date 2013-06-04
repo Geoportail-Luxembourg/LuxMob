@@ -178,7 +178,11 @@ Ext.define('App.view.Main', {
        (function() {
        var u=(("https:" == document.location.protocol) ? "https" : "http") + "://statistics.geoportail.lu/";
        _paq.push(["setTrackerUrl", u+"piwik.php"]);
-       _paq.push(["setSiteId", "12"]);
+       if (typeof window.device === 'undefined'){
+	       _paq.push(["setSiteId", "12"]);}
+	   else{
+	       _paq.push(["setSiteId", "13"]);
+	   }
        var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
        g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
        })();
