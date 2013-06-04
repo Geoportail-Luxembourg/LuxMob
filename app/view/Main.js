@@ -21,6 +21,7 @@ Ext.define('App.view.Main', {
         this.on('painted', this.render, this, {
             single: true
         });
+        _paq = [];
     },
 
     applyItems: function(items, collection) {
@@ -170,7 +171,7 @@ Ext.define('App.view.Main', {
         this.fireEvent('mapready', map);
         
         
-        var _paq = _paq || [];
+
         _paq.push(["trackPageView"]);
         _paq.push(["enableLinkTracking"]);
 
