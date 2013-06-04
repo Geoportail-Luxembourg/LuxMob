@@ -15,7 +15,6 @@ Ext.define('App.controller.MyMaps', {
     config: {
         myMapPreview: null,
         myMapPreviewHeight: 50,
-        featureDetailHeight: 120,
         map: null,
         vectorLayer: null,
         geolocateControl: null,
@@ -42,7 +41,11 @@ Ext.define('App.controller.MyMaps', {
             },
             myMapsList: '#myMapsList',
             myMapFeaturesList: '#myMapFeaturesList',
-            myMapFeatureDetailView: 'mymapfeaturedetailview',
+            myMapFeatureDetailView: {
+                selector: '#mymapfeaturedetailview',
+                xtype: 'mymapfeaturedetailview',
+                autoCreate: true
+            },
             addPoiSubmitButton: 'button[action=addpoisubmit]'
         },
         control: {
@@ -127,10 +130,11 @@ Ext.define('App.controller.MyMaps', {
                     this.setSelectControl(select);
                     vector.events.on({
                         'featureselected': function(e) {
-                            this.showFeatureDetail(e.feature);
-                        },
-                        'featureunselected': function() {
-                            this.hideFeatureDetail();
+                            var view = this.getMyMapFeatureDetailView();
+                            this.getApplication().redirectTo('mymapfeaturedetail');
+                            view.setFeature(e.feature);
+                            // we don't want the feature to stay selected
+                            this.getSelectControl().unselect(e.feature);
                         },
                         scope: this
                     });
@@ -139,17 +143,13 @@ Ext.define('App.controller.MyMaps', {
                     if (map_id) {
                         this.getApplication().redirectTo('main/map/' + map_id);
                     }
+
+                    var view = this.getMyMapFeatureDetailView();
+                    view.setMainMap(this.getMap());
                 }
-            },
-            'button[action=hidefeaturedetail]': {
-                tap: 'hideFeatureDetail'
             },
             myMapDetailView: {
                 'export': 'export'
-            },
-            myMapFeatureDetailView: {
-                'export': 'export',
-                profile: 'profile'
             },
             'button[action=addpoi]': {
                 tap: 'addPoi'
@@ -158,7 +158,8 @@ Ext.define('App.controller.MyMaps', {
         routes: {
             'mymaps': 'showMyMaps',
             'main/map/:id': 'showMyMap',
-            'mymapdetail': 'showMyMapDetail'
+            'mymapdetail': 'showMyMapDetail',
+            'mymapfeaturedetail': 'showFeatureDetail'
         }
     },
 
@@ -180,6 +181,10 @@ Ext.define('App.controller.MyMaps', {
         this.getApplication().getController('Main').showMain();
         this.getApplication().getController('Query').hidePreview();
         this.closeMyMap(Ext.bind(this.showPreview, this, [id]));
+
+        // redirect to main view, so that we don't keep the url
+        // prevents map being reloaded when coming back to main from mymap view
+        this.redirectTo('');
     },
 
     showPreview: function(id) {
@@ -335,6 +340,9 @@ Ext.define('App.controller.MyMaps', {
 
     showMyMapDetail: function() {
         var animation = {type: 'slide', direction: 'left'};
+        if (Ext.Viewport.getActiveItem() == this.getMyMapFeatureDetailView()) {
+            animation = {type: 'slide', direction: 'right'};
+        }
         var view = this.getMyMapDetailView();
         Ext.Viewport.animateActiveItem(
             view,
@@ -342,39 +350,13 @@ Ext.define('App.controller.MyMaps', {
         );
     },
 
-    showFeatureDetail: function(feature) {
-        var preview = this.getMyMapPreview();
-
-        // temporarily hide the map title
-        preview.items.each(function(item) {
-            item.hide();
-        });
-        var detail = preview.add(new App.view.MyMapFeatureDetail());
-        detail.setFeature(feature);
-        this.redirectTo('main');
-        this.previewResize(this.getFeatureDetailHeight());
-    },
-
-    hideFeatureDetail: function() {
-        Ext.defer(function() {
-            if (!this.getVectorLayer().selectedFeatures.length) {
-                this.previewResize(this.getMyMapPreviewHeight());
-            }
-        }, 100, this);
-
-        var preview = this.getMyMapPreview();
-        if (preview) {
-            // remove all the items for feature detail and show the map title again
-            preview.items.each(function(item, index) {
-                if (index === 0) {
-                    // mask
-                } else if (index === 1) {
-                    item.show();
-                } else {
-                    preview.remove(item);
-                }
-            });
-        }
+    showFeatureDetail: function() {
+        var animation = {type: 'slide', direction: 'left'};
+        var view = this.getMyMapFeatureDetailView();
+        Ext.Viewport.animateActiveItem(
+            view,
+            animation
+        );
     },
 
     previewResize: function(height) {

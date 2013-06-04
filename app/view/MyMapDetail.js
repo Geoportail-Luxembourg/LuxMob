@@ -11,7 +11,6 @@ Ext.define('App.view.MyMapDetail', {
         features: null,
         layout: 'vbox',
         fullscreen: true,
-        scrollable: true,
         padding: 10,
         items: [{
             docked: 'top',

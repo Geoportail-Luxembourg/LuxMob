@@ -2,71 +2,40 @@ window.i18n = Ext.i18n.Bundle;
 Ext.define("App.view.MyMapFeatureDetail", {
     extend: 'Ext.Panel',
     xtype: 'mymapfeaturedetailview',
+    id: "myMapFeatureDetailView",
     requires: [ ],
 
     config: {
         layout: 'vbox',
         feature: null,
-        cls: 'my_map_feature_preview',
+        fullscreen: true,
+        scrollable: true,
+        padding: 10,
+        mainMap: null,
+        map: null,
         items: [{
-            xtype: 'toolbar',
             docked: 'top',
-            ui: 'light',
+            xtype: 'toolbar',
+            title: i18n.message('mymap.detail.title'),
             items: [{
-                xtype: 'spacer'
-            }, {
-                xtype: 'button',
-                action: 'hidefeaturedetail',
-                iconCls: 'arrow_down',
-                iconMask: true,
-                ui: 'plain',
-                align: 'right'
+                xtype: "button",
+                text: i18n.message('button.back'),
+                ui: 'back',
+                action: "back"
             }]
         }, {
-            id: 'featuredescription',
+            xtype: 'component',
+            pseudo: 'map',
+            flex: 1
+        }, {
+            pseudo: 'featuredescription',
             tpl: [
+                '<div class="title">{title}</div>',
                 '<div class="description">{description}</div>'
             ],
-            data: null
-        }, {
-            cls: 'export-links',
-            html: [
-                '<a class="export" href="javascript:void(0);">GPX</a>',
-                '<a class="export" href="javascript:void(0);">KML</a>'
-            ].join(' ')
+            data: null,
+            flex: 1
         }]
-    },
-
-    initialize: function() {
-        this.on({
-            tap: {
-                fn: function(e, node) {
-                    this.fireEvent(
-                        'export',
-                        this.getFeature().attributes.name,
-                        this.getFeature().attributes.description,
-                        [this.getFeature()],
-                        e.target.innerHTML
-                    );
-                },
-                element: 'innerElement',
-                delegate: '.export-links a.export'
-            },
-            scope: this
-        });
-        this.on({
-            tap: {
-                fn: function(e, node) {
-                    this.fireEvent(
-                        'profile',
-                        this.getFeature()
-                    );
-                },
-                element: 'innerElement',
-                delegate: '.export-links a.profile'
-            },
-            scope: this
-        });
     },
 
     updateFeature: function(feature) {
@@ -78,14 +47,41 @@ Ext.define("App.view.MyMapFeatureDetail", {
                 '" style="height:30px;padding-right:5px;"/>';
         }
         title += feature.attributes.name;
-        this.getDockedItems()[0].setTitle(title);
-        this.down('#featuredescription').setData(feature.attributes);
+
+        this.down('[pseudo=featuredescription]').setData({
+            title: title,
+            description: feature.attributes.description
+        });
 
         if (feature.geometry instanceof OpenLayers.Geometry.LineString) {
-            Ext.DomHelper.append(
-                this.down('[cls=export-links]').innerHtmlElement,
-                '<a class="profile" href="javascript:void(0);">Profile</a>'
-            );
+            console.log("FIXME! I'm the profile, don't forget me!");
         }
+
+        var map = this.getMap(),
+            mainMap = this.getMainMap();
+        if (map) {
+            map.destroy();
+        }
+        var vectorLayer = new OpenLayers.Layer.Vector("vector", {
+            styleMap: new OpenLayers.StyleMap({
+                "default": OpenLayers.Util.applyDefaults({
+                    strokeWidth: 4
+                }, OpenLayers.Feature.Vector.style['default'])
+            })
+        });
+        vectorLayer.addFeatures([
+            new OpenLayers.Feature.Vector(feature.geometry.clone())
+        ]);
+        var config = OpenLayers.Util.applyDefaults({
+            div: this.down('[pseudo=map]').element.dom,
+            controls: [],
+            layers: [
+                mainMap.baseLayer.clone(),
+                vectorLayer
+            ]
+        }, App.util.Config.getMapConfig());
+        this.setMap(new OpenLayers.Map(config));
+        this.getMap().viewPortDiv.style.position = "absolute";
+        this.getMap().zoomToExtent(feature.geometry.getBounds());
     }
 });
