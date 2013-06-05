@@ -233,10 +233,11 @@ Ext.define('App.controller.Main', {
                     },
                     callbackKey: 'cb'
                 });
+                localStorage.setItem('sendbymail_email', value);
             },
             this,
             false,
-            null,
+            localStorage.getItem('sendbymail_email'),
             {
                 xtype: 'emailfield'
             }
