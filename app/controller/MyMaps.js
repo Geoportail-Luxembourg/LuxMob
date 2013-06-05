@@ -42,7 +42,7 @@ Ext.define('App.controller.MyMaps', {
             myMapsList: '#myMapsList',
             myMapFeaturesList: '#myMapFeaturesList',
             myMapFeatureDetailView: {
-                selector: '#mymapfeaturedetailview',
+                selector: '#myMapFeatureDetailView',
                 xtype: 'mymapfeaturedetailview',
                 autoCreate: true
             },
@@ -151,6 +151,9 @@ Ext.define('App.controller.MyMaps', {
             },
             'button[action=addpoi]': {
                 tap: 'addPoi'
+            },
+            myMapFeatureDetailView: {
+                profile: 'profile'
             },
             exportButton: {
                 tap: 'export'
@@ -590,14 +593,28 @@ Ext.define('App.controller.MyMaps', {
                 items: [{
                     xtype: 'button',
                     text: i18n.message('button.close'),
-                    action: 'main'
+                    handler: function() {
+                        Ext.Viewport.animateActiveItem(
+                            this.getMyMapFeatureDetailView(),
+                            {
+                                type: 'flip',
+                                direction: 'left',
+                                listeners: {
+                                    animationend: function() {
+                                        Ext.Viewport.remove(profileView);
+                                    }
+                                }
+                            }
+                        );
+                    },
+                    scope: this
                 }]
             }, chart]
         });
         Ext.Viewport.add(profileView);
         Ext.Viewport.animateActiveItem(
             profileView,
-            {type: 'cover', direction: "up"}
+            {type: 'flip', direction: "right"}
         );
     },
 

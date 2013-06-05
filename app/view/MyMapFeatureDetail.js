@@ -35,13 +35,21 @@ Ext.define("App.view.MyMapFeatureDetail", {
             pseudo: 'map',
             flex: 1
         }, {
-            pseudo: 'featuredescription',
-            tpl: [
-                '<div class="title">{title}</div>',
-                '<div class="description">{description}</div>'
-            ],
-            data: null,
-            flex: 1
+            flex: 1,
+            items: [{
+                pseudo: 'featuredescription',
+                tpl: [
+                    '<div class="title">{title}</div>',
+                    '<div class="description">{description}</div>'
+                ],
+                data: null
+            }, {
+                cls: 'profile',
+                layout: {
+                    type: 'vbox',
+                    align: 'left'
+                }
+            }]
         }]
     },
 
@@ -61,7 +69,22 @@ Ext.define("App.view.MyMapFeatureDetail", {
         });
 
         if (feature.geometry instanceof OpenLayers.Geometry.LineString) {
-            console.log("FIXME! I'm the profile, don't forget me!");
+            this.down('[cls=profile]').add({
+                xtype: 'button',
+                text: i18n.message('mymaps.profile'),
+                cls: 'link',
+                iconCls: 'chart2',
+                iconMask: true,
+                handler: function() {
+                    this.fireEvent(
+                        'profile',
+                        this.getFeature()
+                    );
+                },
+                scope: this
+            });
+        } else {
+            this.down('[cls=profile]').removeAll();
         }
 
         var map = this.getMap(),
