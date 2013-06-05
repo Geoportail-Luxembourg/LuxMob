@@ -94,15 +94,24 @@ Ext.define('App.controller.Query', {
             },
             queryDetailView: {
                 initialize: function(view) {
-                    view.element.on('click', function(e) {
-                        if (e.target.tagName === 'A' &&
-                            e.target.href.indexOf('map_id') != -1) {
+                    view.element.on({
+                        'click': function(e) {
                             e.preventDefault();
-                            var params = e.target.href.split('?')[1];
-                            params = Ext.Object.fromQueryString(params);
-                            this.redirectTo('main/map/' + params.map_id);
-                        }
-                    }, this);
+                            e.stopPropagation();
+                            if (e.target.href.indexOf('map_id') != -1) {
+                                var params = e.target.href.split('?')[1];
+                                params = Ext.Object.fromQueryString(params);
+                                this.redirectTo('main/map/' + params.map_id);
+                            } else {
+                                window.open(
+                                    e.target.href,
+                                    (window.device) ? '_system' : '_blank'
+                                );
+                            }
+                        },
+                        delegate: 'a',
+                        scope: this
+                    });
                     view.on('hide', function() {
                         this.setData({});
                     });
