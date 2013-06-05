@@ -38,7 +38,7 @@ Ext.define('App.view.Main', {
                         text: 'Ouvrir dans l’application',
                         handler: function() {
                             var map_id = OpenLayers.Util.getParameters().map_id,
-                                qs= (map_id) ? 'map_id='+mapid : '';
+                                qs= (map_id) ? 'map_id='+map_id : '';
                             window.location = "luxmob:///?" + qs;
                             var time = (new Date()).getTime();
                             setTimeout(function(){
