@@ -68,6 +68,7 @@ Ext.define("App.view.MyMapFeatureDetail", {
             description: feature.attributes.description
         });
 
+        this.down('[cls=profile]').removeAll();
         if (feature.geometry instanceof OpenLayers.Geometry.LineString) {
             this.down('[cls=profile]').add({
                 xtype: 'button',
@@ -83,8 +84,6 @@ Ext.define("App.view.MyMapFeatureDetail", {
                 },
                 scope: this
             });
-        } else {
-            this.down('[cls=profile]').removeAll();
         }
 
         var map = this.getMap(),
