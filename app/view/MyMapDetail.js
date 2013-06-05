@@ -32,6 +32,7 @@ Ext.define('App.view.MyMapDetail', {
         }, {
             docked: 'bottom',
             xtype: 'toolbar',
+            hidden: true,
             items: [{
                 xtype: 'spacer'
             }, {
