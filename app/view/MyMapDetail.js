@@ -25,7 +25,7 @@ Ext.define('App.view.MyMapDetail', {
                 xtype: 'spacer'
             }, {
                 xtype: "button",
-                iconCls: "action",
+                iconCls: "action2",
                 iconMask: true,
                 action: "export"
             }]
