@@ -334,18 +334,19 @@ Ext.define('App.controller.Query', {
         // we use defer here to prevent link click to be taken into account
         // while the view is loaded
         Ext.defer(function() {
-            view.setData(Ext.getStore('Query').getById(id).get('properties'));
-
+            var data = Ext.getStore('Query').getById(id).get('properties');
+            // remove iframe when in app
             if (window.device) {
-                // detect any click on link to open them in the native browser
-                Ext.select('a', view.element.dom).each(function(link) {
-                    link = link.dom;
-                    link.onclick = function(e) {
-                        e.preventDefault();
-                        window.open(link.href, '_system');
-                    };
-                });
+                var iframe_re = /<iframe (?:.)* src=([^\s>]*)(?:.)*<\/iframe>/;
+                data.html = data.html.replace(
+                    iframe_re,
+                    function(match, p1) {
+                        window.open(p1, '_system');
+                        return '<a href="'+p1+'" class="x-button">'+i18n.message('query.moreinfo')+'</a>';
+                    }
+                );
             }
+            view.setData(data);
         }, 350);
 
         Ext.Viewport.animateActiveItem(
