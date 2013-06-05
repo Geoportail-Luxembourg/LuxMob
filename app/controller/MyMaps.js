@@ -397,8 +397,8 @@ Ext.define('App.controller.MyMaps', {
                 easing: 'ease-out'
             },
             centered: true,
-            width: Ext.os.deviceType == 'Phone' ? 260 : 400,
-            height: Ext.os.deviceType == 'Phone' ? 220 : 400,
+            width: Ext.os.deviceType == 'Phone' ? '80%' : 400,
+            height: Ext.os.deviceType == 'Phone' ? '80%' : 400,
             items: [{
                 xtype: 'component',
                 html: i18n.message('mymaps.export.title')
