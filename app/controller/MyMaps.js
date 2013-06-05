@@ -46,7 +46,8 @@ Ext.define('App.controller.MyMaps', {
                 xtype: 'mymapfeaturedetailview',
                 autoCreate: true
             },
-            addPoiSubmitButton: 'button[action=addpoisubmit]'
+            addPoiSubmitButton: 'button[action=addpoisubmit]',
+            exportButton: 'button[action=export]'
         },
         control: {
             myMapsList: {
@@ -148,11 +149,11 @@ Ext.define('App.controller.MyMaps', {
                     view.setMainMap(this.getMap());
                 }
             },
-            myMapDetailView: {
-                'export': 'export'
-            },
             'button[action=addpoi]': {
                 tap: 'addPoi'
+            },
+            exportButton: {
+                tap: 'export'
             }
         },
         routes: {
@@ -377,7 +378,100 @@ Ext.define('App.controller.MyMaps', {
         }
     },
 
-    'export': function(title, description, features, format) {
+    'export': function() {
+        var overlay = Ext.Viewport.add({
+            xtype: 'formpanel',
+            modal: true,
+            hideOnMaskTap: true,
+            showAnimation: {
+                type: 'popIn',
+                duration: 250,
+                easing: 'ease-out'
+            },
+            hideAnimation: {
+                type: 'popOut',
+                duration: 250,
+                easing: 'ease-out'
+            },
+            centered: true,
+            width: Ext.os.deviceType == 'Phone' ? 260 : 400,
+            height: Ext.os.deviceType == 'Phone' ? 220 : 400,
+            items: [{
+                xtype: 'component',
+                html: i18n.message('mymaps.export.title')
+            }, {
+                xtype: 'component',
+                html: '<br />'
+            }, {
+                xtype: 'fieldset',
+                title: 'E-mail',
+                items: [{
+                    xtype: 'emailfield',
+                    name: 'email'
+                }]
+            }, {
+                xtype: 'fieldset',
+                title: 'Format',
+                items: [{
+                    xtype: 'radiofield',
+                    name: 'format',
+                    value: 'GPX',
+                    label: 'GPX',
+                    checked: true
+                }, {
+                    xtype: 'radiofield',
+                    name: 'format',
+                    value: 'KML',
+                    label: 'KML'
+                }]
+            }, {
+                xtype: 'container',
+                layout: {
+                    type: 'hbox',
+                    pack: 'center'
+                },
+                padding: 10,
+                defaults: {
+                    style: 'margin-right: 10px;'
+                },
+                items: [{
+                    xtype: 'button',
+                    action: 'cancelexport',
+                    text: i18n.message('button.cancel'),
+                    handler: function() {
+                        overlay.hide();
+                    }
+                }, {
+                    xtype: 'button',
+                    ui: 'confirm',
+                    text: i18n.message('button.OK'),
+                    handler: function() {
+                        var values = overlay.getValues();
+                        this.doExport(values.email, values.format, overlay);
+                    },
+                    scope: this
+                }]
+            }]
+        });
+        overlay.show();
+    },
+
+    doExport: function(email, format, overlay) {
+        var title,
+            description,
+            features;
+        var view = Ext.Viewport.getActiveItem();
+        if (view == this.getMyMapDetailView()) {
+            var mymap = view.getMyMap();
+            title = mymap.title;
+            description = mymap.description;
+            features = view.getFeatures();
+        } else if (view == this.getMyMapFeatureDetailView()) {
+            var feature = view.getFeature();
+            title = feature.attributes.name;
+            description = feature.attributes.description;
+            features = [feature];
+        }
 
         Ext.Viewport.setMasked({
             xtype: 'loadmask',
@@ -409,9 +503,14 @@ Ext.define('App.controller.MyMaps', {
         var content = f.write(features, metadata);
 
         Ext.Ajax.request({
-            url: App.util.Config.getWsgiUrl() + 'upload/upload',
+            url: App.util.Config.getWsgiUrl() + 'mobile_export',
             method: 'POST',
             xmlData: content,
+            params: {
+                mail: email,
+                name: title,
+                lang: i18n.getLanguage()
+            },
             headers: {
                 'Content-Type': contentType
             },
@@ -419,33 +518,13 @@ Ext.define('App.controller.MyMaps', {
                 Ext.Viewport.setMasked(false);
                 if (success) {
                     var o = Ext.decode(response.responseText);
-                    // window.open doesn't work in the web app because of
-                    // the popup blocker. So for the web app we create a
-                    // panel whose content includes a link to the exported
-                    // file.
-                    if (window.device) {
-                        // See http://docs.phonegap.com/en/2.3.0/cordova_inappbrowser_inappbrowser.md.html#window.open
-                        // for information on the '_system' target.
-                        window.open(o.url, '_system');
+                    if (o.success === true) {
+                        Ext.Msg.alert('', i18n.message('mymaps.export.done'));
+                        overlay.hide();
+                    } else if (o.message == "Invalid e-mail address." ){
+                        Ext.Msg.alert('', i18n.message('sendbymail.invalidemail'));
                     } else {
-                        // Offer standard link to user
-                        var panel = Ext.Viewport.add({
-                            xtype: 'panel',
-                            modal: true,
-                            hideOnMaskTap: true,
-                            centered: true,
-                            cls: 'my_map_dwlFile',
-                            width: 260,
-                            height: 220,
-                            html: [
-                                '<a href="',
-                                o.url,
-                                '" target="_blank" class="x-button">',
-                                i18n.message('mymaps.exportdwl'),
-                                '</a>'
-                            ].join('')
-                        });
-                        panel.show();
+                        Ext.Msg.alert('', i18n.message('sendbymail.wrong'));
                     }
                 } else {
                     window.alert('Upload failed');

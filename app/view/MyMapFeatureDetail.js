@@ -22,6 +22,13 @@ Ext.define("App.view.MyMapFeatureDetail", {
                 text: i18n.message('button.back'),
                 ui: 'back',
                 action: "back"
+            }, {
+                xtype: 'spacer'
+            }, {
+                xtype: "button",
+                iconCls: "action",
+                iconMask: true,
+                action: "export"
             }]
         }, {
             xtype: 'component',

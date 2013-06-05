@@ -36,6 +36,7 @@ $base-color: #B58F69;
 @include pictos-iconmask('delete');
 @include pictos-iconmask('arrow_down');
 @include pictos-iconmask('photo1');
+@include pictos-iconmask('action');
 
 body.x-ios.x-phone {
   font-size: 100%; // This accommodates the iPhone, at 163ppi
@@ -107,12 +108,6 @@ body.x-android.x-phone {
 }
 .results-preview small {
     color: grey;
-}
-.results-preview .export-links {
-    font-size: 80%;
-}
-.results-preview .export-links a {
-    padding-right: 4px;
 }
 
 // cards
@@ -387,12 +382,6 @@ div.Mask {
 }
 #myMapDetailView .created_by {
     color: grey;
-}
-#myMapDetailView .export-links {
-    font-size: 80%;
-}
-#myMapDetailView .export-links a {
-    padding-right: 4px;
 }
 .my_map_dwlFile .x-innerhtml{
     text-align: center;

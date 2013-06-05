@@ -21,6 +21,13 @@ Ext.define('App.view.MyMapDetail', {
                 text: i18n.message('button.back'),
                 ui: 'back',
                 action: "main"
+            }, {
+                xtype: 'spacer'
+            }, {
+                xtype: "button",
+                iconCls: "action",
+                iconMask: true,
+                action: "export"
             }]
         }, {
             docked: 'bottom',
@@ -45,12 +52,6 @@ Ext.define('App.view.MyMapDetail', {
             ],
             data: null
         }, {
-            cls: 'export-links',
-            html: [
-                '<a href="javascript:void(0);">GPX</a>',
-                '<a href="javascript:void(0);">KML</a>'
-            ].join(' ')
-        }, {
             id: 'myMapFeaturesList',
             xtype: 'list',
             itemTpl: '{attributes.name}',
@@ -60,22 +61,6 @@ Ext.define('App.view.MyMapDetail', {
     },
 
     initialize: function() {
-        this.on({
-            tap: {
-                fn: function(e, node) {
-                    this.fireEvent(
-                        'export',
-                        this.getMyMap().title,
-                        this.getMyMap().description,
-                        this.getFeatures(),
-                        e.target.innerHTML
-                    );
-                },
-                element: 'innerElement',
-                delegate: '.export-links a'
-            },
-            scope: this
-        });
         this.on({
             painted: function() {
                 if (App.user == this.getMyMap().user_login) {
