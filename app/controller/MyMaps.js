@@ -410,7 +410,8 @@ Ext.define('App.controller.MyMaps', {
                 title: 'E-mail',
                 items: [{
                     xtype: 'emailfield',
-                    name: 'email'
+                    name: 'email',
+                    value: localStorage.getItem('export_email')
                 }]
             }, {
                 xtype: 'fieldset',
@@ -518,6 +519,7 @@ Ext.define('App.controller.MyMaps', {
                 'Content-Type': contentType
             },
             callback: function(options, success, response) {
+                localStorage.setItem('export_email', email);
                 Ext.Viewport.setMasked(false);
                 if (success) {
                     var o = Ext.decode(response.responseText);
