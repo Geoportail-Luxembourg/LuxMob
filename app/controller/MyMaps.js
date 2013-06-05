@@ -597,8 +597,8 @@ Ext.define('App.controller.MyMaps', {
                         Ext.Viewport.animateActiveItem(
                             this.getMyMapFeatureDetailView(),
                             {
-                                type: 'flip',
-                                direction: 'left',
+                                type: 'reveal',
+                                direction: 'down',
                                 listeners: {
                                     animationend: function() {
                                         Ext.Viewport.remove(profileView);
@@ -614,7 +614,7 @@ Ext.define('App.controller.MyMaps', {
         Ext.Viewport.add(profileView);
         Ext.Viewport.animateActiveItem(
             profileView,
-            {type: 'flip', direction: "right"}
+            {type: 'cover', direction: "up"}
         );
     },
 
