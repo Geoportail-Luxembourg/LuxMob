@@ -9,7 +9,7 @@ Ext.define('App.util.Config', {
         /**
          * The languages supported by the application.
          */
-        supportedLanguages: ['en', 'de', 'fr', 'lb'],
+        supportedLanguages: ['en', 'de', 'fr', 'lu'],
 
         /**
          * The default language to use if there's no language detected.
@@ -113,6 +113,7 @@ Ext.define('App.util.Config', {
             langLen = supportedLanguages.length,
             i;
        currentLang = currentLang.substring(0, 2).toLowerCase();
+       currentLang = currentLang == 'lb' ? 'lu' : currenLang;
        for(i = 0; i < langLen; i++) {
            if (supportedLanguages[i] === currentLang) {
                return currentLang;
