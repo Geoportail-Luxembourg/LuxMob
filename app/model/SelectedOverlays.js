@@ -19,7 +19,7 @@ Ext.define('App.model.SelectedOverlays', {
         }, {
             name: 'de'
         }, {
-            name: 'lu'
+            name: 'lb'
         }],
         identifier: 'uuid',
         proxy: {

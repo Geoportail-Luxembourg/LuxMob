@@ -9,7 +9,7 @@ Ext.define('App.util.Config', {
         /**
          * The languages supported by the application.
          */
-        supportedLanguages: ['en', 'de', 'fr'],
+        supportedLanguages: ['en', 'de', 'fr', 'lb'],
 
         /**
          * The default language to use if there's no language detected.
