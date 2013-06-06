@@ -35,8 +35,7 @@ Ext.define('App.view.Main', {
                 id: 'appwarning',
                 items: [
                     {
-                        // text: i18n.message('open_in_app'),
-                        text: 'Ouvrir dans l’application',
+                        text: i18n.message('button.open_in_app'),
                         handler: function() {
                             var map_id = OpenLayers.Util.getParameters().map_id,
                                 qs= (map_id) ? 'map_id='+map_id : '';
@@ -57,7 +56,7 @@ Ext.define('App.view.Main', {
                         xtype: 'spacer'
                     },
                     {
-                        text: 'Fermer',
+                        text: i18n.message('button.close'),
                         handler: function() {
                             Ext.getCmp('appwarning').destroy();
                             localStorage.setItem('disable_app_prompt', true);
