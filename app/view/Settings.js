@@ -32,7 +32,7 @@ Ext.define("App.view.Settings", {
                     {text: 'English', value: 'en'},
                     {text: 'Français', value: 'fr'},
                     {text: 'Deutsch', value: 'de'},
-                    {text: 'Lëtzebuergesch', value: 'lu'}
+                    {text: 'Lëtzebuergesch', value: 'lb'}
                 ],
                 usePicker: false
             }]
