@@ -113,7 +113,7 @@ Ext.define('App.util.Config', {
             langLen = supportedLanguages.length,
             i;
        currentLang = currentLang.substring(0, 2).toLowerCase();
-       currentLang = currentLang == 'lb' ? 'lu' : currenLang;
+       currentLang = currentLang == 'lb' ? 'lu' : currentLang;
        for(i = 0; i < langLen; i++) {
            if (supportedLanguages[i] === currentLang) {
                return currentLang;
