@@ -21,6 +21,7 @@ Ext.define('App.view.Main', {
         this.on('painted', this.render, this, {
             single: true
         });
+        _paq = [];
     },
 
     applyItems: function(items, collection) {
@@ -168,6 +169,25 @@ Ext.define('App.view.Main', {
             map.addControls([new OpenLayers.Control.Zoom()]);
         }
         this.fireEvent('mapready', map);
+        
+        
+
+        _paq.push(["trackPageView"]);
+        _paq.push(["enableLinkTracking"]);
+
+        (function() {
+        var u=(("https:" == document.location.protocol) ? "https" : "http") + "://statistics.geoportail.lu/";
+        _paq.push(["setTrackerUrl", u+"piwik.php"]);
+        if (!window.device){
+	        _paq.push(["setSiteId", "12"]);}
+	    else{
+	        _paq.push(["setSiteId", "13"]);
+	    }
+        var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+        g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+        })();
+        
+        
     },
 
 
