@@ -29,7 +29,7 @@ Ext.define('App.model.Overlays', {
                 return OpenLayers.Lang.de[label] || label;
             }
         }, {
-            name: 'lu',
+            name: 'lb',
             convert: function(value, record) {
                 var label = record.get('label');
                 return OpenLayers.Lang.lu[label] || label;

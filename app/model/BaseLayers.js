@@ -19,7 +19,7 @@ Ext.define('App.model.BaseLayers', {
         }, {
             name: 'de'
         }, {
-            name: 'lu'
+            name: 'lb'
         }]
     }
 });
