@@ -119,6 +119,10 @@ Ext.define('App.view.Main', {
         if (queryParams.bgLayer) {
             this.setBaseLayer(queryParams.bgLayer);
         }
+
+        if (queryParams.bgOpacity == "0") {
+            this.setBaseLayer('Aerial Images');
+        }
     },
 
     updateMap: function(map) {
