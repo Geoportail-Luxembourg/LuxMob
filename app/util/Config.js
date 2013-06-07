@@ -23,10 +23,9 @@ Ext.define('App.util.Config', {
 
         /**
          * The URL to the WMS service (MapProxy) to use in the native app.
-         * (FIXME: http://api.geoportail.lu/mapproxy/service is to be used in
-         * production.)
          */
-        webOverlayUrl: 'http://app.geoportail.lu/mapproxy/service',
+        webOverlayUrl: window.location.href.indexOf('geoportail.lu') != -1 ?
+            '/' : 'http://app.geoportail.lu/',
 
         /**
          * The URLs to the tile service to use in the native app.
@@ -55,9 +54,9 @@ Ext.define('App.util.Config', {
 
         /**
          * The URL to the WSGI app to use in the web app.
-         * (FIXME: http://api.geoportail.lu/ is to be used in production.)
          */
-        webWsgiUrl: 'http://app.geoportail.lu/',
+        webWsgiUrl: window.location.href.indexOf('geoportail.lu') != -1 ?
+            '/' : 'http://app.geoportail.lu/',
 
         /**
          * The OpenLayers.Map configuration.
