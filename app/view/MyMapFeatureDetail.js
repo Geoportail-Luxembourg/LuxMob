@@ -56,8 +56,10 @@ Ext.define("App.view.MyMapFeatureDetail", {
     updateFeature: function(feature) {
         var title = '';
         if (feature.attributes.thumbnail) {
+            // we intentionaly use getAppWsgiUrl here so that we get absolute
+            // urls (no urls like "//images/xxxx.png")
             title += '<img src="' +
-                App.util.Config.getWsgiUrl() +
+                App.util.Config.getAppWsgiUrl() +
                 feature.attributes.thumbnail +
                 '" style="height:30px;padding-right:5px;"/>';
         }
