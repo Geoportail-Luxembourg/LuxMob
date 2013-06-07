@@ -25,7 +25,7 @@ Ext.define('App.util.Config', {
          * The URL to the WMS service (MapProxy) to use in the native app.
          */
         webOverlayUrl: window.location.href.indexOf('geoportail.lu') != -1 ?
-            '/' : 'http://app.geoportail.lu/',
+            '/mapproxy/service' : 'http://app.geoportail.lu/mapproxy/service',
 
         /**
          * The URLs to the tile service to use in the native app.
