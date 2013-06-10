@@ -12,6 +12,7 @@ Ext.define('App.view.MyMapDetail', {
         layout: 'vbox',
         fullscreen: true,
         padding: 10,
+        scrollable: true,
         items: [{
             docked: 'top',
             xtype: 'toolbar',
