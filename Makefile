@@ -74,7 +74,7 @@ copy-to-svn: svn-checkout app
 
 .PHONY: svn-checkout
 svn-checkout:
-	svn co https://project.camptocamp.com/svn/geoportail_luxembourg/branches/mobileevo/geoadmin/luxmob luxmob-svn
+	svn co https://project.camptocamp.com/svn/geoportail_luxembourg/trunk/geoadmin/luxmob luxmob-svn
 
 .PHONY:
 clean:
