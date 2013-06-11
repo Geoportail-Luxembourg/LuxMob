@@ -12,7 +12,6 @@ Ext.define('App.view.MyMapDetail', {
         layout: 'vbox',
         fullscreen: true,
         padding: 10,
-        scrollable: true,
         items: [{
             docked: 'top',
             xtype: 'toolbar',
@@ -52,13 +51,15 @@ Ext.define('App.view.MyMapDetail', {
                 '<div class="created_by"><small>' + OpenLayers.i18n('mymaps.map_created_by') + '{user_login}</small></div>',
                 '<div class="description">{description}</div>'
             ],
-            data: null
+            data: null,
+            scrollable: true,
+            flex: 1
         }, {
             id: 'myMapFeaturesList',
             xtype: 'list',
             itemTpl: '{attributes.name}',
             disableSelection: true,
-            flex: 2
+            flex: 1
         }]
     },
 
