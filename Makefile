@@ -28,6 +28,12 @@ ios-json:
 .PHONY: android
 android: android-json build/cordova-android/local.properties testingapp
 	cp -r build/App/testing/* build/cordova-android/assets/www/
+	./build/cordova-android/cordova/release
+	mv app.json.bak app.json
+
+.PHONY: android-debug
+android-debug: android-json build/cordova-android/local.properties testingapp
+	cp -r build/App/testing/* build/cordova-android/assets/www/
 	./build/cordova-android/cordova/build
 	adb uninstall com.c2c.LuxMob
 	./build/cordova-android/cordova/run
@@ -36,17 +42,6 @@ android: android-json build/cordova-android/local.properties testingapp
 
 android-json:
 	python utils/modify_app_json.py cordova-2.5.0.android.js
-
-# !! The app doesn't currently work in debug mode in the Android emulator !!
-.PHONY: ios-debug
-android-debug: $(SRC) $(SRC_APP)
-	cp -r app build/cordova-android/assets/www/
-	cp -r resources build/cordova-android/assets/www/
-	cp $(SRC) build/cordova-android/assets/www/
-	python utils/modify_app_json.py app.json build/cordova-android/assets/www/app.json
-	./build/cordova-android/cordova/build
-	adb uninstall com.c2c.LuxMob
-	./build/cordova-android/cordova/run
 
 build/cordova-android/local.properties:
 	android update project -p build/cordova-android/
