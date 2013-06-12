@@ -26,8 +26,9 @@ Ext.define('App.view.Main', {
 
     applyItems: function(items, collection) {
         items = [];
+        // FIXME Temporary disable app download message
         if (!App.util.Config.isNativeApp()
-            && !localStorage.getItem('disable_app_prompt')) {
+            && !localStorage.getItem('disable_app_prompt') && false) {
             var toolbar = {
                 xtype: 'toolbar',
                 docked: 'top',
