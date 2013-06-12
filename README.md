@@ -99,7 +99,7 @@ To build the PhoneGap iOS app run this command:
     $ make ios
 
 If you change the source code of the Sencha app you don't need to run `make`
-before running `make android` or `make ios`. The latter commands will build he
+before running `make android` or `make ios`. The latter commands will build the
 Sencha app when required.
 
 ## Push the web app to SVN
