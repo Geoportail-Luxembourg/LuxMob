@@ -89,7 +89,8 @@ To build the web app run this command:
 
     $ make
 
-To build the PhoneGap Android app run this command:
+To build the PhoneGap Android app run this command. A password for the keystore
+may be asked:
 
     $ make android
 
