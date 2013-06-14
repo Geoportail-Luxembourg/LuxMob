@@ -70,7 +70,9 @@ var GeolocateControl = OpenLayers.Class(OpenLayers.Control, {
         if (e.error.code == 1) {
             this.geolocateControl.deactivate();
             this.cancelAutoUpdate();
-            alert("This application is not allowed to use your position");
+            alert(e.error.message);
+        } else if (e.error.code == 2) {
+            alert(e.error.message);
         }
     },
 
