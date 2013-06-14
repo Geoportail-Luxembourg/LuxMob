@@ -629,7 +629,7 @@ Ext.define('App.controller.MyMaps', {
             watch: true,
             geolocationOptions: {
                 enableHighAccuracy: true,
-                maximumAge: 0,
+                maximumAge: 60000,
                 timeout: 7000
             }
         });
