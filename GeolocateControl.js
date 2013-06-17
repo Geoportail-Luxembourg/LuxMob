@@ -32,7 +32,16 @@ var GeolocateControl = OpenLayers.Class(OpenLayers.Control, {
             }, OpenLayers.Feature.Vector.style['default'])
         );
 
+        document.addEventListener("pause",
+            OpenLayers.Function.bind(this.deactivate, this), false);
+
         return true;
+    },
+
+    deactivate: function() {
+        this.layer.removeFeatures([this.circle, this.marker]);
+        this.geolocateControl.deactivate();
+        this.cancelAutoUpdate();
     },
 
     draw: function() {
@@ -68,8 +77,7 @@ var GeolocateControl = OpenLayers.Class(OpenLayers.Control, {
 
     onLocationFailed: function(e) {
         if (e.error.code == 1) {
-            this.geolocateControl.deactivate();
-            this.cancelAutoUpdate();
+            this.deactivate();
             alert(e.error.message);
         } else if (e.error.code == 2) {
             alert(e.error.message);
