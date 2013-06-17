@@ -48,7 +48,9 @@ var GeolocateControl = OpenLayers.Class(OpenLayers.Control, {
         var div = OpenLayers.Control.prototype.draw.apply(this);
 
         var geolocate = document.createElement("a");
-        geolocate.appendChild(document.createTextNode("\ue800"));
+        var span = document.createElement("span");
+        span.appendChild(document.createTextNode("\ue800"));
+        geolocate.appendChild(span);
         div.appendChild(geolocate);
         OpenLayers.Element.addClass(geolocate, "olButton");
         this.button = geolocate;
@@ -85,6 +87,10 @@ var GeolocateControl = OpenLayers.Class(OpenLayers.Control, {
     },
 
     onLocationUpdated: function(e) {
+        if (this.geolocateControl.autoCenter) {
+            OpenLayers.Element.addClass(this.button, 'active');
+        }
+        OpenLayers.Element.removeClass(this.button, 'searching');
         this.layer.removeFeatures([this.circle, this.marker]);
         this.circle.geometry = new OpenLayers.Geometry.Polygon.createRegularPolygon(
             e.point,
@@ -115,6 +121,7 @@ var GeolocateControl = OpenLayers.Class(OpenLayers.Control, {
             this.geolocateControl.autoCenter = false;
             this.touchControl.pinchZoom.preserveCenter = false;
             OpenLayers.Element.removeClass(this.button, 'active');
+            OpenLayers.Element.removeClass(this.button, 'searching');
             this.firstGeolocation = false;
             this.circle.style.fillColor = '#999';
             this.circle.style.strokeColor = '#999';
@@ -129,13 +136,13 @@ var GeolocateControl = OpenLayers.Class(OpenLayers.Control, {
             if (this.button.className.indexOf('active') != -1) {
                 this.cancelAutoUpdate();
             } else {
+                OpenLayers.Element.addClass(this.button, 'searching');
                 this.map.addControl(this.geolocateControl);
                 this.geolocateControl.autoCenter = true;
                 this.firstGeolocation = true;
                 // force activation, even if already active
                 this.geolocateControl.deactivate();
                 this.geolocateControl.activate();
-                OpenLayers.Element.addClass(this.button, 'active');
                 this.touchControl.pinchZoom.preserveCenter = true;
                 this.circle.style.fillColor = '#4C7FB2';
                 this.circle.style.strokeColor = '#4C7FB2';

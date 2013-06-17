@@ -321,6 +321,22 @@ div.Geolocate a.active {
     color: #67B2FF;
 }
 
+@-webkit-keyframes rotation {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(-90deg);
+  }
+}
+
+div.Geolocate a.searching span {
+    -webkit-animation: rotation .5s infinite linear alternate;
+    position: absolute;
+    left: 12px;
+    top: 5px;
+}
+
 div.Mask {
     box-sizing: border-box;
     width: 100%;
