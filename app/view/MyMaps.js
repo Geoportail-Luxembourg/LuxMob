@@ -31,9 +31,5 @@ Ext.define("App.view.MyMaps", {
             disableSelection: true,
             flex: 2
         }]
-    },
-
-    initialize: function() {
-        Ext.getStore('MyMaps').load();
     }
 });

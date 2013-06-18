@@ -295,6 +295,7 @@ Ext.define('App.controller.Main', {
                 this.getLoginButton().hide();
                 this.getLogoutButton().show();
                 this.getMyMapsButton().show();
+                Ext.getStore('MyMaps').load();
             },
             failure: function(response) {
                 App.user = null;
