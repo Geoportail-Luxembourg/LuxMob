@@ -71,7 +71,18 @@ Ext.define('App.util.Config', {
          * The list of themes.
          * Set in the Overlays view initialize method.
          */
-        themes: null
+        themes: null,
+
+        /**
+         * The url to the iOS app store application.
+         */
+        iosStoreUrl: "https://itunes.apple.com/lu/app/geoportail.lu/id661047142",
+
+        /**
+         * The url to the android app store application.
+         */
+        androidStoreUrl: "https://play.google.com/store/apps/details?id=com.c2c.LuxMob"
+
     },
 
     /**
@@ -149,5 +160,16 @@ Ext.define('App.util.Config', {
      */
     isNativeApp: function() {
         return !!window.device;
+    },
+
+    /**
+     * Returns the url to the application in the corresponding store
+     */
+    getAppStoreUrl: function() {
+        if (Ext.os.is('Android')) {
+            return this.getAndroidStoreUrl();
+        } else if (Ext.os.is('iOS')) {
+            return this.getIosStoreUrl();
+        }
     }
 });

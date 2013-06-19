@@ -24,11 +24,41 @@ Ext.define('App.view.Main', {
         _paq = [];
     },
 
+
+    openApp: function() {
+        var map_id = OpenLayers.Util.getParameters().map_id,
+            qs = (map_id) ? 'map_id='+map_id : '',
+            app = "luxmob:///?" + qs,
+            storeUrl = App.util.Config.getAppStoreUrl();
+
+        var w;
+        // wait a bit
+        // if application has started, this code shouldn't be executed
+        // until the browser is open again
+        // Note: this doesn't seem to work well with chrome on Android
+        var loadDateTime = new Date();
+        window.setTimeout(function() {
+            var timeOutDateTime = new Date();
+            if (timeOutDateTime - loadDateTime < 5000) {
+                window.location = storeUrl;
+            }
+            if (Ext.os.is('Android')) {
+                w.close();
+            }
+        }, 2000);
+        if (Ext.os.is('Android')) {
+            // open the url scheme in new tab
+            w = window.open(app, '_blank');
+        } else {
+            window.location = app;
+        }
+    },
+
     applyItems: function(items, collection) {
         items = [];
         // FIXME Temporary disable app download message
         if (!App.util.Config.isNativeApp()
-            && !localStorage.getItem('disable_app_prompt') && false) {
+            && !localStorage.getItem('disable_app_prompt')) {
             var toolbar = {
                 xtype: 'toolbar',
                 docked: 'top',
@@ -37,21 +67,8 @@ Ext.define('App.view.Main', {
                 items: [
                     {
                         text: i18n.message('button.open_in_app'),
-                        handler: function() {
-                            var map_id = OpenLayers.Util.getParameters().map_id,
-                                qs= (map_id) ? 'map_id='+map_id : '';
-                            window.location = "luxmob:///?" + qs;
-                            var time = (new Date()).getTime();
-                            setTimeout(function(){
-                                var now = (new Date()).getTime();
-                                if((now-time)<400) {
-                                    if(confirm('Missing application. Download it now?')){
-                                        // FIXME : set real application URL here
-                                        window.location = 'http://itunes.apple.com/us/app/chrome/id535886823?mt=8';
-                                    }
-                                }
-                            }, 300);
-                        }
+                        handler: this.openApp,
+                        scope: this
                     },
                     {
                         xtype: 'spacer'
