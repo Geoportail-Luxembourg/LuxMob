@@ -76,7 +76,7 @@ Ext.define('App.util.Config', {
         /**
          * The url to the iOS app store application.
          */
-        iosStoreUrl: "https://itunes.apple.com/lu/app/geoportail.lu/id661047142",
+        iosStoreUrl: "https://itunes.apple.com/app/geoportail.lu/id661047142",
 
         /**
          * The url to the android app store application.
