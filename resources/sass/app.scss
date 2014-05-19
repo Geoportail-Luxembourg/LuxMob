@@ -1,43 +1,33 @@
 $base-color: #0099FF;
-/*$list-header-color: #666;                                                       */
-/*$list-header-bg-color: #ccc;                                                    */
 
-/*$index-bar-bg-color: #ccc;                                                      */
-/*$index-bar-color: #666;*/
-
+// The following two lines import the default Sencha Touch theme. If you are building
+// a new theme, remove them and the add your own CSS on top of the base CSS (which
+// is already included in your app.json file).
+@import 'sencha-touch/default';
 @import 'sencha-touch/default/all';
 
-// You may remove any of the following modules that you
-// do not use in order to create a smaller css file.
-@include sencha-panel;
-@include sencha-buttons;
-@include sencha-sheet;
-@include sencha-picker;
-@include sencha-tabs; // custom style see below
-@include sencha-toolbar;
-@include sencha-toolbar-forms;
-/*@include sencha-indexbar;*/
-@include sencha-list;
-@include sencha-layout;
-/*@include sencha-carousel;*/
-@include sencha-form;
-@include sencha-msgbox;
+// Custom code goes here..
 
-// Your custom code goes here...
+// Examples of using the icon mixin:
+// @include icon('user');
+@include icon('list');
+@include icon('search');
+@include icon('more');
+@include icon('delete');
+@include icon('arrow_down');
+@include icon('chart2');
 
-@include pictos-iconmask('code3');
-@include pictos-iconmask('list');
-@include pictos-iconmask('cloud_download');
-@include pictos-iconmask('search');
-@include pictos-iconmask('more');
-@include pictos-iconmask('mail2');
-@include pictos-iconmask('power_on');
-@include pictos-iconmask('locate1');
-@include pictos-iconmask('delete');
-@include pictos-iconmask('arrow_down');
-@include pictos-iconmask('photo1');
-@include pictos-iconmask('action2');
-@include pictos-iconmask('chart2');
+@include icon('code3', ']');
+@include icon('cloud_download', '~');
+@include icon('mail', 'M');
+@include icon('power_on', 'Q');
+@include icon('locate1', '@');
+@include icon('photo1', 'V');
+@include icon('action2', 'R');
+
+@include icon-font('icomoon', inline-font-files('icomoon/icomoon.woff', woff, 'icomoon/icomoon.ttf', truetype,'icomoon/icomoon.svg', svg));
+@include icon('layers', '\e602', 'icomoon');
+
 
 body.x-ios.x-phone {
   font-size: 100%; // This accommodates the iPhone, at 163ppi
@@ -145,10 +135,6 @@ body.x-android.x-phone {
     @include border-radius(4px);
     color: #657b83;
   }
-
-.x-button-icon.layers {
-    -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAQnAAAEJwBJs06NAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAORSURBVGje7dtPaFxVFMfxT2KbUtNUCwliS0kEaS20CFKqYAVRuzBVEKwrqxUUFHThv4WgCP5biAvxD4LooqC4UHFhCy60bmwRbGmhWGkXtbQQwZZEDEw0jcm4OSOPR6dOZt57M5M3iwOPmTv33O+d++49v3vPVa1WFWXow078gIO4B32FtqEg0GV4EMdRTdlx7MayrgfGSjyJM5cATduZKLuy64CxBi/ifAOgaTuPl7Cm44GxFm9hugnQtE1HXWs7Dhgb8BFmMwBN2yw+xoa2A2MrvsR8DqBpm8cX2Fo4MO7EtwVA1rPvcFeuwOjH/TjcRtC0HY429WcGjAE8ilMdBJq2U3gMA00DYwjPY6KDQdM2gecw1DAwRvAaproING1TeB0jdYExhvcx08WgaZvBexhLcNqCTzG3hEDTNheMW2A8lEt1idtBjCeH9Hbsx8ISglzAPtx6uUlrKQzx/4bwYpalsXjhZ7p5kmom8BiJKX6qG5ehVkLLoVjUJ7op0GhZPHRIqNlwKJmZPAwx8QCOFgh6LHz2t3sD4O7YicwL9EfsbNsGQGLN/hq3JD6/Dd9kCHoAdyTqvzl87sf2vPVwH+7FoUs07PukIMdNLe6E7Et15O0h+tPlDkWb+rLUw8vxME400NCfcF+tAbgBexsMYubxOW5M+B6v08FpOxFtXN6KHh7E0zjXxD/0c2y8XxF1jYYS+6tOVLQXGxOT4a4mJ8Nz0ebBxejhYbyCyQzewdN4HCui7mvwZmzB/o0PalFRnE48hF8y8DsZDMOX08OjeBeVHAOEwfB1Na6N5xXRKb/m4LcSTKNJPbwZnxQkFibxcpxMXIlnCorc5oJxc7v08DQu9PRwTw/39HBPD/f0cE8PZ6uHd+FIgaBHwmfxejiA++N5R0i5vEAPYEfabyHAqSF9Eo/UVAq24auM1vKFqGtbItbeEz7zH9L/M2mdxVO1DBxsCgV0sQnQi/HbTYlY+4k6mUDZT1qLXJZ+xwtYHb9dj3caFCSVKLs+IU+fxW+FLEstBh5/xJHrcEJyvlqn06biu1rZqyJt6UIhgUfGoWUFb2Nd1L0q8VrUhuOqxEh6A38WElrmLB5mI63p+sTENxDP66JTKoWIh4Ll4T/4LEbRdfgwp9yu+vKwTepoIeCLPxAvXcpDaZNaSpu2VNrEtNKmHpY2ubTU6cOlTRAv7RWA0l7yKO01ntJe1OrEq3j/AuAtwZIxNc7hAAAAAElFTkSuQmCC');
-}
 
 /* imported from openlayers/theme/default/style.mobile.css */
 div.olControlZoom {

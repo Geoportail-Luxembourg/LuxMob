@@ -36,7 +36,7 @@ Ext.define('App.view.MoreMenu', {
         }, {
             xtype: 'button',
             action: 'sendbymail',
-            iconCls: "mail2",
+            iconCls: "mail",
             text: i18n.message("button.sendbymail"),
             iconMask: true
         }];

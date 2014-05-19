@@ -1,8 +1,9 @@
 //<debug>
-Ext.Loader.setPath({
-    'Ext': 'touch/src',
-    'App': 'app',
-    'Ext.i18n': 'lib/Ext.i18n.Bundle-touch/i18n'
+Ext.Loader.setConfig({
+    enabled: true,
+    paths: {
+        'Ext.i18n': 'lib/Ext.i18n.Bundle-touch/i18n'
+    }
 });
 //</debug>
 
