@@ -3,29 +3,27 @@
 ## Build Requirements
 
 Building the Luxembourg Mobile Sencha Touch app (LuxMob) requires installing
-Sencha Cmd 3.0.2.288, which has its own requirements (see below).
+Sencha Cmd 4.0.4.84, which has its own requirements (see below).
 
 The Android SDK Tools are also required to build the app for Android.
 
 ### Sencha Cmd
 
-Download Sencha Cmd 3.0.2.288 for your OS from
-http://cdn.sencha.com/cmd/3.0.2.288/SenchaCmd-3.0.2.288-linux.run.zip or
-http://cdn.sencha.com/cmd/3.0.2.288/SenchaCmd-3.0.2.288-linux-x64.run.zip.
+Download Sencha Cmd 4.0.4.84 for your OS.
 
 Unzip the downloaded zip file:
         
-    $ unzip SenchaCmd-3.0.2.288-linux.run.zip
+    $ unzip SenchaCmd-4.0.4.84-linux.run.zip
 
 Run the installer:
 
-    $ ./SenchaCmd-3.0.2.288-linux.run --prefix ~/local/opt/ --mode unattended
+    $ ./SenchaCmd-4.0.4.84-linux.run --prefix ~/local/opt/ --mode unattended
 
 Using the `unattended` mode the installer does not prompt the user for
 questions.
 
 The above command installs Sencha Cmd under
-`~/local/opt/Sencha/Cmd/3.0.2.288/`.  The installer also modifies your
+`~/local/opt/Sencha/Cmd/4.0.4.84/`.  The installer also modifies your
 `.bashrc` file to extend `PATH` and set `SENCHA_CMD_3_0_0`. So sourcing
 `.bashrc` should make the `sencha` command available in the shell.
 
