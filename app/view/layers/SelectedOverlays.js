@@ -8,7 +8,7 @@ Ext.define('App.view.layers.SelectedOverlays', {
     id: 'selectedOverlaysList',
 
     config: {
-        scrollable: false,
+        scrollable: null,
         defaults: {
             xtype: 'checkboxfield',
             labelWidth: '80%'

@@ -14,7 +14,7 @@ Ext.define('App.view.Login', {
     config: {
         url: App.util.Config.getWsgiUrl() + 'checkLogin',
         method: 'POST',
-        scrollable: false,
+        scrollable: null,
         layout: {
             type: 'vbox',
             pack: 'center',
