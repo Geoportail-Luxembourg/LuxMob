@@ -19,12 +19,12 @@ Ext.define('App.view.layers.MapSettings', {
             {
                 iconCls: 'layers',
                 iconMask: true,
-                title: foobar('mapsettings.title.layers'),
+                title: Ext.i18n.Bundle.message('mapsettings.title.layers'),
                 xclass: "App.view.layers.Layers"
             }, {
                 iconCls: 'cloud_download',
                 iconMask: true,
-                title: foobar('mapsettings.title.savedmaps'),
+                title: Ext.i18n.Bundle.message('mapsettings.title.savedmaps'),
                 xclass: window.device ?
                      "App.view.layers.SavedMaps" : "App.view.layers.SavedMapsNotAvailable"
             }

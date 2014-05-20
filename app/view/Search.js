@@ -10,7 +10,7 @@ Ext.define('App.view.Search', {
     config: {
         itemTpl: "<div>{listlabel}</div>",
         store: 'Search',
-        emptyText: foobar('search.empty'),
+        emptyText: Ext.i18n.Bundle.message('search.empty'),
         pinHeaders: true,
         grouped: true,
         items: [
@@ -26,7 +26,7 @@ Ext.define('App.view.Search', {
                     flex: 4
                 }, {
                     xtype: 'button',
-                    text: foobar('button.cancel'),
+                    text: Ext.i18n.Bundle.message('button.cancel'),
                     action: 'main'
                 }]
             }

@@ -11,11 +11,11 @@ Ext.define('App.view.layers.Layers', {
         activeItem: 0,
         items: [{
                 xtype: "toolbar",
-                title: foobar('mapsettings.title.layers'),
+                title: Ext.i18n.Bundle.message('mapsettings.title.layers'),
                 docked: "top",
                 items: [{
                     xtype: "button",
-                    text: foobar('button.close'),
+                    text: Ext.i18n.Bundle.message('button.close'),
                     action: "main"
                 }]
             },{
@@ -24,7 +24,7 @@ Ext.define('App.view.layers.Layers', {
                 items: [{
                     xtype: 'fieldset',
                     margin: 10,
-                    title: foobar('layers.title.baselayer'),
+                    title: Ext.i18n.Bundle.message('layers.title.baselayer'),
                     items: [{
                         xtype: "button",
                         id: "baseLayerButton",
@@ -37,7 +37,7 @@ Ext.define('App.view.layers.Layers', {
                 }, {
                     margin: 10,
                     xtype: 'fieldset',
-                    title: foobar('layers.title.overlays'),
+                    title: Ext.i18n.Bundle.message('layers.title.overlays'),
                     items: [{
                         xclass: "App.view.layers.SelectedOverlays"
                     }]
@@ -52,7 +52,7 @@ Ext.define('App.view.layers.Layers', {
             el.setMasked({
                 xtype     : 'loadmask',
                 indicator : false,
-                message   : foobar('layers.nonetwork')
+                message   : Ext.i18n.Bundle.message('layers.nonetwork')
             });
         } else {
             el.unmask();

@@ -1,6 +1,3 @@
-function foobar(text) {
-    return text;
-}
 //<debug>
 Ext.Loader.setConfig({
     enabled: true,
@@ -25,16 +22,9 @@ Ext.application({
     requires: [
         'Ext.viewport.Viewport',
         'Ext.MessageBox',
-        //'Ext.i18n.Bundle',
+        'Ext.i18n.Bundle',
         'App.util.Config'
     ],
-
-    //bundle: {
-        //bundle: 'App',
-        //lang: 'en-US',
-        //path: 'resources/i18n',
-        //noCache: true
-    //},
 
     views: ['Main', 'layers.MapSettings', 'MoreMenu'],
     controllers: ["Download",'Main', 'Layers', 'Settings', 'Search', 'Query', 'MyMaps'],
@@ -201,12 +191,12 @@ Ext.application({
     },
 
     prepareI18n: function() {
-        //Ext.i18n.Bundle.configure({
-            //bundle: 'App',
-            //path: 'resources/i18n',
-            //language: App.util.Config.getLanguage(),
-            //noCache: true
-        //});
+        Ext.i18n.Bundle.configure({
+            bundle: 'App',
+            path: 'resources/i18n',
+            language: App.util.Config.getLanguage(),
+            noCache: true
+        });
         OpenLayers.Lang.setCode(App.util.Config.getLanguage());
     },
 
@@ -216,22 +206,22 @@ Ext.application({
             //override: 'Ext.MessageBox',
 
             //statics: {
-                //YES   : {text: foobar('messagebox.yes'),    itemId: 'yes', ui: 'action'},
-                //NO    : {text: foobar('messagebox.no'),     itemId: 'no'},
-                //CANCEL: {text: foobar('messagebox.cancel'), itemId: 'cancel'},
+                //YES   : {text: App.app.bundle.getMsg('messagebox.yes'),    itemId: 'yes', ui: 'action'},
+                //NO    : {text: App.app.bundle.getMsg('messagebox.no'),     itemId: 'no'},
+                //CANCEL: {text: App.app.bundle.getMsg('messagebox.cancel'), itemId: 'cancel'},
 
                 //OKCANCEL: [
-                    //{text: foobar('messagebox.ok'), itemId: 'ok', ui: 'action'},
-                    //{text: foobar('messagebox.cancel'), itemId: 'cancel'}
+                    //{text: App.app.bundle.getMsg('messagebox.ok'), itemId: 'ok', ui: 'action'},
+                    //{text: App.app.bundle.getMsg('messagebox.cancel'), itemId: 'cancel'}
                 //],
                 //YESNOCANCEL: [
-                    //{text: foobar('messagebox.yes'),    itemId: 'yes', ui: 'action'},
-                    //{text: foobar('messagebox.no'),     itemId: 'no'},
-                    //{text: foobar('messagebox.cancel'), itemId: 'cancel'}
+                    //{text: App.app.bundle.getMsg('messagebox.yes'),    itemId: 'yes', ui: 'action'},
+                    //{text: App.app.bundle.getMsg('messagebox.no'),     itemId: 'no'},
+                    //{text: App.app.bundle.getMsg('messagebox.cancel'), itemId: 'cancel'}
                 //],
                 //YESNO: [
-                    //{text: foobar('messagebox.yes'), itemId: 'yes', ui: 'action'},
-                    //{text: foobar('messagebox.no'),  itemId: 'no'}
+                    //{text: App.app.bundle.getMsg('messagebox.yes'), itemId: 'yes', ui: 'action'},
+                    //{text: App.app.bundle.getMsg('messagebox.no'),  itemId: 'no'}
                 //]
             //}
         //});
@@ -242,10 +232,10 @@ Ext.application({
             //override : 'Ext.picker.Picker',
             //config: {
                 //doneButton:{
-                    //text : foobar('button.done')
+                    //text : App.app.bundle.getMsg('button.done')
                 //},
                 //cancelButton:{
-                    //text : foobar('button.cancel')
+                    //text : App.app.bundle.getMsg('button.cancel')
                 //}
             //}
         //});

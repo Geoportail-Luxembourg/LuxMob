@@ -159,7 +159,7 @@ Ext.define('App.controller.Main', {
     showSearch: function() {
         if (window.device && navigator.connection &&
             navigator.connection.type == Connection.NONE) {
-            Ext.Msg.alert("", foobar('search.nonetwork'));
+            Ext.Msg.alert("", Ext.i18n.Bundle.message('search.nonetwork'));
             this.getMainView().down('#fakeSearch').blur();
         } else {
             Ext.Viewport.animateActiveItem(
@@ -191,7 +191,7 @@ Ext.define('App.controller.Main', {
 
     sendByMail: function() {
         Ext.Msg.prompt(
-            foobar('button.sendbymail'),
+            Ext.i18n.Bundle.message('button.sendbymail'),
             'E-mail',
             function(buttonId, value) {
                 if (buttonId != 'ok') {
@@ -217,17 +217,17 @@ Ext.define('App.controller.Main', {
                         x: map.getCenter().lon,
                         y: map.getCenter().lat,
                         zoom: map.getZoom(),
-                        lang: i18n.getLanguage(),
+                        lang: Ext.i18n.Bundle.getLanguage(),
                         theme: theme,
                         mail: value
                     },
                     success: function(resp) {
                         if (resp.success === true) {
-                            Ext.Msg.alert('', foobar('sendbymail.done'));
+                            Ext.Msg.alert('', Ext.i18n.Bundle.message('sendbymail.done'));
                         } else if (resp.message == "Invalid e-mail address." ){
-                            Ext.Msg.alert('', foobar('sendbymail.invalidemail'));
+                            Ext.Msg.alert('', Ext.i18n.Bundle.message('sendbymail.invalidemail'));
                         } else {
-                            Ext.Msg.alert('', foobar('sendbymail.wrong'));
+                            Ext.Msg.alert('', Ext.i18n.Bundle.message('sendbymail.wrong'));
                         }
                     },
                     callbackKey: 'cb'
@@ -267,7 +267,7 @@ Ext.define('App.controller.Main', {
                 }
             },
             failure: function() {
-                Ext.Msg.alert('', foobar('login.error'));
+                Ext.Msg.alert('', Ext.i18n.Bundle.message('login.error'));
             },
             scope: this
         });

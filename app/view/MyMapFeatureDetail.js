@@ -15,10 +15,10 @@ Ext.define("App.view.MyMapFeatureDetail", {
         items: [{
             docked: 'top',
             xtype: 'toolbar',
-            title: foobar('mymap.detail.title'),
+            title: Ext.i18n.Bundle.message('mymap.detail.title'),
             items: [{
                 xtype: "button",
-                text: foobar('button.back'),
+                text: Ext.i18n.Bundle.message('button.back'),
                 ui: 'back',
                 action: "back"
             }, {
@@ -73,7 +73,7 @@ Ext.define("App.view.MyMapFeatureDetail", {
         if (feature.geometry instanceof OpenLayers.Geometry.LineString) {
             this.down('[cls=profile]').add({
                 xtype: 'button',
-                text: foobar('mymaps.profile'),
+                text: Ext.i18n.Bundle.message('mymaps.profile'),
                 cls: 'link',
                 iconCls: 'chart2',
                 iconMask: true,

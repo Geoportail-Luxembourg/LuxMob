@@ -14,10 +14,10 @@ Ext.define('App.view.QueryDetail', {
         items: [{
             docked: 'top',
             xtype: 'toolbar',
-            title: foobar('query.detail.title'),
+            title: Ext.i18n.Bundle.message('query.detail.title'),
             items: [{
                 xtype: "button",
-                text: foobar('button.back'),
+                text: Ext.i18n.Bundle.message('button.back'),
                 ui: 'back',
                 action: "back"
             }]

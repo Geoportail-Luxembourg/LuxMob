@@ -6,6 +6,7 @@
  */
 Ext.Loader.addClassPathMappings({
   "App": "app",
+  "AppTest": "lib/Ext.i18n.Bundle-touch/demo",
   "Ext": "touch/src",
   "Ext.device.Purchases.Product": "touch/src/device/purchases/Sencha.js",
   "Ext.device.filesystem.DirectoryEntry": "touch/src/device/filesystem/HTML5.js",
@@ -64,6 +65,10 @@ Ext.ClassManager.addNameAlternateMappings({
   "App.view.layers.SavedMaps": [],
   "App.view.layers.SavedMapsNotAvailable": [],
   "App.view.layers.SelectedOverlays": [],
+  "AppTest.controller.Main": [],
+  "AppTest.controller.Settings": [],
+  "AppTest.view.Main": [],
+  "AppTest.view.Settings": [],
   "Ext.AbstractComponent": [],
   "Ext.AbstractManager": [],
   "Ext.AbstractPlugin": [],
@@ -666,6 +671,17 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.layout.wrapper.BoxDock": [],
   "Ext.layout.wrapper.Dock": [],
   "Ext.layout.wrapper.Inner": [],
+  "Ext.log.Base": [],
+  "Ext.log.Logger": [],
+  "Ext.log.filter.Filter": [],
+  "Ext.log.filter.Priority": [],
+  "Ext.log.formatter.Default": [],
+  "Ext.log.formatter.Formatter": [],
+  "Ext.log.formatter.Identity": [],
+  "Ext.log.writer.Console": [],
+  "Ext.log.writer.DocumentTitle": [],
+  "Ext.log.writer.Remote": [],
+  "Ext.log.writer.Writer": [],
   "Ext.mixin.Bindable": [],
   "Ext.mixin.Filterable": [],
   "Ext.mixin.Mixin": [],
@@ -861,6 +877,14 @@ Ext.ClassManager.addNameAliasMappings({
   "App.view.layers.SavedMaps": [],
   "App.view.layers.SavedMapsNotAvailable": [],
   "App.view.layers.SelectedOverlays": [],
+  "AppTest.controller.Main": [],
+  "AppTest.controller.Settings": [],
+  "AppTest.view.Main": [
+    "widget.mainview"
+  ],
+  "AppTest.view.Settings": [
+    "widget.settings"
+  ],
   "Ext.AbstractComponent": [],
   "Ext.AbstractManager": [],
   "Ext.AbstractPlugin": [],
@@ -1633,7 +1657,9 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.fx.runner.Css": [],
   "Ext.fx.runner.CssAnimation": [],
   "Ext.fx.runner.CssTransition": [],
-  "Ext.i18n.Bundle": [],
+  "Ext.i18n.Bundle": [
+    "widget.bundle"
+  ],
   "Ext.i18n.model.Property": [],
   "Ext.i18n.reader.Property": [
     "reader.property"
@@ -1667,6 +1693,17 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.layout.wrapper.BoxDock": [],
   "Ext.layout.wrapper.Dock": [],
   "Ext.layout.wrapper.Inner": [],
+  "Ext.log.Base": [],
+  "Ext.log.Logger": [],
+  "Ext.log.filter.Filter": [],
+  "Ext.log.filter.Priority": [],
+  "Ext.log.formatter.Default": [],
+  "Ext.log.formatter.Formatter": [],
+  "Ext.log.formatter.Identity": [],
+  "Ext.log.writer.Console": [],
+  "Ext.log.writer.DocumentTitle": [],
+  "Ext.log.writer.Remote": [],
+  "Ext.log.writer.Writer": [],
   "Ext.mixin.Bindable": [],
   "Ext.mixin.Filterable": [],
   "Ext.mixin.Mixin": [],

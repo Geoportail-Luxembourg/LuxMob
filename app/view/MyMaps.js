@@ -8,10 +8,10 @@ Ext.define("App.view.MyMaps", {
         items: [{
             docked: 'top',
             xtype: 'toolbar',
-            title: foobar("mymaps.mymaps"),
+            title: Ext.i18n.Bundle.message("mymaps.mymaps"),
             items: [{
                 xtype: 'button',
-                text: foobar('button.close'),
+                text: Ext.i18n.Bundle.message('button.close'),
                 action: 'main'
             }]
         }, {

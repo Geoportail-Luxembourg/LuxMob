@@ -5,18 +5,18 @@ Ext.define('App.view.layers.SavedMapsNotAvailable', {
         layout: 'fit',
         items: [{
             xtype: "toolbar",
-            title: foobar('savedmaps.title'),
+            title: Ext.i18n.Bundle.message('savedmaps.title'),
             docked: "top",
             items: [{
                 xtype: "button",
-                text: foobar('button.close'),
+                text: Ext.i18n.Bundle.message('button.close'),
                 action: "main",
                 iconMask: true
             }]
         }, {
             xtype: 'panel',
             cls: "card",
-            html: "<p class='action'>" + foobar('savedmaps.html') + "</p>"
+            html: "<p class='action'>" + Ext.i18n.Bundle.message('savedmaps.html') + "</p>"
         }]
     }
 });

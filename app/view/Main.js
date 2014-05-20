@@ -66,7 +66,7 @@ Ext.define('App.view.Main', {
                 id: 'appwarning',
                 items: [
                     {
-                        text: foobar('button.open_in_app'),
+                        text: Ext.i18n.Bundle.message('button.open_in_app'),
                         handler: this.openApp,
                         scope: this
                     },
@@ -74,7 +74,7 @@ Ext.define('App.view.Main', {
                         xtype: 'spacer'
                     },
                     {
-                        text: foobar('button.close'),
+                        text: Ext.i18n.Bundle.message('button.close'),
                         handler: function() {
                             Ext.getCmp('appwarning').destroy();
                             localStorage.setItem('disable_app_prompt', true);

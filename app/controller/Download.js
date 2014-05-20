@@ -94,7 +94,7 @@ Ext.define('App.controller.Download', {
     showDownload: function() {
 
         if (!window.device) {
-            Ext.Msg.alert("", foobar('savedmaps.html'));
+            Ext.Msg.alert("", Ext.i18n.Bundle.message('savedmaps.html'));
             return;
         }
 
@@ -118,12 +118,12 @@ Ext.define('App.controller.Download', {
                     items: [{
                         xtype: 'button',
                         action: 'canceldownload',
-                        text: foobar('button.cancel')
+                        text: Ext.i18n.Bundle.message('button.cancel')
                     }, {
                         xtype: 'button',
                         action: 'dodownload',
                         ui: 'confirm',
-                        text: foobar('button.download_short')
+                        text: Ext.i18n.Bundle.message('button.download_short')
                     }]
                 }]
             });
@@ -163,8 +163,8 @@ Ext.define('App.controller.Download', {
 
     promptForName: function() {
         Ext.Msg.prompt(
-            foobar('download.mapname'),
-            foobar('download.name'),
+            Ext.i18n.Bundle.message('download.mapname'),
+            Ext.i18n.Bundle.message('download.name'),
             Ext.bind(function(buttonId, value) {
                 if (buttonId == 'ok') {
                     this.initDownload(value);
@@ -405,7 +405,7 @@ Ext.define('App.controller.Download', {
             xtype: 'actionsheet',
             items: [
                 {
-                    text: foobar("button.map_remove"),
+                    text: Ext.i18n.Bundle.message("button.map_remove"),
                     ui: 'decline',
                     handler: function() {
                         this.deleteTiles(record);
@@ -413,7 +413,7 @@ Ext.define('App.controller.Download', {
                     },
                     scope: this
                 }, {
-                    text: foobar("button.cancel"),
+                    text: Ext.i18n.Bundle.message("button.cancel"),
                     handler: function() {
                         actions.hide();
                     }

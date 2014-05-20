@@ -150,7 +150,7 @@ Ext.define('App.controller.Query', {
                 bbox: params[0],
                 layers: params[1],
                 scale: params[2],
-                lang: i18n.getLanguage()
+                lang: Ext.i18n.Bundle.getLanguage()
             },
             callback: function(records, operation, success) {
                 this.setLoading(false);
@@ -161,11 +161,11 @@ Ext.define('App.controller.Query', {
                 var text, cb = Ext.emptyFn;
 
                 if (success === false) {
-                    text = foobar('query.impossible');
+                    text = Ext.i18n.Bundle.message('query.impossible');
                 } else if (count === 0) {
-                    text = foobar('query.noresults');
+                    text = Ext.i18n.Bundle.message('query.noresults');
                 } else if (count > 1) {
-                    text = foobar('query.results', {
+                    text = Ext.i18n.Bundle.message('query.results', {
                         count: count
                     });
                     cb = Ext.bind(
@@ -221,7 +221,7 @@ Ext.define('App.controller.Query', {
                 },
                 masked: {
                     xtype: 'loadmask',
-                    message: foobar('querying'),
+                    message: Ext.i18n.Bundle.message('querying'),
                     indicator: false
                 }
             });
@@ -342,7 +342,7 @@ Ext.define('App.controller.Query', {
                     iframe_re,
                     function(match, p1) {
                         window.open(p1, '_system');
-                        return '<a href="'+p1+'" class="x-button">'+foobar('query.moreinfo')+'</a>';
+                        return '<a href="'+p1+'" class="x-button">'+Ext.i18n.Bundle.message('query.moreinfo')+'</a>';
                     }
                 );
             }

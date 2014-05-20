@@ -465,7 +465,7 @@ Ext.define('App.controller.Layers', {
     onOverlayDeselect: function(list, record) {
         var selList = this.getSelectedOverlaysList();
         selList.remove(selList.down('field[name=' + record.get('name') + ']'));
-        this.showMessage(foobar("overlays.layerremoved"));
+        this.showMessage(Ext.i18n.Bundle.message("overlays.layerremoved"));
         this.onOverlayRemove(record.get('name'));
     },
 
@@ -517,7 +517,7 @@ Ext.define('App.controller.Layers', {
             xtype: 'actionsheet',
             items: [
                 {
-                    text: foobar("button.layer_remove"),
+                    text: Ext.i18n.Bundle.message("button.layer_remove"),
                     ui: 'decline',
                     handler: function() {
                         field.getParent().remove(field);
@@ -542,7 +542,7 @@ Ext.define('App.controller.Layers', {
                     },
                     scope: this
                 }, {
-                    text: foobar("button.cancel"),
+                    text: Ext.i18n.Bundle.message("button.cancel"),
                     handler: function() {
                         actions.hide();
                     }
@@ -585,7 +585,7 @@ Ext.define('App.controller.Layers', {
                         item.check();
                     }
                 });
-                this.showMessage(foobar("layers.exclusion_baselayer_msg", {
+                this.showMessage(Ext.i18n.Bundle.message("layers.exclusion_baselayer_msg", {
                     baseLayer: OpenLayers.i18n(curBaseLayer.get('name')),
                     overlay: OpenLayers.i18n(layer.get('name'))
                 }));
@@ -613,7 +613,7 @@ Ext.define('App.controller.Layers', {
         this.onOverlayChange();
 
         if (layersToExclude.length) {
-            this.showMessage(foobar("layers.exclusion_msg", {
+            this.showMessage(Ext.i18n.Bundle.message("layers.exclusion_msg", {
                 layer: OpenLayers.i18n(layer.get('name')),
                 layers: layersToExclude.join(', ')
             }));
@@ -711,7 +711,7 @@ Ext.define('App.controller.Layers', {
                 for (i = 0; i < regexps.length; i++) {
                     var search = regexps[i],
                         didMatch = record.get('name').match(search) ||
-                                   record.get(i18n.getLanguage()).match(search);
+                                   record.get(Ext.i18n.Bundle.getLanguage()).match(search);
 
                     //if it matched the first or last name, push it into the matches array
                     matched.push(didMatch);

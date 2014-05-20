@@ -10,10 +10,10 @@ Ext.define("App.view.Settings", {
         items: [{
             docked: 'top',
             xtype: 'toolbar',
-            title: foobar("settings.settings"),
+            title: Ext.i18n.Bundle.message("settings.settings"),
             items: [{
                 xtype: 'button',
-                text: foobar('button.close'),
+                text: Ext.i18n.Bundle.message('button.close'),
                 action: 'main'
             }]
         }, {
@@ -21,10 +21,10 @@ Ext.define("App.view.Settings", {
             items: [{
                 xtype: "selectfield",
                 id: 'languageSelect',
-                label: foobar('settings.language'),
+                label: Ext.i18n.Bundle.message('settings.language'),
                 listeners: {
                     painted: function() {
-                        this.setValue(App.app.bundle.getLanguage());
+                        this.setValue(Ext.i18n.Bundle.getLanguage());
                     }
                 },
                 options: [

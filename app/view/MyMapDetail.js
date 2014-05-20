@@ -14,10 +14,10 @@ Ext.define('App.view.MyMapDetail', {
         items: [{
             docked: 'top',
             xtype: 'toolbar',
-            title: foobar('mymap.detail.title'),
+            title: Ext.i18n.Bundle.message('mymap.detail.title'),
             items: [{
                 xtype: "button",
-                text: foobar('button.back'),
+                text: Ext.i18n.Bundle.message('button.back'),
                 ui: 'back',
                 action: "main"
             }, {
@@ -39,7 +39,7 @@ Ext.define('App.view.MyMapDetail', {
                 iconCls: 'locate1',
                 iconMask: true,
                 action: "addpoi",
-                text: foobar('mymaps.detail.addpoi')
+                text: Ext.i18n.Bundle.message('mymaps.detail.addpoi')
             },{
                 xtype: 'spacer'
             }]

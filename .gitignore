@@ -8,7 +8,6 @@ luxmob-svn/
 bootstrap.js
 
 cordova-app/platforms/android/assets/www
-cordova-app/plugins/android.json
 cordova-app/www
 cordova-app/platforms/android/CordovaLib/ant-build/
 cordova-app/platforms/android/CordovaLib/ant-build/

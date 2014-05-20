@@ -10,10 +10,10 @@ Ext.define('App.view.layers.SavedMaps', {
         layout: 'fit',
         items: [{ xtype: "toolbar",
             docked: "top",
-            title: foobar('savedmaps.title'),
+            title: Ext.i18n.Bundle.message('savedmaps.title'),
             items: [{
                 xtype: "button",
-                text: foobar('button.close'),
+                text: Ext.i18n.Bundle.message('button.close'),
                 action: "main",
                 iconMask: true
             }]
@@ -34,7 +34,7 @@ Ext.define('App.view.layers.SavedMaps', {
                     '<small class="map_properties">',
                         '{[(values.size/1024/1024).toFixed(1)]}Mb',
                         '<tpl if="resumable">',
-                            foobar('savedmaps.incomplete'),
+                            Ext.i18n.Bundle.message('savedmaps.incomplete'),
                         '</tpl>',
                     '</small>',
                 '</tpl>',
@@ -51,7 +51,7 @@ Ext.define('App.view.layers.SavedMaps', {
                     }
                 }
             ),
-            emptyText: "<p class='action'>" + foobar('savedmaps.nomaps') + "</p>",
+            emptyText: "<p class='action'>" + Ext.i18n.Bundle.message('savedmaps.nomaps') + "</p>",
             disclosureProperty: 'resumable',
             onItemDisclosure: function(record, btn, index) {
                 this.fireEvent('resume', record, btn, index);
