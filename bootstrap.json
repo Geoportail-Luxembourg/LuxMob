@@ -4,4 +4,4 @@
  * combination of content from app.json, and all required package's package.json
  * files.  Customizations should be placed in app.json.
  */
-{"id":"510fc440-ca3b-4290-8358-e097e636f367","js":[{"path":"touch/sencha-touch.js"},{"path":"bootstrap.js"},{"path":"app.js","update":"full"}],"css":[{"path":"resources/css/app.css","update":"full"}]}
+{"id":"510fc440-ca3b-4290-8358-e097e636f367","js":[{"path":"touch/sencha-touch.js"},{"path":"bootstrap.js"},{"path":"GeolocateControl.js"},{"path":"SavedMapLayer.js"},{"path":"app.js","update":"full"}],"css":[{"path":"resources/css/app.css","update":"full"}]}

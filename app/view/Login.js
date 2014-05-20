@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.Login', {
     extend: 'Ext.form.Panel',
     id: 'loginView',
@@ -31,13 +30,13 @@ Ext.define('App.view.Login', {
             items: [{
                 xtype: 'textfield',
                 name: 'login',
-                label: i18n.message('login.login'),
+                label: foobar('login.login'),
                 autoCorrect: false,
                 autoCapitalize: false
             }, {
                 xtype: 'passwordfield',
                 name: 'password',
-                label: i18n.message('login.password')
+                label: foobar('login.password')
             }]
         }, {
             xtype: 'container',
@@ -48,12 +47,12 @@ Ext.define('App.view.Login', {
             },
             items: [{
                 xtype: 'button',
-                text: i18n.message('button.cancel'),
+                text: foobar('button.cancel'),
                 action: 'main',
                 margin: 2
             }, {
                 xtype: 'button',
-                text: i18n.message('login.submit'),
+                text: foobar('login.submit'),
                 ui: 'confirm',
                 action: 'login',
                 margin: 2
@@ -61,22 +60,22 @@ Ext.define('App.view.Login', {
         }, {
             xtype: 'component',
             padding: 20,
-            html: i18n.message('login.info')
+            html: foobar('login.info')
         }, {
             xtype: 'button',
-            text: i18n.message('login.lostpassword'),
+            text: foobar('login.lostpassword'),
             cls: 'link',
             handler: function() {
                 var link = "http://myaccount.geoportail.lu/lostpassword?lang=";
-                window.open(link + i18n.getLanguage(), '_system');
+                window.open(link + App.app.bundle.getLanguage(), '_system');
             }
         }, {
             xtype: 'button',
-            text: i18n.message('login.newaccount'),
+            text: foobar('login.newaccount'),
             cls: 'link',
             handler: function() {
                 var link = "http://myaccount.geoportail.lu/newaccount?lang=";
-                window.open(link + i18n.getLanguage(), '_system');
+                window.open(link + App.app.bundle.getLanguage(), '_system');
             }
         }]
     }

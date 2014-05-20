@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.controller.MyMaps', {
     extend: 'Ext.app.Controller',
     requires: [
@@ -200,7 +199,7 @@ Ext.define('App.controller.MyMaps', {
                 padding: 5,
                 height: 40,
                 style: {
-                    message: i18n.message('querying'),
+                    message: foobar('querying'),
                     backgroundColor: 'white'
                 },
                 masked: {
@@ -294,7 +293,7 @@ Ext.define('App.controller.MyMaps', {
             failure: function(response) {
                 this.closeMyMap();
                 if (response.status == 404) {
-                    Ext.Msg.alert('', i18n.message('mymaps.notfound'));
+                    Ext.Msg.alert('', foobar('mymaps.notfound'));
                 }
             },
             callbackKey: 'cb',
@@ -401,7 +400,7 @@ Ext.define('App.controller.MyMaps', {
             height: Ext.os.deviceType == 'Phone' ? '80%' : 400,
             items: [{
                 xtype: 'component',
-                html: i18n.message('mymaps.export.title')
+                html: foobar('mymaps.export.title')
             }, {
                 xtype: 'component',
                 html: '<br />'
@@ -441,14 +440,14 @@ Ext.define('App.controller.MyMaps', {
                 items: [{
                     xtype: 'button',
                     action: 'cancelexport',
-                    text: i18n.message('button.cancel'),
+                    text: foobar('button.cancel'),
                     handler: function() {
                         overlay.hide();
                     }
                 }, {
                     xtype: 'button',
                     ui: 'confirm',
-                    text: i18n.message('button.OK'),
+                    text: foobar('button.OK'),
                     handler: function() {
                         var values = overlay.getValues();
                         this.doExport(values.email, values.format, overlay);
@@ -513,7 +512,7 @@ Ext.define('App.controller.MyMaps', {
             params: {
                 mail: email,
                 name: title,
-                lang: i18n.getLanguage()
+                lang: App.app.bundle.getLanguage()
             },
             headers: {
                 'Content-Type': contentType
@@ -524,12 +523,12 @@ Ext.define('App.controller.MyMaps', {
                 if (success) {
                     var o = Ext.decode(response.responseText);
                     if (o.success === true) {
-                        Ext.Msg.alert('', i18n.message('mymaps.export.done'));
+                        Ext.Msg.alert('', foobar('mymaps.export.done'));
                         overlay.hide();
                     } else if (o.message == "Invalid e-mail address." ){
-                        Ext.Msg.alert('', i18n.message('sendbymail.invalidemail'));
+                        Ext.Msg.alert('', foobar('sendbymail.invalidemail'));
                     } else {
-                        Ext.Msg.alert('', i18n.message('sendbymail.wrong'));
+                        Ext.Msg.alert('', foobar('sendbymail.wrong'));
                     }
                 } else {
                     window.alert('Upload failed');
@@ -594,7 +593,7 @@ Ext.define('App.controller.MyMaps', {
                 xtype: 'toolbar',
                 items: [{
                     xtype: 'button',
-                    text: i18n.message('button.close'),
+                    text: foobar('button.close'),
                     handler: function() {
                         Ext.Viewport.animateActiveItem(
                             this.getMyMapFeatureDetailView(),
@@ -655,7 +654,7 @@ Ext.define('App.controller.MyMaps', {
             },
             items: [{
                 xtype: 'toolbar',
-                title: i18n.message('mymaps.detail.addpoi')
+                title: foobar('mymaps.detail.addpoi')
             },{
                 layout: 'hbox',
                 items: [{
@@ -695,13 +694,13 @@ Ext.define('App.controller.MyMaps', {
                 },
                 items: [{
                     xtype: 'button',
-                    text: i18n.message('button.cancel'),
+                    text: foobar('button.cancel'),
                     action: 'cancel',
                     handler: this.closeAddPoi,
                     scope: this
                 }, {
                     xtype: 'button',
-                    text: i18n.message('button.OK'),
+                    text: foobar('button.OK'),
                     action: 'addpoisubmit',
                     ui: 'confirm',
                     disabled: true,
@@ -798,7 +797,7 @@ Ext.define('App.controller.MyMaps', {
             xtype: 'actionsheet',
             items: [
                 {
-                    text: i18n.message("button.capture_picture"),
+                    text: foobar("button.capture_picture"),
                     handler: function() {
                         navigator.device.capture.captureImage(
                             Ext.bind(this.captureSuccess, this, [actions], true),
@@ -807,7 +806,7 @@ Ext.define('App.controller.MyMaps', {
                     },
                     scope: this
                 }, {
-                    text: i18n.message("button.picture_from_library"),
+                    text: foobar("button.picture_from_library"),
                     handler: function() {
                         var destinationType = navigator.camera.DestinationType;
                         var source = navigator.camera.PictureSourceType;
@@ -822,7 +821,7 @@ Ext.define('App.controller.MyMaps', {
                     },
                     scope: this
                 }, {
-                    text: i18n.message("button.cancel"),
+                    text: foobar("button.cancel"),
                     handler: function() {
                         actions.hide();
                     }

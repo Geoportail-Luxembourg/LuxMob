@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.layers.MapSettings', {
     extend: 'Ext.tab.Panel',
     requires: [
@@ -20,12 +19,12 @@ Ext.define('App.view.layers.MapSettings', {
             {
                 iconCls: 'layers',
                 iconMask: true,
-                title: i18n.message('mapsettings.title.layers'),
+                title: foobar('mapsettings.title.layers'),
                 xclass: "App.view.layers.Layers"
             }, {
                 iconCls: 'cloud_download',
                 iconMask: true,
-                title: i18n.message('mapsettings.title.savedmaps'),
+                title: foobar('mapsettings.title.savedmaps'),
                 xclass: window.device ?
                      "App.view.layers.SavedMaps" : "App.view.layers.SavedMapsNotAvailable"
             }

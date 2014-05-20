@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.layers.Layers', {
     extend: 'Ext.Panel',
     requires: [
@@ -12,11 +11,11 @@ Ext.define('App.view.layers.Layers', {
         activeItem: 0,
         items: [{
                 xtype: "toolbar",
-                title: i18n.message('mapsettings.title.layers'),
+                title: foobar('mapsettings.title.layers'),
                 docked: "top",
                 items: [{
                     xtype: "button",
-                    text: i18n.message('button.close'),
+                    text: foobar('button.close'),
                     action: "main"
                 }]
             },{
@@ -25,7 +24,7 @@ Ext.define('App.view.layers.Layers', {
                 items: [{
                     xtype: 'fieldset',
                     margin: 10,
-                    title: i18n.message('layers.title.baselayer'),
+                    title: foobar('layers.title.baselayer'),
                     items: [{
                         xtype: "button",
                         id: "baseLayerButton",
@@ -38,7 +37,7 @@ Ext.define('App.view.layers.Layers', {
                 }, {
                     margin: 10,
                     xtype: 'fieldset',
-                    title: i18n.message('layers.title.overlays'),
+                    title: foobar('layers.title.overlays'),
                     items: [{
                         xclass: "App.view.layers.SelectedOverlays"
                     }]
@@ -53,7 +52,7 @@ Ext.define('App.view.layers.Layers', {
             el.setMasked({
                 xtype     : 'loadmask',
                 indicator : false,
-                message   : i18n.message('layers.nonetwork')
+                message   : foobar('layers.nonetwork')
             });
         } else {
             el.unmask();

@@ -6,9 +6,6 @@
  */
 Ext.Loader.addClassPathMappings({
   "App": "app",
-  "App.MessageBox": "app.js",
-  "App.Picker": "app.js",
-  "AppTest": "lib/Ext.i18n.Bundle-touch/demo",
   "Ext": "touch/src",
   "Ext.device.Purchases.Product": "touch/src/device/purchases/Sencha.js",
   "Ext.device.filesystem.DirectoryEntry": "touch/src/device/filesystem/HTML5.js",
@@ -22,14 +19,11 @@ Ext.Loader.addClassPathMappings({
   "Ext.device.sqlite.SQLTransaction": "touch/src/device/sqlite/Sencha.js",
   "Ext.draw.engine.SvgContext.Gradient": "touch/src/draw/engine/SvgContext.js",
   "Ext.i18n": "lib/Ext.i18n.Bundle-touch/i18n",
-  "Ext.overrides.event.recognizer.LongPress": "app.js",
   "ListItemTplFix": "app/controller/Layers.js",
   "SearchHighlight": "app/controller/Search.js",
   "patch": "lib/Ext.i18n.Bundle-touch/patch"
 });
 Ext.ClassManager.addNameAlternateMappings({
-  "App.MessageBox": [],
-  "App.Picker": [],
   "App.controller.Download": [],
   "App.controller.Layers": [],
   "App.controller.Main": [],
@@ -70,10 +64,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "App.view.layers.SavedMaps": [],
   "App.view.layers.SavedMapsNotAvailable": [],
   "App.view.layers.SelectedOverlays": [],
-  "AppTest.controller.Main": [],
-  "AppTest.controller.Settings": [],
-  "AppTest.view.Main": [],
-  "AppTest.view.Settings": [],
   "Ext.AbstractComponent": [],
   "Ext.AbstractManager": [],
   "Ext.AbstractPlugin": [],
@@ -676,6 +666,17 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.layout.wrapper.BoxDock": [],
   "Ext.layout.wrapper.Dock": [],
   "Ext.layout.wrapper.Inner": [],
+  "Ext.log.Base": [],
+  "Ext.log.Logger": [],
+  "Ext.log.filter.Filter": [],
+  "Ext.log.filter.Priority": [],
+  "Ext.log.formatter.Default": [],
+  "Ext.log.formatter.Formatter": [],
+  "Ext.log.formatter.Identity": [],
+  "Ext.log.writer.Console": [],
+  "Ext.log.writer.DocumentTitle": [],
+  "Ext.log.writer.Remote": [],
+  "Ext.log.writer.Writer": [],
   "Ext.mixin.Bindable": [],
   "Ext.mixin.Filterable": [],
   "Ext.mixin.Mixin": [],
@@ -691,7 +692,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.navigation.View": [
     "Ext.NavigationView"
   ],
-  "Ext.overrides.event.recognizer.LongPress": [],
   "Ext.picker.Date": [
     "Ext.DatePicker"
   ],
@@ -806,8 +806,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "patch.AjaxProxy": []
 });
 Ext.ClassManager.addNameAliasMappings({
-  "App.MessageBox": [],
-  "App.Picker": [],
   "App.controller.Download": [],
   "App.controller.Layers": [],
   "App.controller.Main": [],
@@ -874,14 +872,6 @@ Ext.ClassManager.addNameAliasMappings({
   "App.view.layers.SavedMaps": [],
   "App.view.layers.SavedMapsNotAvailable": [],
   "App.view.layers.SelectedOverlays": [],
-  "AppTest.controller.Main": [],
-  "AppTest.controller.Settings": [],
-  "AppTest.view.Main": [
-    "widget.mainview"
-  ],
-  "AppTest.view.Settings": [
-    "widget.settings"
-  ],
   "Ext.AbstractComponent": [],
   "Ext.AbstractManager": [],
   "Ext.AbstractPlugin": [],
@@ -1654,9 +1644,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.fx.runner.Css": [],
   "Ext.fx.runner.CssAnimation": [],
   "Ext.fx.runner.CssTransition": [],
-  "Ext.i18n.Bundle": [
-    "widget.bundle"
-  ],
+  "Ext.i18n.Bundle": [],
   "Ext.i18n.model.Property": [],
   "Ext.i18n.reader.Property": [
     "reader.property"
@@ -1690,6 +1678,17 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.layout.wrapper.BoxDock": [],
   "Ext.layout.wrapper.Dock": [],
   "Ext.layout.wrapper.Inner": [],
+  "Ext.log.Base": [],
+  "Ext.log.Logger": [],
+  "Ext.log.filter.Filter": [],
+  "Ext.log.filter.Priority": [],
+  "Ext.log.formatter.Default": [],
+  "Ext.log.formatter.Formatter": [],
+  "Ext.log.formatter.Identity": [],
+  "Ext.log.writer.Console": [],
+  "Ext.log.writer.DocumentTitle": [],
+  "Ext.log.writer.Remote": [],
+  "Ext.log.writer.Writer": [],
   "Ext.mixin.Bindable": [],
   "Ext.mixin.Filterable": [],
   "Ext.mixin.Mixin": [],
@@ -1703,7 +1702,6 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.navigation.View": [
     "widget.navigationview"
   ],
-  "Ext.overrides.event.recognizer.LongPress": [],
   "Ext.picker.Date": [
     "widget.datepicker"
   ],

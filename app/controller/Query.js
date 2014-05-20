@@ -161,11 +161,11 @@ Ext.define('App.controller.Query', {
                 var text, cb = Ext.emptyFn;
 
                 if (success === false) {
-                    text = i18n.message('query.impossible');
+                    text = foobar('query.impossible');
                 } else if (count === 0) {
-                    text = i18n.message('query.noresults');
+                    text = foobar('query.noresults');
                 } else if (count > 1) {
-                    text = i18n.message('query.results', {
+                    text = foobar('query.results', {
                         count: count
                     });
                     cb = Ext.bind(
@@ -221,7 +221,7 @@ Ext.define('App.controller.Query', {
                 },
                 masked: {
                     xtype: 'loadmask',
-                    message: i18n.message('querying'),
+                    message: foobar('querying'),
                     indicator: false
                 }
             });
@@ -342,7 +342,7 @@ Ext.define('App.controller.Query', {
                     iframe_re,
                     function(match, p1) {
                         window.open(p1, '_system');
-                        return '<a href="'+p1+'" class="x-button">'+i18n.message('query.moreinfo')+'</a>';
+                        return '<a href="'+p1+'" class="x-button">'+foobar('query.moreinfo')+'</a>';
                     }
                 );
             }

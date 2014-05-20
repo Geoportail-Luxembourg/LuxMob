@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.layers.SelectedOverlays', {
     extend: 'Ext.form.Panel',
     requires: [
@@ -17,7 +16,7 @@ Ext.define('App.view.layers.SelectedOverlays', {
             xtype: "button",
             id: "addOverlaysButton",
             action: "addOverlays",
-            text: i18n.message('selectedoverlays.selectlayers'),
+            text: foobar('selectedoverlays.selectlayers'),
             iconCls: "code3",
             iconMask: true,
             iconAlign: "right"

@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.layers.BaseLayers', {
     extend: 'Ext.form.Panel',
 
@@ -22,7 +21,7 @@ Ext.define('App.view.layers.BaseLayers', {
                 docked: "top",
                 items: [{
                     xtype: "button",
-                    text: i18n.message("button.layers"),
+                    text: foobar("button.layers"),
                     iconCls: "layers",
                     iconMask: true,
                     ui: 'back',

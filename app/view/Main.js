@@ -1,9 +1,9 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.Main', {
     extend: 'Ext.Container',
     xtype: 'mainview',
     requires: [
-        'App.plugin.StatefulMap'
+        'App.plugin.StatefulMap',
+        'Ext.field.Search'
     ],
     id: "mainView",
     config: {
@@ -26,10 +26,10 @@ Ext.define('App.view.Main', {
 
 
     openApp: function() {
-        var map_id = OpenLayers.Util.getParameters().map_id,
-            qs = (map_id) ? 'map_id='+map_id : '',
-            app = "luxmob:///?" + qs,
-            storeUrl = App.util.Config.getAppStoreUrl();
+        var map_id = OpenLayers.Util.getParameters().map_id;
+        var qs = (map_id) ? 'map_id='+map_id : '';
+        var app = "luxmob:///?" + qs;
+        var storeUrl = App.util.Config.getAppStoreUrl();
 
         var w;
         // wait a bit
@@ -66,7 +66,7 @@ Ext.define('App.view.Main', {
                 id: 'appwarning',
                 items: [
                     {
-                        text: i18n.message('button.open_in_app'),
+                        text: foobar('button.open_in_app'),
                         handler: this.openApp,
                         scope: this
                     },
@@ -74,7 +74,7 @@ Ext.define('App.view.Main', {
                         xtype: 'spacer'
                     },
                     {
-                        text: i18n.message('button.close'),
+                        text: foobar('button.close'),
                         handler: function() {
                             Ext.getCmp('appwarning').destroy();
                             localStorage.setItem('disable_app_prompt', true);

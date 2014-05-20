@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.Search', {
     extend: 'Ext.dataview.List',
     xtype: 'searchview',
@@ -11,7 +10,7 @@ Ext.define('App.view.Search', {
     config: {
         itemTpl: "<div>{listlabel}</div>",
         store: 'Search',
-        emptyText: i18n.message('search.empty'),
+        emptyText: foobar('search.empty'),
         pinHeaders: true,
         grouped: true,
         items: [
@@ -27,7 +26,7 @@ Ext.define('App.view.Search', {
                     flex: 4
                 }, {
                     xtype: 'button',
-                    text: i18n.message('button.cancel'),
+                    text: foobar('button.cancel'),
                     action: 'main'
                 }]
             }

@@ -32,19 +32,10 @@ android: android-json build/cordova-android/local.properties testingapp
 	mv app.json.bak app.json
 
 .PHONY: android-debug
-android-debug: android-json build/cordova-android/local.properties testingapp
-	cp -r build/App/testing/* build/cordova-android/assets/www/
-	./build/cordova-android/cordova/build
+android-debug: testingapp
 	adb uninstall com.c2c.LuxMob
-	./build/cordova-android/cordova/run
-	rm -rf app.json
-	mv app.json.bak app.json
-
-android-json:
-	python utils/modify_app_json.py cordova-2.5.0.android.js
-
-build/cordova-android/local.properties:
-	android update project -p build/cordova-android/
+	cp -r build/testing/App/* cordova-app/www/
+	cd cordova-app && cordova run android
 
 .PHONY: app
 app: external/openlayers build/App/production/app.js

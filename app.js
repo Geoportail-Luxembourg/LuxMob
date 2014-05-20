@@ -1,27 +1,40 @@
+function foobar(text) {
+    return text;
+}
 //<debug>
 Ext.Loader.setConfig({
     enabled: true,
     paths: {
+        'App': 'app',
+        'Ext': 'touch/src',
         'Ext.i18n': 'lib/Ext.i18n.Bundle-touch/i18n'
     }
 });
 //</debug>
 
-Ext.define('Ext.overrides.event.recognizer.LongPress', {
-    override: 'Ext.event.recognizer.LongPress',
-    config: {
-        minDuration: 250
-    }
-});
+//Ext.define('Ext.overrides.event.recognizer.LongPress', {
+    //override: 'Ext.event.recognizer.LongPress',
+    //config: {
+        //minDuration: 250
+    //}
+//});
 
 Ext.application({
     name: 'App',
 
     requires: [
+        'Ext.viewport.Viewport',
         'Ext.MessageBox',
-        'Ext.i18n.Bundle',
+        //'Ext.i18n.Bundle',
         'App.util.Config'
     ],
+
+    //bundle: {
+        //bundle: 'App',
+        //lang: 'en-US',
+        //path: 'resources/i18n',
+        //noCache: true
+    //},
 
     views: ['Main', 'layers.MapSettings', 'MoreMenu'],
     controllers: ["Download",'Main', 'Layers', 'Settings', 'Search', 'Query', 'MyMaps'],
@@ -188,53 +201,53 @@ Ext.application({
     },
 
     prepareI18n: function() {
-        Ext.i18n.Bundle.configure({
-            bundle: 'App',
-            path: 'resources/i18n',
-            language: App.util.Config.getLanguage(),
-            noCache: true
-        });
+        //Ext.i18n.Bundle.configure({
+            //bundle: 'App',
+            //path: 'resources/i18n',
+            //language: App.util.Config.getLanguage(),
+            //noCache: true
+        //});
         OpenLayers.Lang.setCode(App.util.Config.getLanguage());
     },
 
     configureMessageBox: function() {
-        // Override MessageBox default messages
-        Ext.define('App.MessageBox', {
-            override: 'Ext.MessageBox',
+        //// Override MessageBox default messages
+        //Ext.define('App.MessageBox', {
+            //override: 'Ext.MessageBox',
 
-            statics: {
-                YES   : {text: Ext.i18n.Bundle.message('messagebox.yes'),    itemId: 'yes', ui: 'action'},
-                NO    : {text: Ext.i18n.Bundle.message('messagebox.no'),     itemId: 'no'},
-                CANCEL: {text: Ext.i18n.Bundle.message('messagebox.cancel'), itemId: 'cancel'},
+            //statics: {
+                //YES   : {text: foobar('messagebox.yes'),    itemId: 'yes', ui: 'action'},
+                //NO    : {text: foobar('messagebox.no'),     itemId: 'no'},
+                //CANCEL: {text: foobar('messagebox.cancel'), itemId: 'cancel'},
 
-                OKCANCEL: [
-                    {text: Ext.i18n.Bundle.message('messagebox.ok'), itemId: 'ok', ui: 'action'},
-                    {text: Ext.i18n.Bundle.message('messagebox.cancel'), itemId: 'cancel'}
-                ],
-                YESNOCANCEL: [
-                    {text: Ext.i18n.Bundle.message('messagebox.yes'),    itemId: 'yes', ui: 'action'},
-                    {text: Ext.i18n.Bundle.message('messagebox.no'),     itemId: 'no'},
-                    {text: Ext.i18n.Bundle.message('messagebox.cancel'), itemId: 'cancel'}
-                ],
-                YESNO: [
-                    {text: Ext.i18n.Bundle.message('messagebox.yes'), itemId: 'yes', ui: 'action'},
-                    {text: Ext.i18n.Bundle.message('messagebox.no'),  itemId: 'no'}
-                ]
-            }
-        });
+                //OKCANCEL: [
+                    //{text: foobar('messagebox.ok'), itemId: 'ok', ui: 'action'},
+                    //{text: foobar('messagebox.cancel'), itemId: 'cancel'}
+                //],
+                //YESNOCANCEL: [
+                    //{text: foobar('messagebox.yes'),    itemId: 'yes', ui: 'action'},
+                    //{text: foobar('messagebox.no'),     itemId: 'no'},
+                    //{text: foobar('messagebox.cancel'), itemId: 'cancel'}
+                //],
+                //YESNO: [
+                    //{text: foobar('messagebox.yes'), itemId: 'yes', ui: 'action'},
+                    //{text: foobar('messagebox.no'),  itemId: 'no'}
+                //]
+            //}
+        //});
     },
 
     configurePicker: function() {
-        Ext.define('App.Picker', {
-            override : 'Ext.picker.Picker',
-            config: {
-                doneButton:{
-                    text : Ext.i18n.Bundle.message('button.done')
-                },
-                cancelButton:{
-                    text : Ext.i18n.Bundle.message('button.cancel')
-                }
-            }
-        });
+        //Ext.define('App.Picker', {
+            //override : 'Ext.picker.Picker',
+            //config: {
+                //doneButton:{
+                    //text : foobar('button.done')
+                //},
+                //cancelButton:{
+                    //text : foobar('button.cancel')
+                //}
+            //}
+        //});
     }
 });

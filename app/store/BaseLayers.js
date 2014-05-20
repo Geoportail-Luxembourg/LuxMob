@@ -2,7 +2,8 @@ Ext.define('App.store.BaseLayers', {
     extend: 'Ext.data.Store',
     requires: [
         'App.model.BaseLayers',
-        'App.util.Config'
+        'App.util.Config',
+        'Ext.data.proxy.JsonP'
     ],
     config: {
         model: 'App.model.BaseLayers',

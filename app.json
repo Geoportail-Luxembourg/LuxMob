@@ -48,6 +48,12 @@
             "x-bootstrap": true
         },
         {
+            "path": "GeolocateControl.js"
+        },
+        {
+            "path": "SavedMapLayer.js"
+        },
+        {
             "path": "app.js",
             "bundle": true,  /* Indicates that all class dependencies are concatenated into this file when build */
             "update": "full"
@@ -109,9 +115,7 @@
         "resources/font",
         "resources/i18n",
         "proj4js-compressed.js",
-        "openlayers-mobile.js",
-        "GeolocateControl.js",
-        "SavedMapLayer.js"
+        "openlayers-mobile.js"
     ],
 
     /**

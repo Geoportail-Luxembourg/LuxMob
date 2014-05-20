@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.MoreMenu', {
     extend: 'Ext.Panel',
     id: 'moreMenu',
@@ -24,20 +23,20 @@ Ext.define('App.view.MoreMenu', {
             iconCls: "settings",
             iconMask: true,
             action: "settings",
-            text: i18n.message('settings.settings')
+            text: foobar('settings.settings')
         }, {
             xtype: 'button',
             action: 'download',
             cls: "download",
             iconCls: "cloud_download",
-            text: i18n.message("button.download"),
+            text: foobar("button.download"),
             disabled: true,
             iconMask: true
         }, {
             xtype: 'button',
             action: 'sendbymail',
             iconCls: "mail",
-            text: i18n.message("button.sendbymail"),
+            text: foobar("button.sendbymail"),
             iconMask: true
         }];
 
@@ -46,7 +45,7 @@ Ext.define('App.view.MoreMenu', {
                 xtype: 'button',
                 action: 'mymaps',
                 iconCls: "locate1",
-                text: i18n.message("button.mymaps"),
+                text: foobar("button.mymaps"),
                 hidden: true,
                 iconMask: true
             });
@@ -55,7 +54,7 @@ Ext.define('App.view.MoreMenu', {
                 xtype: 'button',
                 action: 'loginform',
                 iconCls: "power_on",
-                text: i18n.message("button.login"),
+                text: foobar("button.login"),
                 iconMask: true
             });
 
@@ -63,7 +62,7 @@ Ext.define('App.view.MoreMenu', {
                 xtype: 'button',
                 action: 'logout',
                 iconCls: "power_on",
-                text: i18n.message("button.logout"),
+                text: foobar("button.logout"),
                 hidden: true,
                 iconMask: true
             });

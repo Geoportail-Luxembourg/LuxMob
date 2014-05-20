@@ -12,7 +12,7 @@ The Android SDK Tools are also required to build the app for Android.
 Download Sencha Cmd 4.0.4.84 for your OS.
 
 Unzip the downloaded zip file:
-        
+
     $ unzip SenchaCmd-4.0.4.84-linux.run.zip
 
 Run the installer:
@@ -44,8 +44,8 @@ http://developer.android.com/sdk/index.html.
 
 For example:
 
-    $ wget http://dl.google.com/android/android-sdk_r21.0.1-linux.tgz
-    $ tar xvzf android-sdk_r21.0.1-linux.tgz
+    $ wget http://dl.google.com/android/ndk/android-ndk-r9d-linux-x86.tar.bz2
+    $ tar xvjf android-ndk-r9d-linux-x86.tar.bz2
 
 To be able to build the LuxMob app, and run it in the Android emulator, you
 need to install the Android SDK Platform-tools, and at least one platform and
@@ -69,9 +69,9 @@ Use `adb devices` to see the list of Android devices. The emulated
 Android device should be listed as a `device`:
 
     $ adb devices
-    List of devices attached 
+    List of devices attached
     emulator-5554   device
-    
+
 Also, for Sencha Cmd to find the Android SDK Tools you need to have the paths
 to the `platform-tools` and `tools` directories in your `PATH`.
 

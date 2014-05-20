@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.QueryDetail', {
     extend: "Ext.Panel",
 
@@ -15,10 +14,10 @@ Ext.define('App.view.QueryDetail', {
         items: [{
             docked: 'top',
             xtype: 'toolbar',
-            title: i18n.message('query.detail.title'),
+            title: foobar('query.detail.title'),
             items: [{
                 xtype: "button",
-                text: i18n.message('button.back'),
+                text: foobar('button.back'),
                 ui: 'back',
                 action: "back"
             }]

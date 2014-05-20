@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.controller.Download', {
     extend: 'Ext.app.Controller',
 
@@ -95,7 +94,7 @@ Ext.define('App.controller.Download', {
     showDownload: function() {
 
         if (!window.device) {
-            Ext.Msg.alert("", i18n.message('savedmaps.html'));
+            Ext.Msg.alert("", foobar('savedmaps.html'));
             return;
         }
 
@@ -119,12 +118,12 @@ Ext.define('App.controller.Download', {
                     items: [{
                         xtype: 'button',
                         action: 'canceldownload',
-                        text: i18n.message('button.cancel')
+                        text: foobar('button.cancel')
                     }, {
                         xtype: 'button',
                         action: 'dodownload',
                         ui: 'confirm',
-                        text: i18n.message('button.download_short')
+                        text: foobar('button.download_short')
                     }]
                 }]
             });
@@ -164,8 +163,8 @@ Ext.define('App.controller.Download', {
 
     promptForName: function() {
         Ext.Msg.prompt(
-            i18n.message('download.mapname'),
-            i18n.message('download.name'),
+            foobar('download.mapname'),
+            foobar('download.name'),
             Ext.bind(function(buttonId, value) {
                 if (buttonId == 'ok') {
                     this.initDownload(value);
@@ -406,7 +405,7 @@ Ext.define('App.controller.Download', {
             xtype: 'actionsheet',
             items: [
                 {
-                    text: i18n.message("button.map_remove"),
+                    text: foobar("button.map_remove"),
                     ui: 'decline',
                     handler: function() {
                         this.deleteTiles(record);
@@ -414,7 +413,7 @@ Ext.define('App.controller.Download', {
                     },
                     scope: this
                 }, {
-                    text: i18n.message("button.cancel"),
+                    text: foobar("button.cancel"),
                     handler: function() {
                         actions.hide();
                     }

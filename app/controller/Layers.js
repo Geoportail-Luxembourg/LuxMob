@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.controller.Layers', {
     extend: 'Ext.app.Controller',
 
@@ -466,7 +465,7 @@ Ext.define('App.controller.Layers', {
     onOverlayDeselect: function(list, record) {
         var selList = this.getSelectedOverlaysList();
         selList.remove(selList.down('field[name=' + record.get('name') + ']'));
-        this.showMessage(i18n.message("overlays.layerremoved"));
+        this.showMessage(foobar("overlays.layerremoved"));
         this.onOverlayRemove(record.get('name'));
     },
 
@@ -518,7 +517,7 @@ Ext.define('App.controller.Layers', {
             xtype: 'actionsheet',
             items: [
                 {
-                    text: i18n.message("button.layer_remove"),
+                    text: foobar("button.layer_remove"),
                     ui: 'decline',
                     handler: function() {
                         field.getParent().remove(field);
@@ -543,7 +542,7 @@ Ext.define('App.controller.Layers', {
                     },
                     scope: this
                 }, {
-                    text: i18n.message("button.cancel"),
+                    text: foobar("button.cancel"),
                     handler: function() {
                         actions.hide();
                     }
@@ -586,7 +585,7 @@ Ext.define('App.controller.Layers', {
                         item.check();
                     }
                 });
-                this.showMessage(i18n.message("layers.exclusion_baselayer_msg", {
+                this.showMessage(foobar("layers.exclusion_baselayer_msg", {
                     baseLayer: OpenLayers.i18n(curBaseLayer.get('name')),
                     overlay: OpenLayers.i18n(layer.get('name'))
                 }));
@@ -614,7 +613,7 @@ Ext.define('App.controller.Layers', {
         this.onOverlayChange();
 
         if (layersToExclude.length) {
-            this.showMessage(i18n.message("layers.exclusion_msg", {
+            this.showMessage(foobar("layers.exclusion_msg", {
                 layer: OpenLayers.i18n(layer.get('name')),
                 layers: layersToExclude.join(', ')
             }));

@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.controller.Main', {
     extend: 'Ext.app.Controller',
 
@@ -160,7 +159,7 @@ Ext.define('App.controller.Main', {
     showSearch: function() {
         if (window.device && navigator.connection &&
             navigator.connection.type == Connection.NONE) {
-            Ext.Msg.alert("", i18n.message('search.nonetwork'));
+            Ext.Msg.alert("", foobar('search.nonetwork'));
             this.getMainView().down('#fakeSearch').blur();
         } else {
             Ext.Viewport.animateActiveItem(
@@ -192,7 +191,7 @@ Ext.define('App.controller.Main', {
 
     sendByMail: function() {
         Ext.Msg.prompt(
-            i18n.message('button.sendbymail'),
+            foobar('button.sendbymail'),
             'E-mail',
             function(buttonId, value) {
                 if (buttonId != 'ok') {
@@ -224,11 +223,11 @@ Ext.define('App.controller.Main', {
                     },
                     success: function(resp) {
                         if (resp.success === true) {
-                            Ext.Msg.alert('', i18n.message('sendbymail.done'));
+                            Ext.Msg.alert('', foobar('sendbymail.done'));
                         } else if (resp.message == "Invalid e-mail address." ){
-                            Ext.Msg.alert('', i18n.message('sendbymail.invalidemail'));
+                            Ext.Msg.alert('', foobar('sendbymail.invalidemail'));
                         } else {
-                            Ext.Msg.alert('', i18n.message('sendbymail.wrong'));
+                            Ext.Msg.alert('', foobar('sendbymail.wrong'));
                         }
                     },
                     callbackKey: 'cb'
@@ -268,7 +267,7 @@ Ext.define('App.controller.Main', {
                 }
             },
             failure: function() {
-                Ext.Msg.alert('', i18n.message('login.error'));
+                Ext.Msg.alert('', foobar('login.error'));
             },
             scope: this
         });
