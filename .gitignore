@@ -5,6 +5,7 @@ build/testing/
 build/temp/
 stderr.txt
 luxmob-svn/
+bootstrap.js
 
 cordova-app/platforms/android/assets/www
 cordova-app/plugins/android.json
