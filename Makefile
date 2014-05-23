@@ -12,15 +12,9 @@ ios: ios-json testingapp
 	mv app.json.bak app.json
 
 .PHONY: ios-debug
-ios-debug: $(SRC) $(SRC_APP)
-	cp -r app build/cordova-ios/www/
-	cp -r resources build/cordova-ios/www/
-	cp -r touch build/cordova-ios/www/
-	cp -r lib build/cordova-ios/www/
-	python utils/modify_app_json.py cordova-2.5.0.ios.js
-	cp $(SRC) build/cordova-ios/www/
-	cp cordova-2.5.0.ios.js build/cordova-ios/www
-	mv app.json.bak app.json
+ios-debug: testingapp
+	cp -r build/testing/App/* cordova-app/www/
+	cd cordova-app && cordova build ios
 
 ios-json:
 	python utils/modify_app_json.py cordova-2.5.0.ios.js

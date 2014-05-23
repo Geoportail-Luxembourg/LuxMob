@@ -330,7 +330,7 @@ Ext.define('App.controller.Download', {
         var fileName = name + '.png';
         this.getFileTransfer().download(
             url,
-            this.getDirectory().toURL() + '/' + fileName,
+            this.getFileSystem().root.toURL() + fileName,
             Ext.bind(function(file) {
                 this.onDownloadSuccess(record, url, file);
             }, this),

@@ -87,14 +87,30 @@ To build the web app run this command:
 
     $ make
 
-To build the PhoneGap Android app run this command. A password for the keystore
+
+## Cordova native apps
+
+### Prerequisites
+
+In order to build the native apps, you need to install cordova-cli first.
+
+    $ npm install -g cordova@3.3.1-0.4.2
+
+### Android
+
+To build the Cordova Android app run this command. A password for the keystore
 may be asked:
 
     $ make android
 
-To build the PhoneGap iOS app run this command:
+### iOS
+
+To build the Cordova iOS app run this command:
 
     $ make ios
+
+You then have to open `cordova-app/platforms/ios/geoportail.lu.xcodeproj` in
+XCode and run it.
 
 If you change the source code of the Sencha app you don't need to run `make`
 before running `make android` or `make ios`. The latter commands will build the
