@@ -61,11 +61,13 @@ Ext.define('App.controller.Download', {
                     // Android so that files are destroyed after application
                     // removal. Still doesn't work in certain cases.
                     var path = Ext.os.is.Android ?
-                        "Android/data/com.c2c.LuxMob" : "";
+                        "Android/data/com.c2c.LuxMob/" : "";
                     fs.root.getDirectory(path,
                         {create: true, exclusive: false},
                         Ext.bind(function (dirEntry) {
-                            this.setDirectory(dirEntry);
+                            var directory = Ext.os.is.Android ?
+                                dirEntry : fs.root;
+                            this.setDirectory(directory);
                             this.setFileTransfer(new FileTransfer());
 
                             // set any downloading map as resumable
@@ -330,7 +332,7 @@ Ext.define('App.controller.Download', {
         var fileName = name + '.png';
         this.getFileTransfer().download(
             url,
-            this.getFileSystem().root.toURL() + fileName,
+            this.getDirectory().toURL() + '/' + fileName,
             Ext.bind(function(file) {
                 this.onDownloadSuccess(record, url, file);
             }, this),
