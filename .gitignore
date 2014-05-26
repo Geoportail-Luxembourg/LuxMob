@@ -32,3 +32,11 @@ cordova-app/www/openlayers-mobile.js
 cordova-app/www/proj4js-compressed.js
 cordova-app/www/resources/
 cordova-app/www/webintent.js
+
+.DS_Store
+cordova-app/.DS_Store
+cordova-app/platforms/.DS_Store
+cordova-app/platforms/ios/CordovaLib/CordovaLib.xcodeproj/xcuserdata/
+cordova-app/platforms/ios/geoportail.lu.xcodeproj/project.xcworkspace/
+cordova-app/platforms/ios/geoportail.lu.xcodeproj/xcuserdata/
+cordova-app/platforms/ios/www/
