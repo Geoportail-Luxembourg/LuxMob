@@ -6,27 +6,12 @@ SHA1 = $(shell git rev-parse HEAD)
 all: app
 
 .PHONY: ios
-ios: ios-json testingapp
-	cp -r build/App/testing/* build/cordova-ios/www/
-	./build/cordova-ios/cordova/build
-	mv app.json.bak app.json
-
-.PHONY: ios-debug
-ios-debug: testingapp
+ios: testingapp
 	cp -r build/testing/App/* cordova-app/www/
 	cd cordova-app && cordova build ios
 
-ios-json:
-	python utils/modify_app_json.py cordova-2.5.0.ios.js
-
 .PHONY: android
-android: android-json build/cordova-android/local.properties testingapp
-	cp -r build/App/testing/* build/cordova-android/assets/www/
-	./build/cordova-android/cordova/release
-	mv app.json.bak app.json
-
-.PHONY: android-debug
-android-debug: testingapp
+android: testingapp
 	adb uninstall com.c2c.LuxMob
 	cp -r build/testing/App/* cordova-app/www/
 	cd cordova-app && cordova run android

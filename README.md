@@ -168,8 +168,7 @@ Organizer).
 
 ### Create .ipa
 
- - Make a production build : `make ios`. (as of now, there’s a bug on first launch
-that doesn’t exist in `ios-debug` mode).
+ - Make a production build : `make ios`.
  - Select `iOS Device`, in the test device combo. In the menu, select
    `Product`->`Archive`. The `Organizer` windows show up; select the latest archive
    and click on `Distribute` button.

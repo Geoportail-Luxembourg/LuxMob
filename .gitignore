@@ -12,6 +12,8 @@ cordova-app/www
 cordova-app/platforms/android/CordovaLib/ant-build/
 cordova-app/platforms/android/CordovaLib/ant-build/
 cordova-app/platforms/android/CordovaLib/ant-gen/
+cordova-app/platforms/android/CordovaLib/bin/
+cordova-app/platforms/android/bin/
 cordova-app/platforms/android/ant-build/
 cordova-app/platforms/android/ant-gen/
 cordova-app/platforms/android/assets/www/GeolocateControl.js
