@@ -39,6 +39,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "App.model.SavedMaps": [],
   "App.model.Search": [],
   "App.model.SelectedOverlays": [],
+  "App.overrides.LongPress": [],
   "App.plugin.StatefulMap": [],
   "App.store.BaseLayers": [],
   "App.store.MyMaps": [],
@@ -825,6 +826,7 @@ Ext.ClassManager.addNameAliasMappings({
   "App.model.SavedMaps": [],
   "App.model.Search": [],
   "App.model.SelectedOverlays": [],
+  "App.overrides.LongPress": [],
   "App.plugin.StatefulMap": [
     "plugin.statefulmap"
   ],

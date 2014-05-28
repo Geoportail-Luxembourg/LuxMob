@@ -9,13 +9,6 @@ Ext.Loader.setConfig({
 });
 //</debug>
 
-//Ext.define('Ext.overrides.event.recognizer.LongPress', {
-    //override: 'Ext.event.recognizer.LongPress',
-    //config: {
-        //minDuration: 250
-    //}
-//});
-
 Ext.application({
     name: 'App',
 
@@ -23,7 +16,8 @@ Ext.application({
         'Ext.viewport.Viewport',
         'Ext.MessageBox',
         'Ext.i18n.Bundle',
-        'App.util.Config'
+        'App.util.Config',
+        'App.overrides.LongPress'
     ],
 
     views: ['Main', 'layers.MapSettings', 'MoreMenu'],
@@ -64,7 +58,6 @@ Ext.application({
         Ext.create('App.view.MoreMenu');
         Ext.create('App.view.Settings');
 
-        this.configurePicker();
         this.configureMessageBox();
 
         Ext.getStore('Overlays').setSorters(App.util.Config.getLanguage());
@@ -201,43 +194,19 @@ Ext.application({
     },
 
     configureMessageBox: function() {
-        //// Override MessageBox default messages
-        //Ext.define('App.MessageBox', {
-            //override: 'Ext.MessageBox',
-
-            //statics: {
-                //YES   : {text: App.app.bundle.getMsg('messagebox.yes'),    itemId: 'yes', ui: 'action'},
-                //NO    : {text: App.app.bundle.getMsg('messagebox.no'),     itemId: 'no'},
-                //CANCEL: {text: App.app.bundle.getMsg('messagebox.cancel'), itemId: 'cancel'},
-
-                //OKCANCEL: [
-                    //{text: App.app.bundle.getMsg('messagebox.ok'), itemId: 'ok', ui: 'action'},
-                    //{text: App.app.bundle.getMsg('messagebox.cancel'), itemId: 'cancel'}
-                //],
-                //YESNOCANCEL: [
-                    //{text: App.app.bundle.getMsg('messagebox.yes'),    itemId: 'yes', ui: 'action'},
-                    //{text: App.app.bundle.getMsg('messagebox.no'),     itemId: 'no'},
-                    //{text: App.app.bundle.getMsg('messagebox.cancel'), itemId: 'cancel'}
-                //],
-                //YESNO: [
-                    //{text: App.app.bundle.getMsg('messagebox.yes'), itemId: 'yes', ui: 'action'},
-                    //{text: App.app.bundle.getMsg('messagebox.no'),  itemId: 'no'}
-                //]
-            //}
-        //});
-    },
-
-    configurePicker: function() {
-        //Ext.define('App.Picker', {
-            //override : 'Ext.picker.Picker',
-            //config: {
-                //doneButton:{
-                    //text : App.app.bundle.getMsg('button.done')
-                //},
-                //cancelButton:{
-                    //text : App.app.bundle.getMsg('button.cancel')
-                //}
-            //}
-        //});
+        // Override MessageBox default messages
+        if (Ext.MessageBox) {
+            Ext.MessageBox.OK.text = 'OK';
+            Ext.MessageBox.CANCEL.text = 'Cancel';
+            Ext.MessageBox.YES.text = 'Yes';
+            Ext.MessageBox.NO.text = 'No';
+            Ext.MessageBox.OKCANCEL[0].text = Ext.i18n.Bundle.message('messagebox.cancel');
+            Ext.MessageBox.OKCANCEL[1].text = Ext.i18n.Bundle.message('messagebox.ok');
+            Ext.MessageBox.YESNOCANCEL[0].text = Ext.i18n.Bundle.message('messagebox.cancel');
+            Ext.MessageBox.YESNOCANCEL[1].text = Ext.i18n.Bundle.message('messagebox.no');
+            Ext.MessageBox.YESNOCANCEL[2].text = Ext.i18n.Bundle.message('messagebox.yes');
+            Ext.MessageBox.YESNO[0].text = Ext.i18n.Bundle.message('messagebox.no');
+            Ext.MessageBox.YESNO[1].text = Ext.i18n.Bundle.message('messagebox.yes');
+        }
     }
 });
