@@ -684,7 +684,7 @@ Ext.define('App.controller.Layers', {
             store = Ext.getStore("Overlays");
 
         //first clear any current filters on thes tore
-        store.clearFilter();
+        store.clearFilter(true);
 
         //check if a value is set first, as if it isnt we dont have to do anything
         if (value) {
