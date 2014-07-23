@@ -680,7 +680,7 @@ Ext.define('App.controller.Layers', {
      */
     onSearchKeyUp: function(field) {
         //get the store and the value of the field
-        var value = field.getValue(),
+        var value = removeDiacritics(field.getValue()),
             store = Ext.getStore("Overlays");
 
         //first clear any current filters on thes tore
@@ -710,8 +710,11 @@ Ext.define('App.controller.Layers', {
                 //loop through each of the regular expressions
                 for (i = 0; i < regexps.length; i++) {
                     var search = regexps[i],
-                        didMatch = record.get('name').match(search) ||
-                                   record.get(Ext.i18n.Bundle.getLanguage()).match(search);
+                        name = removeDiacritics(record.get('name')),
+                        translated_ = record.get(Ext.i18n.Bundle.getLanguage()),
+                        translated = removeDiacritics(translated_),
+                        didMatch = name.match(search) ||
+                                   translated.match(search);
 
                     //if it matched the first or last name, push it into the matches array
                     matched.push(didMatch);
