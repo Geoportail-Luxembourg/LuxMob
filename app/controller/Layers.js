@@ -683,8 +683,9 @@ Ext.define('App.controller.Layers', {
         var value = removeDiacritics(field.getValue()),
             store = Ext.getStore("Overlays");
 
-        //first clear any current filters on thes tore
-        store.clearFilter(true);
+        // first clear any current filters on thes tore
+        // do it silently if there's a value set
+        store.clearFilter(value ? true : false);
 
         //check if a value is set first, as if it isnt we dont have to do anything
         if (value) {
