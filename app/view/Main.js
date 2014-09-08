@@ -111,14 +111,13 @@ Ext.define('App.view.Main', {
                     iconCls: "layers",
                     iconMask: true,
                     action: "mapsettings",
-                    top: 6,
                     right: 4
                 }, {
                     xtype: "button",
                     iconCls: "more",
                     iconMask: true,
                     action: "more",
-                    bottom: 6,
+                    bottom: 4,
                     right: 4
                 }
             ]
