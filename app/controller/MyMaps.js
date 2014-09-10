@@ -553,7 +553,14 @@ Ext.define('App.controller.MyMaps', {
             jsonData: geojson,
             success: function(response) {
                 var data = Ext.decode(response.responseText);
-                this.drawProfile(data.profile.points);
+                var i;
+                var points = [];
+                var profiles = data.profiles;
+                var len = profiles.length;
+                for (i = 0; i < len; i ++) {
+                    points = points.concat(profiles[i].points);
+                }
+                this.drawProfile(points);
                 Ext.Viewport.setMasked(false);
             },
             failure: function() {
