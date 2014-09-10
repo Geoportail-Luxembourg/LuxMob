@@ -47,6 +47,7 @@
 		BE5B9AF7EC8A4C239408603A /* CDVLocalFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 63668537BEED4441BE8F6E3E /* CDVLocalFilesystem.m */; };
 		10600E59204649F18BA1E5AC /* CDVAssetLibraryFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 07AF762CD7C444D2BFADB4AD /* CDVAssetLibraryFilesystem.m */; };
 		58FBA103081D4CA49E0ED7CF /* CDVFileTransfer.m in Sources */ = {isa = PBXBuildFile; fileRef = 42113574DC344F23BE1BF17C /* CDVFileTransfer.m */; };
+		197DC6E595E6447A905B635E /* CDVInAppBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E56634A3D1347859E70532F /* CDVInAppBrowser.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +125,8 @@
 		C6115C62CFAA4DD89B3F6621 /* CDVAssetLibraryFilesystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVAssetLibraryFilesystem.h"; path = "org.apache.cordova.file/CDVAssetLibraryFilesystem.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		42113574DC344F23BE1BF17C /* CDVFileTransfer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVFileTransfer.m"; path = "org.apache.cordova.file-transfer/CDVFileTransfer.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		88D36B371C9040F099A739A7 /* CDVFileTransfer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVFileTransfer.h"; path = "org.apache.cordova.file-transfer/CDVFileTransfer.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		6E56634A3D1347859E70532F /* CDVInAppBrowser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVInAppBrowser.m"; path = "org.apache.cordova.inappbrowser/CDVInAppBrowser.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		C9421074442B497E9F1FF8B0 /* CDVInAppBrowser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVInAppBrowser.h"; path = "org.apache.cordova.inappbrowser/CDVInAppBrowser.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,6 +262,8 @@
 				C6115C62CFAA4DD89B3F6621 /* CDVAssetLibraryFilesystem.h */,
 				42113574DC344F23BE1BF17C /* CDVFileTransfer.m */,
 				88D36B371C9040F099A739A7 /* CDVFileTransfer.h */,
+				6E56634A3D1347859E70532F /* CDVInAppBrowser.m */,
+				C9421074442B497E9F1FF8B0 /* CDVInAppBrowser.h */,
 			);
 			name = Plugins;
 			path = "geoportail.lu/Plugins";
@@ -451,6 +456,7 @@
 				BE5B9AF7EC8A4C239408603A /* CDVLocalFilesystem.m in Sources */,
 				10600E59204649F18BA1E5AC /* CDVAssetLibraryFilesystem.m in Sources */,
 				58FBA103081D4CA49E0ED7CF /* CDVFileTransfer.m in Sources */,
+				197DC6E595E6447A905B635E /* CDVInAppBrowser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
