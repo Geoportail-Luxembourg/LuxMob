@@ -182,7 +182,7 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "org.apache.cordova.camera": "0.2.9",
+    "org.apache.cordova.camera": "0.3.1",
     "org.apache.cordova.device": "0.2.9",
     "org.apache.cordova.file-transfer": "0.4.3",
     "org.apache.cordova.file": "1.1.0"
