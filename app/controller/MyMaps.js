@@ -793,29 +793,32 @@ Ext.define('App.controller.MyMaps', {
     },
 
     onAddPhoto: function(field) {
+        var dest = Camera.DestinationType.FILE_URI;
         var actions = Ext.Viewport.add({
             xtype: 'actionsheet',
             items: [
                 {
                     text: Ext.i18n.Bundle.message("button.capture_picture"),
                     handler: function() {
-                        navigator.device.capture.captureImage(
-                            Ext.bind(this.captureSuccess, this, [actions], true),
-                            this.onPhotoFail
+                        navigator.camera.getPicture(
+                            Ext.bind(this.onPhotoURISuccess, this, [actions], true),
+                            this.onPhotoFail, {
+                                quality: 50,
+                                destinationType: dest
+                            }
                         );
                     },
                     scope: this
                 }, {
                     text: Ext.i18n.Bundle.message("button.picture_from_library"),
                     handler: function() {
-                        var destinationType = navigator.camera.DestinationType;
-                        var source = navigator.camera.PictureSourceType;
+                        var source = Camera.PictureSourceType.PHOTOLIBRARY;
                         navigator.camera.getPicture(
                             Ext.bind(this.onPhotoURISuccess, this, [actions], true),
                             this.onPhotoFail, {
                                 quality: 50,
-                                destinationType: destinationType.FILE_URI,
-                                sourceType: source.PHOTOLIBRARY
+                                destinationType: dest,
+                                sourceType: source
                             }
                         );
                     },
@@ -831,13 +834,6 @@ Ext.define('App.controller.MyMaps', {
         actions.show();
     },
 
-    captureSuccess: function(mediaFiles, actions) {
-        var i, len;
-        for (i = 0, len = mediaFiles.length; i < len; i += 1) {
-            this.onPhotoURISuccess(mediaFiles[i].fullPath, actions);
-        }
-    },
-
     onPhotoURISuccess: function(imageURI, actions) {
         this.setLoadingPhoto(true);
         actions.hide();
@@ -849,7 +845,6 @@ Ext.define('App.controller.MyMaps', {
         var form = this.getAddPoiView();
         var button = form.down('button[action=upload]');
         button.setIconCls(false);
-        button.setIconMask(false);
         button.setIcon("resources/images/loading.gif");
         this.getAddPoiSubmitButton().setDisabled(true);
 
@@ -870,7 +865,6 @@ Ext.define('App.controller.MyMaps', {
         form.down('field[name=thumbnail]').setValue(r.thumbnail);
         var button = form.down('button[action=upload]');
         button.setIconCls(false);
-        button.setIconMask(false);
         button.setIcon(App.util.Config.getWsgiUrl() + r.thumbnail);
         this.getAddPoiSubmitButton().setDisabled(!this.getHasLocation());
         this.setLoadingPhoto(false);
