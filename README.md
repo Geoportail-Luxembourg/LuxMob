@@ -105,7 +105,7 @@ may be asked:
 
 You may need to run the following command prior to the one above:
 
-    $ cordova platform update android
+    $ cd cordova-app && cordova platform update android
 
 This is intended to fix issues with path in local properties config files.
 
