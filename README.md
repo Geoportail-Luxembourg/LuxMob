@@ -103,6 +103,12 @@ may be asked:
 
     $ make android
 
+You may need to run the following command prior to the one above:
+
+    $ cordova platform update android
+
+This is intended to fix issues with path in local properties config files.
+
 ### iOS
 
 To build the Cordova iOS app run this command:
