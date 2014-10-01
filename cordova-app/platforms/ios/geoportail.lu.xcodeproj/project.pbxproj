@@ -48,6 +48,7 @@
 		10600E59204649F18BA1E5AC /* CDVAssetLibraryFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 07AF762CD7C444D2BFADB4AD /* CDVAssetLibraryFilesystem.m */; };
 		58FBA103081D4CA49E0ED7CF /* CDVFileTransfer.m in Sources */ = {isa = PBXBuildFile; fileRef = 42113574DC344F23BE1BF17C /* CDVFileTransfer.m */; };
 		197DC6E595E6447A905B635E /* CDVInAppBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E56634A3D1347859E70532F /* CDVInAppBrowser.m */; };
+		C24EFADA075041C8A6C5A35A /* CDVLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = EA5908FA9016488CACC8C0D0 /* CDVLocation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +128,8 @@
 		88D36B371C9040F099A739A7 /* CDVFileTransfer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVFileTransfer.h"; path = "org.apache.cordova.file-transfer/CDVFileTransfer.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		6E56634A3D1347859E70532F /* CDVInAppBrowser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVInAppBrowser.m"; path = "org.apache.cordova.inappbrowser/CDVInAppBrowser.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		C9421074442B497E9F1FF8B0 /* CDVInAppBrowser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVInAppBrowser.h"; path = "org.apache.cordova.inappbrowser/CDVInAppBrowser.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		EA5908FA9016488CACC8C0D0 /* CDVLocation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVLocation.m"; path = "org.apache.cordova.geolocation/CDVLocation.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		DD92DB5ABF4F4A449E590050 /* CDVLocation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVLocation.h"; path = "org.apache.cordova.geolocation/CDVLocation.h"; sourceTree = "<group>"; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -264,6 +267,8 @@
 				88D36B371C9040F099A739A7 /* CDVFileTransfer.h */,
 				6E56634A3D1347859E70532F /* CDVInAppBrowser.m */,
 				C9421074442B497E9F1FF8B0 /* CDVInAppBrowser.h */,
+				EA5908FA9016488CACC8C0D0 /* CDVLocation.m */,
+				DD92DB5ABF4F4A449E590050 /* CDVLocation.h */,
 			);
 			name = Plugins;
 			path = "geoportail.lu/Plugins";
@@ -457,6 +462,7 @@
 				10600E59204649F18BA1E5AC /* CDVAssetLibraryFilesystem.m in Sources */,
 				58FBA103081D4CA49E0ED7CF /* CDVFileTransfer.m in Sources */,
 				197DC6E595E6447A905B635E /* CDVInAppBrowser.m in Sources */,
+				C24EFADA075041C8A6C5A35A /* CDVLocation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
