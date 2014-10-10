@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		10600E59204649F18BA1E5AC /* CDVAssetLibraryFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 07AF762CD7C444D2BFADB4AD /* CDVAssetLibraryFilesystem.m */; };
 		197DC6E595E6447A905B635E /* CDVInAppBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E56634A3D1347859E70532F /* CDVInAppBrowser.m */; };
