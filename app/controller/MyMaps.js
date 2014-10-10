@@ -842,11 +842,39 @@ Ext.define('App.controller.MyMaps', {
     },
 
     onPhotoURISuccess: function(imageURI, actions) {
+        // Android 4.4 cordova workarounds ... returns new kind or URL for
+        // content from chooser
+        if(imageURI.indexOf('content://') != -1 && imageURI.indexOf("%3A") != -1){
+            var photo_split = imageURI.split("%3A");
+            imageURI = "content://media/external/images/media/"+photo_split[1];
+        }
+        // workaround end
+
+        var fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1);
+        var extension;
+
+        // check for content: protocol to make sure is not
+        // a file with no extension
+        if (imageURI.indexOf('content://') != -1) {
+            if(imageURI.lastIndexOf('.') > imageURI.lastIndexOf('/')){
+                extension = imageURI.substr(imageURI.lastIndexOf('.') + 1);
+            }else{
+                extension = "jpg";
+                fileName = fileName + ".jpg";
+            }
+        } else {
+            if (imageURI.lastIndexOf('.') == -1 || (imageURI.lastIndexOf('.') < imageURI.lastIndexOf('/')) ) {
+                extension = "invalid";
+            } else {
+                extension = imageURI.substr(imageURI.lastIndexOf('.') + 1);
+            }
+        }
+
         this.setLoadingPhoto(true);
         actions.hide();
         var options = new FileUploadOptions();
         options.fileKey = 'file';
-        options.fileName = imageURI.substring(imageURI.lastIndexOf('/') + 1);
+        options.fileName = fileName;
         options.chunkedMode = false;
 
         var form = this.getAddPoiView();
