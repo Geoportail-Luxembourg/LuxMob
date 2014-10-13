@@ -63,20 +63,11 @@
 
 #pragma mark View lifecycle
 
-// Fix for shrinking screen on Camera, Camera-Roll, InAppBrowser and more...
-bool sizeWasAdjusted = false;
 - (void)viewWillAppear:(BOOL)animated
 {
     // View defaults to full size.  If you want to customize the view's size, or its subviews (e.g. webView),
     // you can do so here.
-    //Lower screen 20px on ios 7
-    if (!sizeWasAdjusted && [[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
-        CGRect viewBounds = [self.webView bounds];
-        viewBounds.origin.y = 20;
-        viewBounds.size.height = viewBounds.size.height - 20;
-        self.webView.frame = viewBounds;
-        sizeWasAdjusted = true;
-    }
+
     [super viewWillAppear:animated];
 }
 
@@ -153,17 +144,7 @@ bool sizeWasAdjusted = false;
     return [super getCommandInstance:className];
 }
 
-/*
-   NOTE: this will only inspect execute calls coming explicitly from native plugins,
-   not the commandQueue (from JavaScript). To see execute calls from JavaScript, see
-   MainCommandQueue below
-*/
-- (BOOL)execute:(CDVInvokedUrlCommand*)command
-{
-    return [super execute:command];
-}
-
-- (NSString*)pathForResource:(NSString*)resourcepath;
+- (NSString*)pathForResource:(NSString*)resourcepath
 {
     return [super pathForResource:resourcepath];
 }
