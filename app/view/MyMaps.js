@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define("App.view.MyMaps", {
     extend: 'Ext.Panel',
     xtype: 'mymapsview',
@@ -9,10 +8,10 @@ Ext.define("App.view.MyMaps", {
         items: [{
             docked: 'top',
             xtype: 'toolbar',
-            title: i18n.message("mymaps.mymaps"),
+            title: Ext.i18n.Bundle.message("mymaps.mymaps"),
             items: [{
                 xtype: 'button',
-                text: i18n.message('button.close'),
+                text: Ext.i18n.Bundle.message('button.close'),
                 action: 'main'
             }]
         }, {

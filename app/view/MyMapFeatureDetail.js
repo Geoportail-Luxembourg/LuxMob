@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define("App.view.MyMapFeatureDetail", {
     extend: 'Ext.Panel',
     xtype: 'mymapfeaturedetailview',
@@ -16,10 +15,10 @@ Ext.define("App.view.MyMapFeatureDetail", {
         items: [{
             docked: 'top',
             xtype: 'toolbar',
-            title: i18n.message('mymap.detail.title'),
+            title: Ext.i18n.Bundle.message('mymap.detail.title'),
             items: [{
                 xtype: "button",
-                text: i18n.message('button.back'),
+                text: Ext.i18n.Bundle.message('button.back'),
                 ui: 'back',
                 action: "back"
             }, {
@@ -74,7 +73,7 @@ Ext.define("App.view.MyMapFeatureDetail", {
         if (feature.geometry instanceof OpenLayers.Geometry.LineString) {
             this.down('[cls=profile]').add({
                 xtype: 'button',
-                text: i18n.message('mymaps.profile'),
+                text: Ext.i18n.Bundle.message('mymaps.profile'),
                 cls: 'link',
                 iconCls: 'chart2',
                 iconMask: true,

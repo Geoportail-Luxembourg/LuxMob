@@ -3,29 +3,27 @@
 ## Build Requirements
 
 Building the Luxembourg Mobile Sencha Touch app (LuxMob) requires installing
-Sencha Cmd 3.0.2.288, which has its own requirements (see below).
+Sencha Cmd 4.0.4.84, which has its own requirements (see below).
 
 The Android SDK Tools are also required to build the app for Android.
 
 ### Sencha Cmd
 
-Download Sencha Cmd 3.0.2.288 for your OS from
-http://cdn.sencha.com/cmd/3.0.2.288/SenchaCmd-3.0.2.288-linux.run.zip or
-http://cdn.sencha.com/cmd/3.0.2.288/SenchaCmd-3.0.2.288-linux-x64.run.zip.
+Download Sencha Cmd 4.0.4.84 for your OS.
 
 Unzip the downloaded zip file:
-        
-    $ unzip SenchaCmd-3.0.2.288-linux.run.zip
+
+    $ unzip SenchaCmd-4.0.4.84-linux.run.zip
 
 Run the installer:
 
-    $ ./SenchaCmd-3.0.2.288-linux.run --prefix ~/local/opt/ --mode unattended
+    $ ./SenchaCmd-4.0.4.84-linux.run --prefix ~/local/opt/ --mode unattended
 
 Using the `unattended` mode the installer does not prompt the user for
 questions.
 
 The above command installs Sencha Cmd under
-`~/local/opt/Sencha/Cmd/3.0.2.288/`.  The installer also modifies your
+`~/local/opt/Sencha/Cmd/4.0.4.84/`.  The installer also modifies your
 `.bashrc` file to extend `PATH` and set `SENCHA_CMD_3_0_0`. So sourcing
 `.bashrc` should make the `sencha` command available in the shell.
 
@@ -46,8 +44,8 @@ http://developer.android.com/sdk/index.html.
 
 For example:
 
-    $ wget http://dl.google.com/android/android-sdk_r21.0.1-linux.tgz
-    $ tar xvzf android-sdk_r21.0.1-linux.tgz
+    $ wget http://dl.google.com/android/ndk/android-ndk-r9d-linux-x86.tar.bz2
+    $ tar xvjf android-ndk-r9d-linux-x86.tar.bz2
 
 To be able to build the LuxMob app, and run it in the Android emulator, you
 need to install the Android SDK Platform-tools, and at least one platform and
@@ -71,9 +69,9 @@ Use `adb devices` to see the list of Android devices. The emulated
 Android device should be listed as a `device`:
 
     $ adb devices
-    List of devices attached 
+    List of devices attached
     emulator-5554   device
-    
+
 Also, for Sencha Cmd to find the Android SDK Tools you need to have the paths
 to the `platform-tools` and `tools` directories in your `PATH`.
 
@@ -89,14 +87,36 @@ To build the web app run this command:
 
     $ make
 
-To build the PhoneGap Android app run this command. A password for the keystore
+
+## Cordova native apps
+
+### Prerequisites
+
+In order to build the native apps, you need to install cordova-cli first.
+
+    $ npm install -g cordova@3.5.0-0.2.7
+
+### Android
+
+To build the Cordova Android app run this command. A password for the keystore
 may be asked:
 
     $ make android
 
-To build the PhoneGap iOS app run this command:
+You may need to run the following command prior to the one above:
+
+    $ cd cordova-app && cordova platform update android
+
+This is intended to fix issues with path in local properties config files.
+
+### iOS
+
+To build the Cordova iOS app run this command:
 
     $ make ios
+
+You then have to open `cordova-app/platforms/ios/geoportail.lu.xcodeproj` in
+XCode and run it.
 
 If you change the source code of the Sencha app you don't need to run `make`
 before running `make android` or `make ios`. The latter commands will build the
@@ -154,8 +174,7 @@ Organizer).
 
 ### Create .ipa
 
- - Make a production build : `make ios`. (as of now, there’s a bug on first launch
-that doesn’t exist in `ios-debug` mode).
+ - Make a production build : `make ios`.
  - Select `iOS Device`, in the test device combo. In the menu, select
    `Product`->`Archive`. The `Organizer` windows show up; select the latest archive
    and click on `Distribute` button.

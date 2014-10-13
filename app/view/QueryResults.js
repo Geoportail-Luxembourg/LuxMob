@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.QueryResults', {
     extend: "Ext.List",
 
@@ -14,10 +13,10 @@ Ext.define('App.view.QueryResults', {
         items: [{
             docked: 'top',
             xtype: 'toolbar',
-            title: i18n.message('query.title'),
+            title: Ext.i18n.Bundle.message('query.title'),
             items: [{
                 xtype: "button",
-                text: i18n.message('button.back'),
+                text: Ext.i18n.Bundle.message('button.back'),
                 ui: 'back',
                 action: "main"
             }]

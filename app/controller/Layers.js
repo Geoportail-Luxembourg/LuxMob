@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.controller.Layers', {
     extend: 'Ext.app.Controller',
 
@@ -466,7 +465,7 @@ Ext.define('App.controller.Layers', {
     onOverlayDeselect: function(list, record) {
         var selList = this.getSelectedOverlaysList();
         selList.remove(selList.down('field[name=' + record.get('name') + ']'));
-        this.showMessage(i18n.message("overlays.layerremoved"));
+        this.showMessage(Ext.i18n.Bundle.message("overlays.layerremoved"));
         this.onOverlayRemove(record.get('name'));
     },
 
@@ -518,7 +517,7 @@ Ext.define('App.controller.Layers', {
             xtype: 'actionsheet',
             items: [
                 {
-                    text: i18n.message("button.layer_remove"),
+                    text: Ext.i18n.Bundle.message("button.layer_remove"),
                     ui: 'decline',
                     handler: function() {
                         field.getParent().remove(field);
@@ -543,7 +542,7 @@ Ext.define('App.controller.Layers', {
                     },
                     scope: this
                 }, {
-                    text: i18n.message("button.cancel"),
+                    text: Ext.i18n.Bundle.message("button.cancel"),
                     handler: function() {
                         actions.hide();
                     }
@@ -586,7 +585,7 @@ Ext.define('App.controller.Layers', {
                         item.check();
                     }
                 });
-                this.showMessage(i18n.message("layers.exclusion_baselayer_msg", {
+                this.showMessage(Ext.i18n.Bundle.message("layers.exclusion_baselayer_msg", {
                     baseLayer: OpenLayers.i18n(curBaseLayer.get('name')),
                     overlay: OpenLayers.i18n(layer.get('name'))
                 }));
@@ -614,7 +613,7 @@ Ext.define('App.controller.Layers', {
         this.onOverlayChange();
 
         if (layersToExclude.length) {
-            this.showMessage(i18n.message("layers.exclusion_msg", {
+            this.showMessage(Ext.i18n.Bundle.message("layers.exclusion_msg", {
                 layer: OpenLayers.i18n(layer.get('name')),
                 layers: layersToExclude.join(', ')
             }));
@@ -681,11 +680,12 @@ Ext.define('App.controller.Layers', {
      */
     onSearchKeyUp: function(field) {
         //get the store and the value of the field
-        var value = field.getValue(),
+        var value = removeDiacritics(field.getValue()),
             store = Ext.getStore("Overlays");
 
-        //first clear any current filters on thes tore
-        store.clearFilter();
+        // first clear any current filters on thes tore
+        // do it silently if there's a value set
+        store.clearFilter(value ? true : false);
 
         //check if a value is set first, as if it isnt we dont have to do anything
         if (value) {
@@ -711,8 +711,11 @@ Ext.define('App.controller.Layers', {
                 //loop through each of the regular expressions
                 for (i = 0; i < regexps.length; i++) {
                     var search = regexps[i],
-                        didMatch = record.get('name').match(search) ||
-                                   record.get(i18n.getLanguage()).match(search);
+                        name = removeDiacritics(record.get('name')),
+                        translated_ = record.get(Ext.i18n.Bundle.getLanguage()),
+                        translated = removeDiacritics(translated_),
+                        didMatch = name.match(search) ||
+                                   translated.match(search);
 
                     //if it matched the first or last name, push it into the matches array
                     matched.push(didMatch);

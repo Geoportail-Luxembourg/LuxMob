@@ -6,45 +6,15 @@ SHA1 = $(shell git rev-parse HEAD)
 all: app
 
 .PHONY: ios
-ios: ios-json testingapp
-	cp -r build/App/testing/* build/cordova-ios/www/
-	./build/cordova-ios/cordova/build
-	mv app.json.bak app.json
-
-.PHONY: ios-debug
-ios-debug: $(SRC) $(SRC_APP)
-	cp -r app build/cordova-ios/www/
-	cp -r resources build/cordova-ios/www/
-	cp -r touch build/cordova-ios/www/
-	cp -r lib build/cordova-ios/www/
-	python utils/modify_app_json.py cordova-2.5.0.ios.js
-	cp $(SRC) build/cordova-ios/www/
-	cp cordova-2.5.0.ios.js build/cordova-ios/www
-	mv app.json.bak app.json
-
-ios-json:
-	python utils/modify_app_json.py cordova-2.5.0.ios.js
+ios: testingapp
+	cp -r build/testing/App/* cordova-app/www/
+	cd cordova-app && cordova build ios
 
 .PHONY: android
-android: android-json build/cordova-android/local.properties testingapp
-	cp -r build/App/testing/* build/cordova-android/assets/www/
-	./build/cordova-android/cordova/release
-	mv app.json.bak app.json
-
-.PHONY: android-debug
-android-debug: android-json build/cordova-android/local.properties testingapp
-	cp -r build/App/testing/* build/cordova-android/assets/www/
-	./build/cordova-android/cordova/build
+android: testingapp
 	adb uninstall com.c2c.LuxMob
-	./build/cordova-android/cordova/run
-	rm -rf app.json
-	mv app.json.bak app.json
-
-android-json:
-	python utils/modify_app_json.py cordova-2.5.0.android.js
-
-build/cordova-android/local.properties:
-	android update project -p build/cordova-android/
+	cp -r build/testing/App/* cordova-app/www/
+	cd cordova-app && cordova run android
 
 .PHONY: app
 app: external/openlayers build/App/production/app.js

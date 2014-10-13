@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.layers.Overlays', {
     extend: "Ext.Panel",
 
@@ -18,7 +17,7 @@ Ext.define('App.view.layers.Overlays', {
                     items: [
                         {
                             xtype: "button",
-                            text: i18n.message("button.layers"),
+                            text: Ext.i18n.Bundle.message("button.layers"),
                             iconCls: "layers",
                             iconMask: true,
                             ui: 'back',
@@ -77,7 +76,7 @@ Ext.define('App.view.layers.Overlays', {
 
         var list = this.down('#overlaysList');
         list.setStore(Ext.getStore('Overlays'))
-            .setItemTpl(['{', i18n.getLanguage(), '}'].join());
+            .setItemTpl(['{', Ext.i18n.Bundle.getLanguage(), '}'].join());
         this.fireEvent('ready');
     }
 });

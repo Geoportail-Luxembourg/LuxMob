@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.view.layers.SavedMapsNotAvailable', {
     extend: 'Ext.Panel',
 
@@ -6,18 +5,18 @@ Ext.define('App.view.layers.SavedMapsNotAvailable', {
         layout: 'fit',
         items: [{
             xtype: "toolbar",
-            title: i18n.message('savedmaps.title'),
+            title: Ext.i18n.Bundle.message('savedmaps.title'),
             docked: "top",
             items: [{
                 xtype: "button",
-                text: i18n.message('button.close'),
+                text: Ext.i18n.Bundle.message('button.close'),
                 action: "main",
                 iconMask: true
             }]
         }, {
             xtype: 'panel',
             cls: "card",
-            html: "<p class='action'>" + i18n.message('savedmaps.html') + "</p>"
+            html: "<p class='action'>" + Ext.i18n.Bundle.message('savedmaps.html') + "</p>"
         }]
     }
 });

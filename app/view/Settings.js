@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define("App.view.Settings", {
     extend: 'Ext.form.Panel',
     id: 'settingsView',
@@ -11,10 +10,10 @@ Ext.define("App.view.Settings", {
         items: [{
             docked: 'top',
             xtype: 'toolbar',
-            title: i18n.message("settings.settings"),
+            title: Ext.i18n.Bundle.message("settings.settings"),
             items: [{
                 xtype: 'button',
-                text: i18n.message('button.close'),
+                text: Ext.i18n.Bundle.message('button.close'),
                 action: 'main'
             }]
         }, {
@@ -22,7 +21,7 @@ Ext.define("App.view.Settings", {
             items: [{
                 xtype: "selectfield",
                 id: 'languageSelect',
-                label: i18n.message('settings.language'),
+                label: Ext.i18n.Bundle.message('settings.language'),
                 listeners: {
                     painted: function() {
                         this.setValue(Ext.i18n.Bundle.getLanguage());

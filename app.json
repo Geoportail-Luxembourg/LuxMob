@@ -2,7 +2,7 @@
     /**
      * The application's namespace, used by Sencha Command to generate classes
      */
-    "name": "LuxMob",
+    "name": "App",
 
     /**
      * The file path to this application's front HTML document, relative to this app.json file
@@ -31,12 +31,27 @@
      *                                      //    cached inside localStorage until this value is changed.
      *                                      //  - "delta" to enable over-the-air delta update for this file
      *                                      //  - "full" means full update will be made when this file changes
+     *          "x-bootstrap": true         // (Optional)
+     *                                      // Indicates a development mode only dependency.
+     *                                      // These files will not be copied into the build directory or referenced
+     *                                      // in the generate app.json manifest for the micro loader.
      *
      *      }
      */
     "js": [
         {
-            "path": "touch/sencha-touch.js"
+            "path": "touch/sencha-touch.js",
+            "x-bootstrap": true
+        },
+        {
+            "path": "bootstrap.js",
+            "x-bootstrap": true
+        },
+        {
+            "path": "GeolocateControl.js"
+        },
+        {
+            "path": "SavedMapLayer.js"
         },
         {
             "path": "app.js",
@@ -100,9 +115,7 @@
         "resources/font",
         "resources/i18n",
         "proj4js-compressed.js",
-        "openlayers-mobile.js",
-        "GeolocateControl.js",
-        "SavedMapLayer.js"
+        "openlayers-mobile.js"
     ],
 
     /**
@@ -119,28 +132,14 @@
     "archivePath": "archive",
 
     /**
-     * Default paths to build this application to for each environment
+     * List of package names to require for the cmd build process
      */
-    "buildPaths": {
-        "testing": "build/testing",
-        "production": "build/production",
-        "package": "build/package",
-        "native": "build/native"
-    },
-
-    /**
-     * Build options
-     */
-    "buildOptions": {
-        "product": "touch",
-        "minVersion": 3,
-        "debug": false,
-        "logger": false
-    },
+    "requires": [
+    ],
 
     /**
      * Uniquely generated id for this application, used as prefix for localStorage keys.
      * Normally you should never change this value.
      */
-    "id": "587ab8f6-4a47-4052-b1ea-305af6dfb4e7"
+    "id": "510fc440-ca3b-4290-8358-e097e636f367"
 }

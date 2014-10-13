@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.controller.MyMaps', {
     extend: 'Ext.app.Controller',
     requires: [
@@ -200,7 +199,7 @@ Ext.define('App.controller.MyMaps', {
                 padding: 5,
                 height: 40,
                 style: {
-                    message: i18n.message('querying'),
+                    message: Ext.i18n.Bundle.message('querying'),
                     backgroundColor: 'white'
                 },
                 masked: {
@@ -294,7 +293,7 @@ Ext.define('App.controller.MyMaps', {
             failure: function(response) {
                 this.closeMyMap();
                 if (response.status == 404) {
-                    Ext.Msg.alert('', i18n.message('mymaps.notfound'));
+                    Ext.Msg.alert('', Ext.i18n.Bundle.message('mymaps.notfound'));
                 }
             },
             callbackKey: 'cb',
@@ -401,7 +400,7 @@ Ext.define('App.controller.MyMaps', {
             height: Ext.os.deviceType == 'Phone' ? '80%' : 400,
             items: [{
                 xtype: 'component',
-                html: i18n.message('mymaps.export.title')
+                html: Ext.i18n.Bundle.message('mymaps.export.title')
             }, {
                 xtype: 'component',
                 html: '<br />'
@@ -441,14 +440,14 @@ Ext.define('App.controller.MyMaps', {
                 items: [{
                     xtype: 'button',
                     action: 'cancelexport',
-                    text: i18n.message('button.cancel'),
+                    text: Ext.i18n.Bundle.message('button.cancel'),
                     handler: function() {
                         overlay.hide();
                     }
                 }, {
                     xtype: 'button',
                     ui: 'confirm',
-                    text: i18n.message('button.OK'),
+                    text: Ext.i18n.Bundle.message('button.OK'),
                     handler: function() {
                         var values = overlay.getValues();
                         this.doExport(values.email, values.format, overlay);
@@ -513,7 +512,7 @@ Ext.define('App.controller.MyMaps', {
             params: {
                 mail: email,
                 name: title,
-                lang: i18n.getLanguage()
+                lang: Ext.i18n.Bundle.getLanguage()
             },
             headers: {
                 'Content-Type': contentType
@@ -524,12 +523,12 @@ Ext.define('App.controller.MyMaps', {
                 if (success) {
                     var o = Ext.decode(response.responseText);
                     if (o.success === true) {
-                        Ext.Msg.alert('', i18n.message('mymaps.export.done'));
+                        Ext.Msg.alert('', Ext.i18n.Bundle.message('mymaps.export.done'));
                         overlay.hide();
                     } else if (o.message == "Invalid e-mail address." ){
-                        Ext.Msg.alert('', i18n.message('sendbymail.invalidemail'));
+                        Ext.Msg.alert('', Ext.i18n.Bundle.message('sendbymail.invalidemail'));
                     } else {
-                        Ext.Msg.alert('', i18n.message('sendbymail.wrong'));
+                        Ext.Msg.alert('', Ext.i18n.Bundle.message('sendbymail.wrong'));
                     }
                 } else {
                     window.alert('Upload failed');
@@ -554,7 +553,14 @@ Ext.define('App.controller.MyMaps', {
             jsonData: geojson,
             success: function(response) {
                 var data = Ext.decode(response.responseText);
-                this.drawProfile(data.profile.points);
+                var i;
+                var points = [];
+                var profiles = data.profiles;
+                var len = profiles.length;
+                for (i = 0; i < len; i ++) {
+                    points = points.concat(profiles[i].points);
+                }
+                this.drawProfile(points);
                 Ext.Viewport.setMasked(false);
             },
             failure: function() {
@@ -594,7 +600,7 @@ Ext.define('App.controller.MyMaps', {
                 xtype: 'toolbar',
                 items: [{
                     xtype: 'button',
-                    text: i18n.message('button.close'),
+                    text: Ext.i18n.Bundle.message('button.close'),
                     handler: function() {
                         Ext.Viewport.animateActiveItem(
                             this.getMyMapFeatureDetailView(),
@@ -655,7 +661,7 @@ Ext.define('App.controller.MyMaps', {
             },
             items: [{
                 xtype: 'toolbar',
-                title: i18n.message('mymaps.detail.addpoi')
+                title: Ext.i18n.Bundle.message('mymaps.detail.addpoi')
             },{
                 layout: 'hbox',
                 items: [{
@@ -695,13 +701,13 @@ Ext.define('App.controller.MyMaps', {
                 },
                 items: [{
                     xtype: 'button',
-                    text: i18n.message('button.cancel'),
+                    text: Ext.i18n.Bundle.message('button.cancel'),
                     action: 'cancel',
                     handler: this.closeAddPoi,
                     scope: this
                 }, {
                     xtype: 'button',
-                    text: i18n.message('button.OK'),
+                    text: Ext.i18n.Bundle.message('button.OK'),
                     action: 'addpoisubmit',
                     ui: 'confirm',
                     disabled: true,
@@ -794,35 +800,38 @@ Ext.define('App.controller.MyMaps', {
     },
 
     onAddPhoto: function(field) {
+        var dest = Camera.DestinationType.FILE_URI;
         var actions = Ext.Viewport.add({
             xtype: 'actionsheet',
             items: [
                 {
-                    text: i18n.message("button.capture_picture"),
+                    text: Ext.i18n.Bundle.message("button.capture_picture"),
                     handler: function() {
-                        navigator.device.capture.captureImage(
-                            Ext.bind(this.captureSuccess, this, [actions], true),
-                            this.onPhotoFail
-                        );
-                    },
-                    scope: this
-                }, {
-                    text: i18n.message("button.picture_from_library"),
-                    handler: function() {
-                        var destinationType = navigator.camera.DestinationType;
-                        var source = navigator.camera.PictureSourceType;
                         navigator.camera.getPicture(
                             Ext.bind(this.onPhotoURISuccess, this, [actions], true),
                             this.onPhotoFail, {
                                 quality: 50,
-                                destinationType: destinationType.FILE_URI,
-                                sourceType: source.PHOTOLIBRARY
+                                destinationType: dest
                             }
                         );
                     },
                     scope: this
                 }, {
-                    text: i18n.message("button.cancel"),
+                    text: Ext.i18n.Bundle.message("button.picture_from_library"),
+                    handler: function() {
+                        var source = Camera.PictureSourceType.PHOTOLIBRARY;
+                        navigator.camera.getPicture(
+                            Ext.bind(this.onPhotoURISuccess, this, [actions], true),
+                            this.onPhotoFail, {
+                                quality: 50,
+                                destinationType: dest,
+                                sourceType: source
+                            }
+                        );
+                    },
+                    scope: this
+                }, {
+                    text: Ext.i18n.Bundle.message("button.cancel"),
                     handler: function() {
                         actions.hide();
                     }
@@ -832,25 +841,45 @@ Ext.define('App.controller.MyMaps', {
         actions.show();
     },
 
-    captureSuccess: function(mediaFiles, actions) {
-        var i, len;
-        for (i = 0, len = mediaFiles.length; i < len; i += 1) {
-            this.onPhotoURISuccess(mediaFiles[i].fullPath, actions);
-        }
-    },
-
     onPhotoURISuccess: function(imageURI, actions) {
+        // Android 4.4 cordova workarounds ... returns new kind or URL for
+        // content from chooser
+        if(imageURI.indexOf('content://') != -1 && imageURI.indexOf("%3A") != -1){
+            var photo_split = imageURI.split("%3A");
+            imageURI = "content://media/external/images/media/"+photo_split[1];
+        }
+        // workaround end
+
+        var fileName = imageURI.substr(imageURI.lastIndexOf('/') + 1);
+        var extension;
+
+        // check for content: protocol to make sure is not
+        // a file with no extension
+        if (imageURI.indexOf('content://') != -1) {
+            if(imageURI.lastIndexOf('.') > imageURI.lastIndexOf('/')){
+                extension = imageURI.substr(imageURI.lastIndexOf('.') + 1);
+            }else{
+                extension = "jpg";
+                fileName = fileName + ".jpg";
+            }
+        } else {
+            if (imageURI.lastIndexOf('.') == -1 || (imageURI.lastIndexOf('.') < imageURI.lastIndexOf('/')) ) {
+                extension = "invalid";
+            } else {
+                extension = imageURI.substr(imageURI.lastIndexOf('.') + 1);
+            }
+        }
+
         this.setLoadingPhoto(true);
         actions.hide();
         var options = new FileUploadOptions();
         options.fileKey = 'file';
-        options.fileName = imageURI.substring(imageURI.lastIndexOf('/') + 1);
+        options.fileName = fileName;
         options.chunkedMode = false;
 
         var form = this.getAddPoiView();
         var button = form.down('button[action=upload]');
         button.setIconCls(false);
-        button.setIconMask(false);
         button.setIcon("resources/images/loading.gif");
         this.getAddPoiSubmitButton().setDisabled(true);
 
@@ -871,7 +900,6 @@ Ext.define('App.controller.MyMaps', {
         form.down('field[name=thumbnail]').setValue(r.thumbnail);
         var button = form.down('button[action=upload]');
         button.setIconCls(false);
-        button.setIconMask(false);
         button.setIcon(App.util.Config.getWsgiUrl() + r.thumbnail);
         this.getAddPoiSubmitButton().setDisabled(!this.getHasLocation());
         this.setLoadingPhoto(false);

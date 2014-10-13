@@ -1,4 +1,3 @@
-window.i18n = Ext.i18n.Bundle;
 Ext.define('App.controller.Download', {
     extend: 'Ext.app.Controller',
 
@@ -62,11 +61,13 @@ Ext.define('App.controller.Download', {
                     // Android so that files are destroyed after application
                     // removal. Still doesn't work in certain cases.
                     var path = Ext.os.is.Android ?
-                        "Android/data/com.c2c.LuxMob" : "";
+                        "Android/data/com.c2c.LuxMob/" : "";
                     fs.root.getDirectory(path,
                         {create: true, exclusive: false},
                         Ext.bind(function (dirEntry) {
-                            this.setDirectory(dirEntry);
+                            var directory = Ext.os.is.Android ?
+                                dirEntry : fs.root;
+                            this.setDirectory(directory);
                             this.setFileTransfer(new FileTransfer());
 
                             // set any downloading map as resumable
@@ -95,7 +96,7 @@ Ext.define('App.controller.Download', {
     showDownload: function() {
 
         if (!window.device) {
-            Ext.Msg.alert("", i18n.message('savedmaps.html'));
+            Ext.Msg.alert("", Ext.i18n.Bundle.message('savedmaps.html'));
             return;
         }
 
@@ -119,12 +120,12 @@ Ext.define('App.controller.Download', {
                     items: [{
                         xtype: 'button',
                         action: 'canceldownload',
-                        text: i18n.message('button.cancel')
+                        text: Ext.i18n.Bundle.message('button.cancel')
                     }, {
                         xtype: 'button',
                         action: 'dodownload',
                         ui: 'confirm',
-                        text: i18n.message('button.download_short')
+                        text: Ext.i18n.Bundle.message('button.download_short')
                     }]
                 }]
             });
@@ -164,8 +165,8 @@ Ext.define('App.controller.Download', {
 
     promptForName: function() {
         Ext.Msg.prompt(
-            i18n.message('download.mapname'),
-            i18n.message('download.name'),
+            Ext.i18n.Bundle.message('download.mapname'),
+            Ext.i18n.Bundle.message('download.name'),
             Ext.bind(function(buttonId, value) {
                 if (buttonId == 'ok') {
                     this.initDownload(value);
@@ -331,7 +332,7 @@ Ext.define('App.controller.Download', {
         var fileName = name + '.png';
         this.getFileTransfer().download(
             url,
-            this.getDirectory().fullPath + '/' + fileName,
+            this.getDirectory().toURL() + '/' + fileName,
             Ext.bind(function(file) {
                 this.onDownloadSuccess(record, url, file);
             }, this),
@@ -406,7 +407,7 @@ Ext.define('App.controller.Download', {
             xtype: 'actionsheet',
             items: [
                 {
-                    text: i18n.message("button.map_remove"),
+                    text: Ext.i18n.Bundle.message("button.map_remove"),
                     ui: 'decline',
                     handler: function() {
                         this.deleteTiles(record);
@@ -414,7 +415,7 @@ Ext.define('App.controller.Download', {
                     },
                     scope: this
                 }, {
-                    text: i18n.message("button.cancel"),
+                    text: Ext.i18n.Bundle.message("button.cancel"),
                     handler: function() {
                         actions.hide();
                     }
