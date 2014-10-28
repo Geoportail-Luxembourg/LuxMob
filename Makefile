@@ -10,11 +10,15 @@ ios: testingapp
 	cp -r build/testing/App/* cordova-app/www/
 	cd cordova-app && cordova build ios
 
-.PHONY: android
+.PHONY: android-debug
 android: testingapp
 	adb uninstall com.c2c.LuxMob
 	cp -r build/testing/App/* cordova-app/www/
 	cd cordova-app && cordova run android
+
+.PHONY: android
+android: testingapp
+	cd cordova-app && cordova build android --release
 
 .PHONY: app
 app: external/openlayers build/App/production/app.js
