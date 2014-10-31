@@ -48,6 +48,9 @@
 		BB726B73CA664AC996BCAF94 /* CDVLocalFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 413DE8DB023C4698ABF2B883 /* CDVLocalFilesystem.m */; };
 		0387053CDB8845999E4FD714 /* CDVAssetLibraryFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 34C81D50289D4F7381E271E7 /* CDVAssetLibraryFilesystem.m */; };
 		2A55C5BD2B724C4586212F6D /* CDVFileTransfer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F13E6DD13E74DB1AF50E38D /* CDVFileTransfer.m */; };
+		003380244C8043F988528696 /* CDVConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B493754F0BE4CD495927881 /* CDVConnection.m */; };
+		873614B32EC1470DB2EF4EAD /* CDVReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 36D1A62E778C433B85B5EB9D /* CDVReachability.m */; };
+		BD185065A2C24064BF655FD9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3566D5D9FB648DA95036DA0 /* SystemConfiguration.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,6 +135,11 @@
 		3A8B42A73D7D4EF2A7818DC2 /* CDVAssetLibraryFilesystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVAssetLibraryFilesystem.h"; path = "org.apache.cordova.file/CDVAssetLibraryFilesystem.h"; sourceTree = "<group>"; fileEncoding = 4; };
 		3F13E6DD13E74DB1AF50E38D /* CDVFileTransfer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVFileTransfer.m"; path = "org.apache.cordova.file-transfer/CDVFileTransfer.m"; sourceTree = "<group>"; fileEncoding = 4; };
 		D52B3EED317D48C2815D904E /* CDVFileTransfer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVFileTransfer.h"; path = "org.apache.cordova.file-transfer/CDVFileTransfer.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		5B493754F0BE4CD495927881 /* CDVConnection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVConnection.m"; path = "org.apache.cordova.network-information/CDVConnection.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		36D1A62E778C433B85B5EB9D /* CDVReachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "CDVReachability.m"; path = "org.apache.cordova.network-information/CDVReachability.m"; sourceTree = "<group>"; fileEncoding = 4; };
+		D1D0AFAB6F4640F6BCB6739A /* CDVConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVConnection.h"; path = "org.apache.cordova.network-information/CDVConnection.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		7084AEF29B814E6FB13E63C1 /* CDVReachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CDVReachability.h"; path = "org.apache.cordova.network-information/CDVReachability.h"; sourceTree = "<group>"; fileEncoding = 4; };
+		B3566D5D9FB648DA95036DA0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "SystemConfiguration.framework"; path = "System/Library/Frameworks/SystemConfiguration.framework"; sourceTree = SDKROOT; fileEncoding = 4; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +153,7 @@
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
 				1180AAE8EF2B47BDB7A30855 /* ImageIO.framework in Frameworks */,
 				41CF31B020E14640AE463E0E /* CoreLocation.framework in Frameworks */,
+				BD185065A2C24064BF655FD9 /* SystemConfiguration.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +248,7 @@
 				305D5FD0115AB8F900A74A75 /* MobileCoreServices.framework */,
 				72330D361ED940C7A4AC6710 /* ImageIO.framework */,
 				453E1E7443134448BE07CE79 /* CoreLocation.framework */,
+				B3566D5D9FB648DA95036DA0 /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -273,6 +283,10 @@
 				3A8B42A73D7D4EF2A7818DC2 /* CDVAssetLibraryFilesystem.h */,
 				3F13E6DD13E74DB1AF50E38D /* CDVFileTransfer.m */,
 				D52B3EED317D48C2815D904E /* CDVFileTransfer.h */,
+				5B493754F0BE4CD495927881 /* CDVConnection.m */,
+				36D1A62E778C433B85B5EB9D /* CDVReachability.m */,
+				D1D0AFAB6F4640F6BCB6739A /* CDVConnection.h */,
+				7084AEF29B814E6FB13E63C1 /* CDVReachability.h */,
 			);
 			name = Plugins;
 			path = "geoportail.lu/Plugins";
@@ -476,6 +490,8 @@
 				BB726B73CA664AC996BCAF94 /* CDVLocalFilesystem.m in Sources */,
 				0387053CDB8845999E4FD714 /* CDVAssetLibraryFilesystem.m in Sources */,
 				2A55C5BD2B724C4586212F6D /* CDVFileTransfer.m in Sources */,
+				003380244C8043F988528696 /* CDVConnection.m in Sources */,
+				873614B32EC1470DB2EF4EAD /* CDVReachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -36,6 +36,12 @@
                             "xml": "false",
                             "count": 2
                         }
+                    ],
+                    "SystemConfiguration.framework": [
+                        {
+                            "xml": "true",
+                            "count": 1
+                        }
                     ]
                 }
             },
@@ -69,6 +75,10 @@
                         {
                             "xml": "<feature name=\"FileTransfer\"><param name=\"ios-package\" value=\"CDVFileTransfer\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"ios-package\" value=\"CDVConnection\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -99,6 +109,9 @@
             "PACKAGE_NAME": "com.c2c.LuxMob"
         },
         "org.apache.cordova.file-transfer": {
+            "PACKAGE_NAME": "com.c2c.LuxMob"
+        },
+        "org.apache.cordova.network-information": {
             "PACKAGE_NAME": "com.c2c.LuxMob"
         }
     },
