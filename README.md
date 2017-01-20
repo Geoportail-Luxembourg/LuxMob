@@ -9,7 +9,9 @@ The Android SDK Tools are also required to build the app for Android.
 
 ### Sencha Cmd
 
-Download Sencha Cmd 4.0.4.84 for your OS.
+Download Sencha Cmd 4.0.4.84 for your OS. See http://cdn.sencha.com/cmd/4.0.4.84/release-notes.html
+
+You can also download linux64 version [here](https://dev.camptocamp.com/files/lux/SenchaCmd-4.0.4.84-linux-x64.run.zip).
 
 Unzip the downloaded zip file:
 
@@ -94,7 +96,7 @@ To build the web app run this command:
 
 In order to build the native apps, you need to install cordova-cli first.
 
-    $ npm install -g cordova@3.5.0-0.2.7
+    $ npm install -g cordova@3.6.3-0.2.13
 
 ### Android
 
