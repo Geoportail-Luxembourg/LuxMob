@@ -105,6 +105,10 @@ may be asked:
 
     $ make android
 
+To build and run the debug version:
+
+    $ make android-debug
+
 You may need to run the following command prior to the one above:
 
     $ cd cordova-app && cordova platform update android
