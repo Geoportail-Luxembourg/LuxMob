@@ -63,21 +63,11 @@
 
 #pragma mark View lifecycle
 
-// Fix for shrinking screen on Camera, Camera-Roll, InAppBrowser and more...
-bool sizeWasAdjusted = false;
 - (void)viewWillAppear:(BOOL)animated
 {
     // View defaults to full size.  If you want to customize the view's size, or its subviews (e.g. webView),
     // you can do so here.
 
-    //Lower screen 20px on ios 7
-    if (!sizeWasAdjusted && [[[UIDevice currentDevice] systemVersion] floatValue] >= 7) {
-        CGRect viewBounds = [self.webView bounds];
-        viewBounds.origin.y = 20;
-        viewBounds.size.height = viewBounds.size.height - 20;
-        self.webView.frame = viewBounds;
-        sizeWasAdjusted = true;
-    }
     [super viewWillAppear:animated];
 }
 
@@ -94,12 +84,6 @@ bool sizeWasAdjusted = false;
     // e.g. self.myOutlet = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return [super shouldAutorotateToInterfaceOrientation:interfaceOrientation];
-}
-
 /* Comment out the block below to over-ride */
 
 /*
@@ -107,35 +91,20 @@ bool sizeWasAdjusted = false;
 {
     return[super newCordovaViewWithFrame:bounds];
 }
-*/
 
-#pragma mark UIWebDelegate implementation
-
-- (void)webViewDidFinishLoad:(UIWebView*)theWebView
+- (NSUInteger)supportedInterfaceOrientations 
 {
-    // Black base color for background matches the native apps
-    theWebView.backgroundColor = [UIColor blackColor];
-
-    return [super webViewDidFinishLoad:theWebView];
+    return [super supportedInterfaceOrientations];
 }
 
-/* Comment out the block below to over-ride */
-
-/*
-
-- (void) webViewDidStartLoad:(UIWebView*)theWebView
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation 
 {
-    return [super webViewDidStartLoad:theWebView];
+    return [super shouldAutorotateToInterfaceOrientation:interfaceOrientation];
 }
 
-- (void) webView:(UIWebView*)theWebView didFailLoadWithError:(NSError*)error
+- (BOOL)shouldAutorotate 
 {
-    return [super webView:theWebView didFailLoadWithError:error];
-}
-
-- (BOOL) webView:(UIWebView*)theWebView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType
-{
-    return [super webView:theWebView shouldStartLoadWithRequest:request navigationType:navigationType];
+    return [super shouldAutorotate];
 }
 */
 

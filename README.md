@@ -96,7 +96,7 @@ To build the web app run this command:
 
 In order to build the native apps, you need to install cordova-cli first.
 
-    $ npm install -g cordova@3.6.3-0.2.13
+    $ npm install -g cordova@6.5.0
 
 ### Android
 

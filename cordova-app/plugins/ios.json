@@ -96,27 +96,33 @@
         }
     },
     "installed_plugins": {
-        "org.apache.cordova.camera": {
+        "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "com.c2c.LuxMob"
         },
-        "org.apache.cordova.device": {
+        "cordova-plugin-camera": {
+            "CAMERA_USAGE_DESCRIPTION": " ",
+            "PHOTOLIBRARY_USAGE_DESCRIPTION": " ",
             "PACKAGE_NAME": "com.c2c.LuxMob"
         },
-        "org.apache.cordova.geolocation": {
+        "cordova-plugin-device": {
             "PACKAGE_NAME": "com.c2c.LuxMob"
         },
-        "org.apache.cordova.inappbrowser": {
+        "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "com.c2c.LuxMob"
         },
-        "org.apache.cordova.file-transfer": {
+        "cordova-plugin-geolocation": {
+            "GEOLOCATION_USAGE_DESCRIPTION": " ",
             "PACKAGE_NAME": "com.c2c.LuxMob"
         },
-        "org.apache.cordova.network-information": {
+        "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.c2c.LuxMob"
         }
     },
     "dependent_plugins": {
-        "org.apache.cordova.file": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.c2c.LuxMob"
+        },
+        "cordova-plugin-file": {
             "PACKAGE_NAME": "com.c2c.LuxMob"
         }
     }

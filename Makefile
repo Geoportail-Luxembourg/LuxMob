@@ -18,7 +18,7 @@ android-debug: testingapp
 
 .PHONY: android
 android: testingapp
-	cd cordova-app && cordova build android --release
+	cd cordova-app && cordova build android --release -- --keystore=platforms/android/app_signing.keystore  --alias=release
 
 .PHONY: app
 app: external/openlayers build/App/production/app.js
