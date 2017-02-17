@@ -20,6 +20,8 @@ Ext.Loader.addClassPathMappings({
   "Ext.device.sqlite.SQLTransaction": "touch/src/device/sqlite/Sencha.js",
   "Ext.draw.engine.SvgContext.Gradient": "touch/src/draw/engine/SvgContext.js",
   "Ext.i18n": "lib/Ext.i18n.Bundle-touch/i18n",
+  "Ext.util.PaintMonitor": "app.js",
+  "Ext.util.SizeMonitor": "app.js",
   "ListItemTplFix": "app/controller/Layers.js",
   "SearchHighlight": "app/controller/Search.js",
   "patch": "lib/Ext.i18n.Bundle-touch/patch"
