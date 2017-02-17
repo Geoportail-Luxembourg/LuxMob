@@ -17,7 +17,9 @@ Ext.application({
         'Ext.MessageBox',
         'Ext.i18n.Bundle',
         'App.util.Config',
-        'App.overrides.LongPress'
+        'App.overrides.LongPress',
+        'App.overrides.PaintMonitor',
+        'App.overrides.SizeMonitor'
     ],
 
     views: ['Main', 'layers.MapSettings', 'MoreMenu'],
