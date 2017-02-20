@@ -2,9 +2,6 @@ SRC = app.js app.json index.html openlayers-mobile.js proj4js-compressed.js Geol
 SRC_APP = $(shell find app -name \*.js)
 SHA1 = $(shell git rev-parse HEAD)
 
-.PHONY: all
-all: app
-
 .PHONY: ios
 ios: testingapp
 	cp -r build/testing/App/* cordova-app/www/
