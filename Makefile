@@ -2,9 +2,6 @@ SRC = app.js app.json index.html openlayers-mobile.js proj4js-compressed.js Geol
 SRC_APP = $(shell find app -name \*.js)
 SHA1 = $(shell git rev-parse HEAD)
 
-.PHONY: all
-all: app
-
 .PHONY: ios
 ios: testingapp
 	cp -r build/testing/App/* cordova-app/www/
@@ -13,11 +10,14 @@ ios: testingapp
 .PHONY: android-debug
 android-debug: testingapp
 	adb uninstall com.c2c.LuxMob
+	rm -rf cordova-app/www/*
 	cp -r build/testing/App/* cordova-app/www/
 	cd cordova-app && cordova run android
 
 .PHONY: android
-android: testingapp
+android: app
+	rm -rf cordova-app/www/*
+	cp -r build/production/App/* cordova-app/www/
 	cd cordova-app && cordova build android --release -- --keystore=platforms/android/app_signing.keystore  --alias=release
 
 .PHONY: app
