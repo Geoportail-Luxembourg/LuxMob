@@ -12,7 +12,7 @@ Ext.define('App.plugin.StatefulMap', {
                 this.setMap(map);
                 // apply saved state
                 var state = this.getState();
-                if (state) {
+                if (state && state.lonlat) {
                     view.setCenter([state.lonlat.lon, state.lonlat.lat]);
                     view.setZoom(state.zoom);
                     view.setBaseLayer(state.baselayer);
