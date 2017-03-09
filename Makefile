@@ -4,6 +4,7 @@ SHA1 = $(shell git rev-parse HEAD)
 
 .PHONY: ios
 ios: testingapp
+	mkdir -p cordova-app/www
 	cp -r build/testing/App/* cordova-app/www/
 	cd cordova-app && cordova build ios
 
@@ -11,12 +12,14 @@ ios: testingapp
 android-debug: testingapp
 	adb uninstall com.c2c.LuxMob
 	rm -rf cordova-app/www/*
+	mkdir -p cordova-app/www
 	cp -r build/testing/App/* cordova-app/www/
 	cd cordova-app && cordova run android
 
 .PHONY: android
 android: app
 	rm -rf cordova-app/www/*
+	mkdir -p cordova-app/www
 	cp -r build/production/App/* cordova-app/www/
 	cd cordova-app && cordova build android --release -- --keystore=platforms/android/app_signing.keystore  --alias=release
 
